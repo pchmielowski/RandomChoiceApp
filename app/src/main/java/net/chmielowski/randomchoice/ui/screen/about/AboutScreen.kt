@@ -66,22 +66,11 @@ internal fun AboutScreen(navigator: DestinationsNavigator = EmptyDestinationsNav
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Divider(modifier = Modifier.padding(vertical = 16.dp))
-            SourceCodeButton()
             LibrariesButton(navigator)
             SendFeedbackButton()
             RateAppButton()
         }
     }
-}
-
-@Composable
-private fun SourceCodeButton() {
-    val context = LocalContext.current
-    Button(
-        onClick = { context.openWebPage("https://github.com/pchmielowski/RandomChoiceApp") },
-        icon = Icons.Outlined.Code,
-        label = R.string.label_source,
-    )
 }
 
 @Composable

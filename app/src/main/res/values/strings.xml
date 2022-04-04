@@ -39,7 +39,6 @@
     <string name="label_version">Version:</string>
     <string name="label_send_feedback_to">You can send the feedback to %s</string>
     <string name="label_libraries">Open source libraries</string>
-    <string name="label_source">Show app\'s source code</string>
 
     <string name="error">Error!</string>
 </resources>
