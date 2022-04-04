@@ -171,9 +171,6 @@ private fun Context.openWebPage(uri: String) = try {
     Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show()
 }
 
-private fun Context.playStoreUri() =
-    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-
 @Composable
 private fun Button(
     onClick: () -> Unit,
