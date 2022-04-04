@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Feedback
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.StarRate
@@ -65,11 +66,22 @@ internal fun AboutScreen(navigator: DestinationsNavigator = EmptyDestinationsNav
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Divider(modifier = Modifier.padding(vertical = 16.dp))
+            SourceCodeButton()
             LibrariesButton(navigator)
             SendFeedbackButton()
             RateAppButton()
         }
     }
+}
+
+@Composable
+private fun SourceCodeButton() {
+    val context = LocalContext.current
+    Button(
+        onClick = { context.openWebPage("https://github.com/pchmielowski/RandomChoiceApp") },
+        icon = Icons.Outlined.Code,
+        label = R.string.label_source,
+    )
 }
 
 @Composable
