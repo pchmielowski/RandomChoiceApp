@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -113,6 +115,22 @@ private fun SendFeedbackButton() {
     }
     if (noClientInfoVisible) {
         NoClientDialog(onDismissRequest = { noClientInfoVisible = false })
+    }
+}
+
+@Composable
+private fun Button(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    @StringRes label: Int,
+) {
+    TextButton(
+        onClick = onClick,
+        modifier = Modifier.padding(horizontal = 8.dp),
+    ) {
+        Icon(icon, contentDescription = null)
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(stringResource(label))
     }
 }
 
