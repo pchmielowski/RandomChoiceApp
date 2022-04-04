@@ -1,3 +1,6 @@
+# Play store
+https://play.google.com/store/apps/details?id=net.chmielowski.randomchoice
+
 # Taking screenshots
 
 1. Disable animations:
