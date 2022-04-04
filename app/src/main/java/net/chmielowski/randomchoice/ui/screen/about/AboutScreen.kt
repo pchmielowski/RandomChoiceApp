@@ -78,13 +78,11 @@ internal fun AboutScreen(navigator: DestinationsNavigator = EmptyDestinationsNav
 private fun SourceCodeButton() {
     val context = LocalContext.current
     Button(
-        onClick = { context.openWebPage(githubUri()) },
+        onClick = { context.openWebPage(Uri.parse("https://github.com/pchmielowski/RandomChoiceApp")) },
         icon = Icons.Outlined.Code,
         label = R.string.label_source,
     )
 }
-
-private fun githubUri() = Uri.parse("https://github.com/pchmielowski/RandomChoiceApp")
 
 @Composable
 private fun LibrariesButton(navigator: DestinationsNavigator) {
