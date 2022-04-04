@@ -186,3 +186,13 @@ private fun Button(
         Text(stringResource(label))
     }
 }
+
+@Suppress("SwallowedException")
+private fun Context.openWebPage(uri: Uri) = try {
+    startActivity(Intent(Intent.ACTION_VIEW, uri))
+} catch (e: ActivityNotFoundException) {
+    Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show()
+}
+
+private fun Context.playStoreUri() =
+    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
