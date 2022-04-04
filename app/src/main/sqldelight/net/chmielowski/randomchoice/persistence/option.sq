@@ -1,0 +1,14 @@
+import net.chmielowski.randomchoice.core.DilemmaId;
+
+CREATE TABLE option (
+    name TEXT NOT NULL,
+    choice INTEGER AS DilemmaId NOT NULL, -- TODO: Rename to dilemma
+
+    PRIMARY KEY (name, choice),
+    FOREIGN KEY (choice) REFERENCES choice(id) ON DELETE CASCADE
+);
+
+insertOption:
+INSERT INTO option (name, choice)
+VALUES (?, ?)
+;

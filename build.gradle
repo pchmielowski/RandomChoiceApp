@@ -1,0 +1,37 @@
+buildscript {
+    ext {
+        compose_version = '1.1.1'
+        sql_delight_version = '1.5.3'
+    }
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.1.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
+        classpath "com.squareup.sqldelight:gradle-plugin:$sql_delight_version"
+    }
+}
+
+subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: "io.gitlab.arturbosch.detekt"
+    detekt {
+        buildUponDefaultConfig = true
+        config = files("$rootDir/detekt-config.yml")
+    }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions.allWarningsAsErrors = true
+        kotlinOptions.freeCompilerArgs += [
+                '-Xopt-in=kotlin.RequiresOptIn',
+        ]
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

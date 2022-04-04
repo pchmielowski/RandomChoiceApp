@@ -1,0 +1,23 @@
+import net.chmielowski.randomchoice.core.DilemmaId;
+
+-- TODO: Rename to dilemma
+CREATE TABLE choice (
+  id INTEGER AS DilemmaId NOT NULL PRIMARY KEY AUTOINCREMENT
+);
+
+selectAllDilemmas:
+SELECT id, option.name
+FROM choice JOIN option ON id = option.choice
+;
+
+selectLastInsertedId:
+SELECT last_insert_rowid();
+
+insertDilemma:
+INSERT INTO choice DEFAULT VALUES
+;
+
+deleteDilemma:
+DELETE FROM choice
+WHERE id = ?
+;
