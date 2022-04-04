@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -30,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -72,28 +74,22 @@ internal fun AboutScreen(navigator: DestinationsNavigator = EmptyDestinationsNav
 
 @Composable
 private fun LibrariesButton(navigator: DestinationsNavigator) {
-    TextButton(
+    Button(
         onClick = { navigator.navigate(LibrariesScreenDestination) },
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(Icons.Outlined.List, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(R.string.label_libraries))
-    }
+        icon = Icons.Outlined.List,
+        label = R.string.label_libraries,
+    )
 }
 
 @Composable
 private fun SendFeedbackButton() {
     val context = LocalContext.current
     var noClientInfoVisible by remember { mutableStateOf(false) }
-    TextButton(
+    Button(
         onClick = { sendEmail(context, onNoClient = { noClientInfoVisible = true }) },
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(Icons.Outlined.Feedback, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(R.string.action_send_feedback))
-    }
+        icon = Icons.Outlined.Feedback,
+        label = R.string.action_send_feedback,
+    )
     if (noClientInfoVisible) {
         NoClientDialog(onDismissRequest = { noClientInfoVisible = false })
     }
@@ -149,21 +145,32 @@ private const val DEVELOPER_EMAIL = "random.choice.app@gmail.com"
 @Composable
 private fun RateAppButton() {
     val context = LocalContext.current
-    TextButton(
-        onClick = context::launchPlayStore,
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(Icons.Outlined.StarRate, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(R.string.action_rate_app))
-    }
+    Button(
+        onClick = { context.openWebPage("https://play.google.com/store/apps/details?id=${context.packageName}") },
+        icon = Icons.Outlined.StarRate,
+        label = R.string.action_rate_app,
+    )
 }
 
 @Suppress("SwallowedException")
-private fun Context.launchPlayStore() = try {
-    startActivity(Intent(Intent.ACTION_VIEW, uri()))
+private fun Context.openWebPage(uri: String) = try {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
 } catch (e: ActivityNotFoundException) {
     Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show()
 }
 
-private fun Context.uri() = Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+@Composable
+private fun Button(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    @StringRes label: Int,
+) {
+    TextButton(
+        onClick = onClick,
+        modifier = Modifier.padding(horizontal = 8.dp),
+    ) {
+        Icon(icon, contentDescription = null)
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(stringResource(label))
+    }
+}
