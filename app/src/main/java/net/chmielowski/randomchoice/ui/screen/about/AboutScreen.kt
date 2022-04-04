@@ -77,60 +77,35 @@ internal fun AboutScreen(navigator: DestinationsNavigator = EmptyDestinationsNav
 @Composable
 private fun SourceCodeButton() {
     val context = LocalContext.current
-    TextButton(
+    Button(
         onClick = { context.openWebPage(githubUri()) },
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(Icons.Outlined.Code, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(R.string.label_source))
-    }
+        icon = Icons.Outlined.Code,
+        label = R.string.label_source,
+    )
 }
 
 private fun githubUri() = Uri.parse("https://github.com/pchmielowski/RandomChoiceApp")
 
 @Composable
 private fun LibrariesButton(navigator: DestinationsNavigator) {
-    TextButton(
+    Button(
         onClick = { navigator.navigate(LibrariesScreenDestination) },
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(Icons.Outlined.List, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(R.string.label_libraries))
-    }
+        icon = Icons.Outlined.List,
+        label = R.string.label_libraries,
+    )
 }
 
 @Composable
 private fun SendFeedbackButton() {
     val context = LocalContext.current
     var noClientInfoVisible by remember { mutableStateOf(false) }
-    TextButton(
+    Button(
         onClick = { sendEmail(context, onNoClient = { noClientInfoVisible = true }) },
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(Icons.Outlined.Feedback, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(R.string.action_send_feedback))
-    }
+        icon = Icons.Outlined.Feedback,
+        label = R.string.action_send_feedback,
+    )
     if (noClientInfoVisible) {
         NoClientDialog(onDismissRequest = { noClientInfoVisible = false })
-    }
-}
-
-@Composable
-private fun Button(
-    onClick: () -> Unit,
-    icon: ImageVector,
-    @StringRes label: Int,
-) {
-    TextButton(
-        onClick = onClick,
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(icon, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(label))
     }
 }
 
@@ -184,14 +159,11 @@ private const val DEVELOPER_EMAIL = "random.choice.app@gmail.com"
 @Composable
 private fun RateAppButton() {
     val context = LocalContext.current
-    TextButton(
+    Button(
         onClick = { context.openWebPage(context.playStoreUri()) },
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
-        Icon(Icons.Outlined.StarRate, contentDescription = null)
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(stringResource(R.string.action_rate_app))
-    }
+        icon = Icons.Outlined.StarRate,
+        label = R.string.action_rate_app,
+    )
 }
 
 @Suppress("SwallowedException")
@@ -203,3 +175,19 @@ private fun Context.openWebPage(uri: Uri) = try {
 
 private fun Context.playStoreUri() =
     Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+
+@Composable
+private fun Button(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    @StringRes label: Int,
+) {
+    TextButton(
+        onClick = onClick,
+        modifier = Modifier.padding(horizontal = 8.dp),
+    ) {
+        Icon(icon, contentDescription = null)
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(stringResource(label))
+    }
+}
