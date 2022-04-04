@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Feedback
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.StarRate
@@ -63,12 +64,28 @@ internal fun AboutScreen(navigator: DestinationsNavigator = EmptyDestinationsNav
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Divider(modifier = Modifier.padding(vertical = 16.dp))
+            SourceCodeButton()
             LibrariesButton(navigator)
             SendFeedbackButton()
             RateAppButton()
         }
     }
 }
+
+@Composable
+private fun SourceCodeButton() {
+    val context = LocalContext.current
+    TextButton(
+        onClick = { context.openWebPage(githubUri()) },
+        modifier = Modifier.padding(horizontal = 8.dp),
+    ) {
+        Icon(Icons.Outlined.Code, contentDescription = null)
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(stringResource(R.string.label_source))
+    }
+}
+
+private fun githubUri() = Uri.parse("https://github.com/pchmielowski/RandomChoiceApp")
 
 @Composable
 private fun LibrariesButton(navigator: DestinationsNavigator) {
@@ -150,7 +167,7 @@ private const val DEVELOPER_EMAIL = "random.choice.app@gmail.com"
 private fun RateAppButton() {
     val context = LocalContext.current
     TextButton(
-        onClick = context::launchPlayStore,
+        onClick = { context.openWebPage(context.playStoreUri()) },
         modifier = Modifier.padding(horizontal = 8.dp),
     ) {
         Icon(Icons.Outlined.StarRate, contentDescription = null)
@@ -160,10 +177,11 @@ private fun RateAppButton() {
 }
 
 @Suppress("SwallowedException")
-private fun Context.launchPlayStore() = try {
-    startActivity(Intent(Intent.ACTION_VIEW, uri()))
+private fun Context.openWebPage(uri: Uri) = try {
+    startActivity(Intent(Intent.ACTION_VIEW, uri))
 } catch (e: ActivityNotFoundException) {
     Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show()
 }
 
-private fun Context.uri() = Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+private fun Context.playStoreUri() =
+    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
