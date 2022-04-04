@@ -78,7 +78,7 @@ internal fun AboutScreen(navigator: DestinationsNavigator = EmptyDestinationsNav
 private fun SourceCodeButton() {
     val context = LocalContext.current
     Button(
-        onClick = { context.openWebPage(Uri.parse("https://github.com/pchmielowski/RandomChoiceApp")) },
+        onClick = { context.openWebPage("https://github.com/pchmielowski/RandomChoiceApp") },
         icon = Icons.Outlined.Code,
         label = R.string.label_source,
     )
@@ -158,21 +158,18 @@ private const val DEVELOPER_EMAIL = "random.choice.app@gmail.com"
 private fun RateAppButton() {
     val context = LocalContext.current
     Button(
-        onClick = { context.openWebPage(context.playStoreUri()) },
+        onClick = { context.openWebPage("https://play.google.com/store/apps/details?id=${context.packageName}") },
         icon = Icons.Outlined.StarRate,
         label = R.string.action_rate_app,
     )
 }
 
 @Suppress("SwallowedException")
-private fun Context.openWebPage(uri: Uri) = try {
-    startActivity(Intent(Intent.ACTION_VIEW, uri))
+private fun Context.openWebPage(uri: String) = try {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
 } catch (e: ActivityNotFoundException) {
     Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show()
 }
-
-private fun Context.playStoreUri() =
-    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
 
 @Composable
 private fun Button(
