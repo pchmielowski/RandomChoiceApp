@@ -57,7 +57,13 @@ internal sealed interface Intent {
 }
 
 @Parcelize
-internal data class State(val dilemma: Dilemma = Dilemma()) : Parcelable
+internal data class State(
+    val dilemma: Dilemma = Dilemma(),
+    private val lastSaved: Dilemma? = null,
+) : Parcelable {
+
+    val isCurrentSaved get() = dilemma == lastSaved
+}
 
 internal sealed interface Label {
 
@@ -97,8 +103,9 @@ internal class MainExecutor(
             is SetTheme -> preference.write(intent.theme)
             is DilemmaIntent -> when (intent) {
                 DilemmaIntent.Save -> {
-                    saveDilemma(getState().dilemma)
-                    // TODO@
+                    val current = getState().dilemma
+                    saveDilemma(current)
+                    dispatchState { copy(lastSaved = current) }
                 }
                 is DilemmaIntent.Reuse -> dispatchState { copy(dilemma = intent.dilemma) }
                 is DilemmaIntent.Delete -> deleteDilemma(intent.dilemma)

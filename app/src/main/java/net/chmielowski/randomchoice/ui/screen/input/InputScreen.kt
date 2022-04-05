@@ -113,8 +113,7 @@ internal fun InputScreen(
         actions = {
             if (state.dilemma.canResetOrSave) {
                 ResetButton(onIntent)
-                SaveButton(onIntent)
-                SaveButton(onIntent, isSaved = true)
+                SaveButton(onIntent, isSaved = state.isCurrentSaved)
             }
             MenuButton(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
