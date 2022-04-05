@@ -2,7 +2,6 @@
 
 package net.chmielowski.randomchoice.ui.screen.saved
 
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,7 +22,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -40,10 +38,10 @@ import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
+import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Loadable
 import net.chmielowski.randomchoice.utils.collectAsLoadableState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 internal fun SavedScreen(
@@ -51,8 +49,7 @@ internal fun SavedScreen(
     observeSavedDilemmas: ObserveSavedDilemmas,
     onIntent: (Intent) -> Unit,
 ) {
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberSplineBasedDecay())
+    val scrollBehavior = rememberScrollBehavior()
     Scaffold(
         navigateUp = navigator::navigateUp,
         title = stringResource(R.string.label_saved),

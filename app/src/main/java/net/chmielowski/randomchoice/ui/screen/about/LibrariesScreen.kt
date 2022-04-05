@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,14 +33,17 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.ui.destinations.LicenseScreenDestination
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
+import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 
 @Preview
 @Destination
 @Composable
 internal fun LibrariesScreen(navigator: DestinationsNavigator = EmptyDestinationsNavigator) {
+    val scrollBehavior = rememberScrollBehavior()
     Scaffold(
         navigateUp = navigator::navigateUp,
         title = stringResource(R.string.label_libraries),
+        scrollBehavior = scrollBehavior,
     ) {
         Column {
             Spacer(modifier = Modifier.height(16.dp))
@@ -53,7 +57,9 @@ internal fun LibrariesScreen(navigator: DestinationsNavigator = EmptyDestination
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .fillMaxWidth(),
             ) {
                 items(libraries, key = Library::name) { library ->
                     LibraryItem(
