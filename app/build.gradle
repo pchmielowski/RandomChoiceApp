@@ -27,7 +27,7 @@ android {
         applicationId "net.chmielowski.randomchoice"
         minSdk 26
         targetSdk 31
-        versionCode 19
+        versionCode 20
         versionName "1.$versionCode"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
