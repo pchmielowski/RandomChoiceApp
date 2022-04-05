@@ -117,11 +117,11 @@ internal fun InputScreen(
     Scaffold(
         title = stringResource(R.string.label_enter_options),
         actions = {
-//            if (state.dilemma.canResetOrSave) {
-            ResetButton(onIntent)
-            SaveButton(onIntent)
-            SaveButton(onIntent, isSaved = true)
-//            }
+            if (state.dilemma.canResetOrSave) {
+                ResetButton(onIntent)
+                SaveButton(onIntent)
+                SaveButton(onIntent, isSaved = true)
+            }
             MenuButton(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
