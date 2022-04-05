@@ -1,5 +1,7 @@
 package net.chmielowski.randomchoice
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithText
 import org.junit.Test
 
 internal abstract class BehaviorTest : AbstractTest() {
@@ -75,8 +77,11 @@ internal abstract class BehaviorTest : AbstractTest() {
         enterOption3("Sandwich")
 
         clickSave()
-        navigateToSaved()
+        rule
+            .onNodeWithText(R.string.message_saved)
+            .assertIsDisplayed()
 
+        navigateToSaved()
         assertSavedOptionsArePresent("Pizza or Salad or Sandwich")
     }
 
