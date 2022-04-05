@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +36,7 @@ import net.chmielowski.randomchoice.core.DilemmaId
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
+import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Loadable
