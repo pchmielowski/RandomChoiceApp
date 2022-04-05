@@ -8,6 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +27,7 @@ internal fun Scaffold(
     floatingActionButton: @Composable () -> Unit = { },
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     snackbarHostState: SnackbarHostState? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     background: @Composable () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
@@ -39,6 +41,7 @@ internal fun Scaffold(
                 },
                 title = title,
                 actions = actions,
+                scrollBehavior = scrollBehavior,
             )
         },
         floatingActionButton = floatingActionButton,

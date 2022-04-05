@@ -13,7 +13,7 @@ internal fun TopBar(
     navigationIcon: @Composable () -> Unit = {},
     title: String,
     actions: @Composable (RowScope.() -> Unit) = {},
-    scrollBehavior: TopAppBarScrollBehavior? = null,
+    scrollBehavior: TopAppBarScrollBehavior?,
 ) {
     LargeTopAppBar(
         navigationIcon = navigationIcon,
