@@ -49,8 +49,8 @@ internal fun Scaffold(
         // Using legacy Material2 just for the correct colors on Material2 widgets.
         androidx.compose.material.Scaffold(backgroundColor = backgroundColor) {
             background()
-            Divider()
             content()
+            Divider()
         }
     }
 }
