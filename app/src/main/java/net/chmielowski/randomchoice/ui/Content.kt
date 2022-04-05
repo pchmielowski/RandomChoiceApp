@@ -43,8 +43,6 @@ internal fun Content(
         CompositionLocalProvider(LocalTheme provides preference.current) {
             AppTheme {
                 Surface {
-                    SetStatusBarColor()
-
                     DestinationsNavHost(
                         navGraph = NavGraphs.root,
                         engine = rememberAnimatedNavHostEngine(rootDefaultAnimations = animations()),
