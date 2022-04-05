@@ -21,7 +21,7 @@ import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import net.chmielowski.randomchoice.ui.widgets.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
