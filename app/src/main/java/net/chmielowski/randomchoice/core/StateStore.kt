@@ -64,8 +64,6 @@ internal sealed interface Label {
     object FocusFirstOptionInput : Label
 
     data class ShowResult(val result: Result) : Label
-
-    object ShowDilemmaSaved : Label
 }
 
 internal class MainExecutor(
@@ -100,7 +98,7 @@ internal class MainExecutor(
             is DilemmaIntent -> when (intent) {
                 DilemmaIntent.Save -> {
                     saveDilemma(getState().dilemma)
-                    publish(Label.ShowDilemmaSaved)
+                    // TODO@
                 }
                 is DilemmaIntent.Reuse -> dispatchState { copy(dilemma = intent.dilemma) }
                 is DilemmaIntent.Delete -> deleteDilemma(intent.dilemma)

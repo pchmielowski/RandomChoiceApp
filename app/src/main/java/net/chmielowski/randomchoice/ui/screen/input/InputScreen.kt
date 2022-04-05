@@ -34,7 +34,6 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -58,7 +57,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.Intent
@@ -66,7 +64,6 @@ import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
 import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
-import net.chmielowski.randomchoice.core.Label.ShowDilemmaSaved
 import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
@@ -92,13 +89,11 @@ internal fun InputScreen(
         when (label) {
             is ShowResult -> navigator.navigate(ResultScreenDestination(label.result))
             FocusFirstOptionInput -> focusRequester.requestFocus()
-            ShowDilemmaSaved -> {}
         }
     }
     InputScreen(
         navigator = navigator,
         state = state,
-        labels = store.labels,
         onIntent = store::accept,
         focusRequester = focusRequester,
     )
@@ -109,7 +104,6 @@ internal fun InputScreen(
 internal fun InputScreen(
     navigator: DestinationsNavigator,
     state: State,
-    labels: Flow<Label>,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
 ) {
@@ -137,7 +131,6 @@ internal fun InputScreen(
                 })
             }
         },
-        snackbarHostState = showingSavedMessageHostState(labels),
         background = {
             if (transitionVisible) {
                 CircularRevealAnimation(
@@ -165,21 +158,6 @@ internal fun InputScreen(
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
     }
-}
-
-@Composable
-private fun showingSavedMessageHostState(labels: Flow<Label>): SnackbarHostState {
-    val state = remember { SnackbarHostState() }
-    val message = stringResource(R.string.message_saved)
-    labels.Observe { label ->
-        when (label) {
-            ShowDilemmaSaved -> state.showSnackbar(message)
-            FocusFirstOptionInput,
-            is ShowResult -> {
-            }
-        }
-    }
-    return state
 }
 
 @Composable
