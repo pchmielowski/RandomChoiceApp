@@ -193,6 +193,12 @@ internal abstract class AbstractTest {
             .performClick()
     }
 
+    protected fun assertSavedMessageIsDisplayed() {
+        rule
+            .onNodeWithText(R.string.message_saved)
+            .assertIsDisplayed()
+    }
+
     protected fun assertSavedOptionsArePresent(options: String) {
         rule
             .onNodeWithText(options)
@@ -227,8 +233,7 @@ private fun Bitmap.save(file: String) {
     Log.d("Screenshot", "Saved screenshot to $path/$file.png")
 }
 
-// TODO@ Revert
-internal fun ComposeContentTestRule.onNodeWithText(@StringRes string: Int) =
+private fun ComposeContentTestRule.onNodeWithText(@StringRes string: Int) =
     onNodeWithText(getString(string))
 
 private fun ComposeContentTestRule.onNodeWithContentDescription(@StringRes string: Int) =

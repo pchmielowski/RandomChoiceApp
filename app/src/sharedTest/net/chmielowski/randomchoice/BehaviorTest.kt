@@ -77,9 +77,7 @@ internal abstract class BehaviorTest : AbstractTest() {
         enterOption3("Sandwich")
 
         clickSave()
-        rule
-            .onNodeWithText(R.string.message_saved)
-            .assertIsDisplayed()
+        assertSavedMessageIsDisplayed()
 
         navigateToSaved()
         assertSavedOptionsArePresent("Pizza or Salad or Sandwich")
