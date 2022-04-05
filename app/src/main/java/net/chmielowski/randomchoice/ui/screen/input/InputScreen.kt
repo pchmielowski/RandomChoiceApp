@@ -114,11 +114,11 @@ internal fun InputScreen(
             if (state.dilemma.canResetOrSave) {
                 ResetButton(onIntent)
                 if (!state.isCurrentSaved) {
-                    SaveButton(onIntent, isSaved = state.isCurrentSaved)
+                    SaveButton(onIntent)
                 }
             }
             if (state.isCurrentSaved) {
-                SaveButton(onIntent, isSaved = state.isCurrentSaved)
+                SavedMessage()
             }
             MenuButton(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
@@ -265,26 +265,27 @@ private fun ResetButton(onIntent: (Intent) -> Unit) {
 }
 
 @Composable
-private fun SaveButton(onIntent: (Intent) -> Unit, isSaved: Boolean = false) {
-    if (isSaved)
-        TextButton(
-            onClick = { },
-            enabled = false,
-            colors = ButtonDefaults.textButtonColors(
-                disabledContentColor = MaterialTheme.colorScheme.primary.copy(alpha = ContentAlpha.medium)
-            ),
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Done,
-                contentDescription = null,
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(stringResource(R.string.message_saved))
-        }
-    else {
-        TextButton(onClick = { onIntent(DilemmaIntent.Save) }) {
-            Text(stringResource(R.string.action_save))
-        }
+private fun SaveButton(onIntent: (Intent) -> Unit) {
+    TextButton(onClick = { onIntent(DilemmaIntent.Save) }) {
+        Text(stringResource(R.string.action_save))
+    }
+}
+
+@Composable
+private fun SavedMessage() {
+    TextButton(
+        onClick = { },
+        enabled = false,
+        colors = ButtonDefaults.textButtonColors(
+            disabledContentColor = MaterialTheme.colorScheme.primary.copy(alpha = ContentAlpha.medium)
+        ),
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Done,
+            contentDescription = null,
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(stringResource(R.string.message_saved))
     }
 }
 
