@@ -5,6 +5,7 @@ package net.chmielowski.randomchoice.ui.screen.input
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Android
@@ -48,6 +50,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -99,6 +103,7 @@ internal fun InputScreen(
     )
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun InputScreen(
@@ -155,10 +160,14 @@ internal fun InputScreen(
                 focusRequester = focusRequester,
             )
             Spacer(modifier = Modifier.height(8.dp))
-            AddOptionButton(
-                onClick = { onIntent(EnterOptionsIntent.AddNew) },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            Row {
+                PasteButton(onIntent = onIntent)
+                Spacer(modifier = Modifier.width(8.dp))
+                AddOptionButton(
+                    onIntent = onIntent,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
     }
@@ -345,12 +354,24 @@ private fun MakeChoiceButton(onActionClick: () -> Unit) {
 }
 
 @Composable
+private fun PasteButton(onIntent: (Intent) -> Unit) {
+    val clipboardManager = LocalClipboardManager.current
+    TextButton(onClick = { onIntent(EnterOptionsIntent.Add(clipboardManager.textOrEmpty)) }) {
+        Icon(Icons.Default.ContentPaste, contentDescription = null)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text("Paste option")
+    }
+}
+
+private val ClipboardManager.textOrEmpty get() = getText()?.toString() ?: ""
+
+@Composable
 private fun AddOptionButton(
-    onClick: () -> Unit,
     modifier: Modifier,
+    onIntent: (Intent) -> Unit,
 ) {
     ElevatedButton(
-        onClick = onClick, // TODO: Focus new field
+        onClick = { onIntent(EnterOptionsIntent.AddNew) }, // TODO: Focus new field
         modifier = modifier,
     ) {
         Icon(Icons.Default.Add, contentDescription = null)
