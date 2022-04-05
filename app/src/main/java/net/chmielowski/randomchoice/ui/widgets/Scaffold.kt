@@ -3,9 +3,12 @@
 package net.chmielowski.randomchoice.ui.widgets
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +33,7 @@ internal fun Scaffold(
 ) {
     androidx.compose.material3.Scaffold(
         topBar = {
+            Surface(color = Color.Blue, modifier = Modifier.fillMaxWidth()) { }
             TopBar(
                 navigationIcon = {
                     if (navigateUp != null) {
@@ -43,7 +47,6 @@ internal fun Scaffold(
         },
         floatingActionButton = floatingActionButton,
         modifier = Modifier
-            .statusBarsPadding()
             .navigationBarsWithImePadding()
     ) {
         // Using legacy Material2 just for the correct colors on Material2 widgets.

@@ -4,11 +4,14 @@ package net.chmielowski.randomchoice.ui
 
 import androidx.compose.animation.AnimatedContentScope.SlideDirection
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.arkivanov.mvikotlin.core.store.Store
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -29,6 +32,7 @@ import net.chmielowski.randomchoice.ui.theme.AppTheme
 import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 
+@Suppress("UNUSED_PARAMETER")
 @OptIn(
     ExperimentalAnimationApi::class,
     ExperimentalMaterialNavigationApi::class,
@@ -39,6 +43,7 @@ internal fun Content(
     observeSavedDilemmas: ObserveSavedDilemmas,
     store: Store<Intent, State, Label>,
 ) {
+
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         CompositionLocalProvider(LocalTheme provides preference.current) {
             AppTheme {
@@ -47,19 +52,24 @@ internal fun Content(
                         navGraph = NavGraphs.root,
                         engine = rememberAnimatedNavHostEngine(rootDefaultAnimations = animations()),
                     ) {
-                        composable(InputScreenDestination) {
-                            InputScreen(
-                                navigator = destinationsNavigator,
-                                store = store,
-                            )
-                        }
-                        composable(SavedScreenDestination) {
-                            SavedScreen(
-                                navigator = destinationsNavigator,
-                                observeSavedDilemmas = observeSavedDilemmas,
-                                onIntent = store::accept,
-                            )
-                        }
+//                        composable(InputScreenDestination) {
+//                            InputScreen(
+//                                navigator = destinationsNavigator,
+//                                store = store,
+//                            )
+//                        }
+//                            InputScreen(
+//                                navigator = destinationsNavigator,
+//                                store = store,
+//                            )
+//                        }
+//                        composable(SavedScreenDestination) {
+//                            SavedScreen(
+//                                navigator = destinationsNavigator,
+//                                observeSavedDilemmas = observeSavedDilemmas,
+//                                onIntent = store::accept,
+//                            )
+//                        }
                     }
                 }
             }
