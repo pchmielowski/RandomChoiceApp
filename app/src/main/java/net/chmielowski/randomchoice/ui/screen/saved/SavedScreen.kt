@@ -45,6 +45,7 @@ import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.utils.Loadable
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 internal fun SavedScreen(
