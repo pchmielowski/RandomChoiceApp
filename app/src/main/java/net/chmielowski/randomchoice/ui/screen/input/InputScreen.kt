@@ -232,6 +232,12 @@ private fun DropdownMenu(
             )
         }
 
+        Item(
+            icon = Icons.Outlined.ListAlt,
+            text = R.string.label_saved,
+            onClick = { onShowSavedClick() },
+        )
+        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
         val theme = LocalTheme.current
         Item(
             icon = Icons.Outlined.WbSunny,
@@ -250,12 +256,6 @@ private fun DropdownMenu(
             text = R.string.label_theme_system,
             choice = theme == Theme.System,
             onClick = { onThemeChoose(Theme.System) },
-        )
-        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
-        Item(
-            icon = Icons.Outlined.ListAlt,
-            text = R.string.label_saved,
-            onClick = { onShowSavedClick() },
         )
         MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
         Item(
