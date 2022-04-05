@@ -1,7 +1,5 @@
 package net.chmielowski.randomchoice
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithText
 import org.junit.Test
 
 internal abstract class BehaviorTest : AbstractTest() {
