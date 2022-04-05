@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import net.chmielowski.randomchoice.ui.widgets.Divider
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -32,6 +31,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.ui.destinations.LicenseScreenDestination
+import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 
