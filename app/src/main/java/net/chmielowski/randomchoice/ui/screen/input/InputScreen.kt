@@ -2,7 +2,6 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -160,10 +160,10 @@ internal fun InputScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row {
-                PasteButton()
+                PasteButton(onIntent = onIntent)
                 Spacer(modifier = Modifier.width(8.dp))
                 AddOptionButton(
-                    onClick = { onIntent(EnterOptionsIntent.AddNew) },
+                    onIntent = onIntent,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -353,22 +353,24 @@ private fun MakeChoiceButton(onActionClick: () -> Unit) {
 }
 
 @Composable
-private fun PasteButton() {
+private fun PasteButton(onIntent: (Intent) -> Unit) {
     val clipboardManager = LocalClipboardManager.current
-    TextButton(onClick = { Log.d("pchm", clipboardManager.getText()?.toString() ?: "") }) {
+    TextButton(onClick = { onIntent(EnterOptionsIntent.Add(clipboardManager.textOrEmpty)) }) {
         Icon(Icons.Default.ContentPaste, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
         Text("Paste option")
     }
 }
 
+private val ClipboardManager.textOrEmpty get() = getText()?.toString() ?: ""
+
 @Composable
 private fun AddOptionButton(
-    onClick: () -> Unit,
     modifier: Modifier,
+    onIntent: (Intent) -> Unit,
 ) {
     ElevatedButton(
-        onClick = onClick, // TODO: Focus new field
+        onClick = { onIntent(EnterOptionsIntent.AddNew) }, // TODO: Focus new field
         modifier = modifier,
     ) {
         Icon(Icons.Default.Add, contentDescription = null)
