@@ -26,8 +26,6 @@ import net.chmielowski.randomchoice.utils.replace
 @Parcelize
 internal data class Dilemma(private val options: List<String> = listOf("", "")) : Parcelable {
 
-    constructor(vararg items: String) : this(items.toList())
-
     init {
         check(options.size >= 2)
     }

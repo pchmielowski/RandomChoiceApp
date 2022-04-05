@@ -41,7 +41,11 @@ private fun typography() = Typography(
         .copy(
             fontFamily = FontFamily(Font(R.font.jaapokki_regular)),
             fontSize = 32.sp,
-        )
+        ),
+    titleLarge = MaterialTheme.typography.titleLarge
+        .copy(
+            fontFamily = FontFamily(Font(R.font.jaapokki_regular)),
+        ),
 )
 
 @Composable
