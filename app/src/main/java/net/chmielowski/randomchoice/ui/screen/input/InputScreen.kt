@@ -113,6 +113,11 @@ internal fun InputScreen(
         actions = {
             if (state.dilemma.canResetOrSave) {
                 ResetButton(onIntent)
+                if (!state.isCurrentSaved) {
+                    SaveButton(onIntent, isSaved = state.isCurrentSaved)
+                }
+            }
+            if (state.isCurrentSaved) {
                 SaveButton(onIntent, isSaved = state.isCurrentSaved)
             }
             MenuButton(
