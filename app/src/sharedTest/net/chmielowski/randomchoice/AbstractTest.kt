@@ -187,6 +187,12 @@ internal abstract class AbstractTest {
             .performClick()
     }
 
+    protected fun assertSaveIsDisplayed() {
+        rule
+            .onNodeWithText(R.string.action_save)
+            .assertIsDisplayed()
+    }
+
     protected fun clickSave() {
         rule
             .onNodeWithText(R.string.action_save)
