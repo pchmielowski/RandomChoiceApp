@@ -2,7 +2,6 @@
 
 package net.chmielowski.randomchoice.ui.screen.saved
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.flow.map
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.DilemmaId
@@ -44,6 +41,7 @@ import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.utils.Loadable
+import net.chmielowski.randomchoice.utils.collectAsLoadableState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -60,10 +58,7 @@ internal fun SavedScreen(
         title = stringResource(R.string.label_saved),
         scrollBehavior = scrollBehavior,
     ) {
-        @SuppressLint("FlowOperatorInvokedInComposition")
-        val loadable by observeSavedDilemmas()
-            .map { Loadable.Loaded(it) }
-            .collectAsState(Loadable.Loading)
+        val loadable by observeSavedDilemmas().collectAsLoadableState()
 
         @Suppress("UnnecessaryVariable")
         val current = loadable
