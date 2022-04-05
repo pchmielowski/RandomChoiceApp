@@ -102,7 +102,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
 
     // Destinations
-    final destinations_version = "1.3.4-beta"
+    final destinations_version = "1.4.2-beta"
     implementation "io.github.raamcosta.compose-destinations:animations-core:$destinations_version"
     ksp "io.github.raamcosta.compose-destinations:ksp:$destinations_version"
 
