@@ -12,15 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
@@ -114,10 +117,11 @@ internal fun InputScreen(
     Scaffold(
         title = stringResource(R.string.label_enter_options),
         actions = {
-            if (state.dilemma.canResetOrSave) {
-                ResetButton(onIntent)
-                SaveButton(onIntent)
-            }
+//            if (state.dilemma.canResetOrSave) {
+            ResetButton(onIntent)
+            SaveButton(onIntent)
+            SaveButton(onIntent, isSaved = true)
+//            }
             MenuButton(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
@@ -279,9 +283,26 @@ private fun ResetButton(onIntent: (Intent) -> Unit) {
 }
 
 @Composable
-private fun SaveButton(onIntent: (Intent) -> Unit) {
-    TextButton(onClick = { onIntent(DilemmaIntent.Save) }) {
-        Text(stringResource(R.string.action_save))
+private fun SaveButton(onIntent: (Intent) -> Unit, isSaved: Boolean = false) {
+    if (isSaved)
+        TextButton(
+            onClick = { },
+            enabled = false,
+            colors = ButtonDefaults.textButtonColors(
+                disabledContentColor = MaterialTheme.colorScheme.primary.copy(alpha = ContentAlpha.medium)
+            ),
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Done,
+                contentDescription = null,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(stringResource(R.string.message_saved))
+        }
+    else {
+        TextButton(onClick = { onIntent(DilemmaIntent.Save) }) {
+            Text(stringResource(R.string.action_save))
+        }
     }
 }
 
