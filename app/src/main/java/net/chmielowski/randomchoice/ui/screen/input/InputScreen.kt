@@ -111,13 +111,13 @@ internal fun InputScreen(
     Scaffold(
         title = stringResource(R.string.label_enter_options),
         actions = {
-            if (state.dilemma.canResetOrSave) {
+            if (state.showResetButton) {
                 ResetButton(onIntent)
-                if (!state.isCurrentSaved) {
-                    SaveButton(onIntent)
-                }
             }
-            if (state.isCurrentSaved) {
+            if (state.showSaveButton) {
+                SaveButton(onIntent)
+            }
+            if (state.showSavedMessage) {
                 SavedMessage()
             }
             MenuButton(
