@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 internal fun TopBar(
     navigationIcon: @Composable () -> Unit = {},
     title: String,
-    actions: @Composable() (RowScope.() -> Unit) = {},
+    actions: @Composable (RowScope.() -> Unit) = {},
 ) {
     LargeTopAppBar(
         navigationIcon = navigationIcon,
         title = { Text(title) },
-        actions = actions
+        actions = actions,
     )
 }
