@@ -57,15 +57,23 @@ internal sealed interface Intent {
 }
 
 @Parcelize
-internal data class State(val dilemma: Dilemma = Dilemma()) : Parcelable
+internal data class State(
+    val dilemma: Dilemma = Dilemma(),
+    private val lastSaved: Dilemma? = null,
+) : Parcelable {
+
+    val showResetButton get() = dilemma.canResetOrSave
+
+    val showSaveButton get() = dilemma.canResetOrSave && dilemma != lastSaved
+
+    val showSavedMessage get() = dilemma == lastSaved
+}
 
 internal sealed interface Label {
 
     object FocusFirstOptionInput : Label
 
     data class ShowResult(val result: Result) : Label
-
-    object ShowDilemmaSaved : Label
 }
 
 internal class MainExecutor(
@@ -99,8 +107,9 @@ internal class MainExecutor(
             is SetTheme -> preference.write(intent.theme)
             is DilemmaIntent -> when (intent) {
                 DilemmaIntent.Save -> {
-                    saveDilemma(getState().dilemma)
-                    publish(Label.ShowDilemmaSaved)
+                    val current = getState().dilemma
+                    saveDilemma(current)
+                    dispatchState { copy(lastSaved = current) }
                 }
                 is DilemmaIntent.Reuse -> dispatchState { copy(dilemma = intent.dilemma) }
                 is DilemmaIntent.Delete -> deleteDilemma(intent.dilemma)

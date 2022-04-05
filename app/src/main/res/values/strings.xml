@@ -28,7 +28,7 @@
     <string name="label_option">Option %d</string>
     <string name="label_chosen_option">Chosen option:</string>
     <string name="label_more">More</string>
-    <string name="label_saved">Saved choices</string>
+    <string name="label_saved">Saved dilemmas</string>
     <string name="label_or">or</string>
 
     <string name="label_theme_light">Light theme</string>

@@ -12,15 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
@@ -31,7 +34,6 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -55,7 +57,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.Intent
@@ -63,7 +64,6 @@ import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
 import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
-import net.chmielowski.randomchoice.core.Label.ShowDilemmaSaved
 import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
@@ -89,13 +89,11 @@ internal fun InputScreen(
         when (label) {
             is ShowResult -> navigator.navigate(ResultScreenDestination(label.result))
             FocusFirstOptionInput -> focusRequester.requestFocus()
-            ShowDilemmaSaved -> {}
         }
     }
     InputScreen(
         navigator = navigator,
         state = state,
-        labels = store.labels,
         onIntent = store::accept,
         focusRequester = focusRequester,
     )
@@ -106,7 +104,6 @@ internal fun InputScreen(
 internal fun InputScreen(
     navigator: DestinationsNavigator,
     state: State,
-    labels: Flow<Label>,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
 ) {
@@ -114,9 +111,14 @@ internal fun InputScreen(
     Scaffold(
         title = stringResource(R.string.label_enter_options),
         actions = {
-            if (state.dilemma.canResetOrSave) {
+            if (state.showResetButton) {
                 ResetButton(onIntent)
+            }
+            if (state.showSaveButton) {
                 SaveButton(onIntent)
+            }
+            if (state.showSavedMessage) {
+                SavedMessage()
             }
             MenuButton(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
@@ -133,7 +135,6 @@ internal fun InputScreen(
                 })
             }
         },
-        snackbarHostState = showingSavedMessageHostState(labels),
         background = {
             if (transitionVisible) {
                 CircularRevealAnimation(
@@ -161,21 +162,6 @@ internal fun InputScreen(
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
     }
-}
-
-@Composable
-private fun showingSavedMessageHostState(labels: Flow<Label>): SnackbarHostState {
-    val state = remember { SnackbarHostState() }
-    val message = stringResource(R.string.message_saved)
-    labels.Observe { label ->
-        when (label) {
-            ShowDilemmaSaved -> state.showSnackbar(message)
-            FocusFirstOptionInput,
-            is ShowResult -> {
-            }
-        }
-    }
-    return state
 }
 
 @Composable
@@ -282,6 +268,24 @@ private fun ResetButton(onIntent: (Intent) -> Unit) {
 private fun SaveButton(onIntent: (Intent) -> Unit) {
     TextButton(onClick = { onIntent(DilemmaIntent.Save) }) {
         Text(stringResource(R.string.action_save))
+    }
+}
+
+@Composable
+private fun SavedMessage() {
+    TextButton(
+        onClick = { },
+        enabled = false,
+        colors = ButtonDefaults.textButtonColors(
+            disabledContentColor = MaterialTheme.colorScheme.primary.copy(alpha = ContentAlpha.medium)
+        ),
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Done,
+            contentDescription = null,
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(stringResource(R.string.message_saved))
     }
 }
 

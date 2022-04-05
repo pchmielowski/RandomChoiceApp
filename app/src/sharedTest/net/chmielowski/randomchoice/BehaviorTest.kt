@@ -74,9 +74,15 @@ internal abstract class BehaviorTest : AbstractTest() {
         clickAddOption()
         enterOption3("Sandwich")
 
+        assertSaveIsDisplayed()
         clickSave()
-        navigateToSaved()
+        assertSavedMessageIsDisplayed()
 
+        // Verify "Save" is displayed again after modification
+        clickRemoveOption1()
+        assertSaveIsDisplayed()
+
+        navigateToSaved()
         assertSavedOptionsArePresent("Pizza or Salad or Sandwich")
     }
 

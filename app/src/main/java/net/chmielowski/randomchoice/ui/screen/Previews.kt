@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.Result
@@ -26,7 +25,6 @@ internal fun InputScreenPreview() {
         state = State(Dilemma()),
         onIntent = {},
         focusRequester = FocusRequester(),
-        labels = flow {},
     )
 }
 
