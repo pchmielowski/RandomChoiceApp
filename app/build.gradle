@@ -121,7 +121,7 @@ dependencies {
     testImplementation "com.squareup.sqldelight:sqlite-driver:$sql_delight_version"
     androidTestImplementation "com.squareup.sqldelight:sqlite-driver:$sql_delight_version"
     // Workaround for https://github.com/cashapp/sqldelight/issues/1397
-    testImplementation "org.xerial:sqlite-jdbc:3.21.0.1"
+    testImplementation "org.xerial:sqlite-jdbc:3.34.0"
 
     // Koin
     final koin_version = "3.1.5"
