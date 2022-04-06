@@ -29,7 +29,7 @@ internal fun AppTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun isDark(theme: Theme) = when (theme) {
+internal fun isDark(theme: Theme) = when (theme) {
     Theme.Light -> false
     Theme.Dark -> true
     Theme.System -> isSystemInDarkTheme()

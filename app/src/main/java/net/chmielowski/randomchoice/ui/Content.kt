@@ -4,14 +4,10 @@ package net.chmielowski.randomchoice.ui
 
 import androidx.compose.animation.AnimatedContentScope.SlideDirection
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.LaunchedEffect
 import com.arkivanov.mvikotlin.core.store.Store
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -31,6 +27,7 @@ import net.chmielowski.randomchoice.ui.screen.saved.SavedScreen
 import net.chmielowski.randomchoice.ui.theme.AppTheme
 import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
+import net.chmielowski.randomchoice.ui.theme.isDark
 
 @OptIn(
     ExperimentalAnimationApi::class,
@@ -46,7 +43,7 @@ internal fun Content(
         CompositionLocalProvider(LocalTheme provides preference.current) {
             AppTheme {
                 Surface {
-                    SetStatusBarColor()
+                    SetStatusBarContentColor()
 
                     DestinationsNavHost(
                         navGraph = NavGraphs.root,
@@ -81,8 +78,10 @@ private fun animations() = RootNavGraphDefaultAnimations(
 )
 
 @Composable
-private fun SetStatusBarColor() {
+private fun SetStatusBarContentColor() {
     val controller = rememberSystemUiController()
-    val background = MaterialTheme.colorScheme.background
-    SideEffect { controller.setStatusBarColor(background) }
+    val isDarkTheme = isDark(LocalTheme.current)
+    LaunchedEffect(controller, !isDarkTheme) {
+        controller.statusBarDarkContentEnabled = !isDarkTheme
+    }
 }
