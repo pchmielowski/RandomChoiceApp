@@ -223,6 +223,12 @@ internal abstract class AbstractTest {
             .onNodeWithText(R.string.action_delete)
             .performClick()
     }
+
+    protected fun clickUndo() {
+        rule
+            .onNodeWithText(R.string.action_undo)
+            .performClick()
+    }
 }
 
 private fun ComposeContentTestRule.takeScreenshot(file: String) {

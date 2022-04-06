@@ -100,7 +100,7 @@ internal abstract class BehaviorTest : AbstractTest() {
         navigateToSaved()
 
         clickDelete()
-        // TODO@ Click Undo
+        clickUndo()
         assertSavedOptionsArePresent("Pizza or Salad")
     }
 
