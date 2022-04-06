@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
@@ -27,9 +28,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +36,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -177,13 +175,102 @@ internal fun InputScreen(
     }
 }
 
+internal interface DropdownMenuStrategy {
+
+    @Composable
+    fun Container(content: @Composable () -> Unit)
+
+    @Composable
+    fun Menu(
+        expanded: Boolean,
+        onDismissRequest: () -> Unit,
+        content: @Composable () -> Unit,
+    )
+
+    @Composable
+    fun Item(
+        icon: ImageVector,
+        choice: Boolean?,
+        @StringRes text: Int,
+        onClick: () -> Unit,
+        onDismiss: () -> Unit,
+    )
+
+    object Real : DropdownMenuStrategy {
+
+        @Composable
+        override fun Container(content: @Composable () -> Unit) = Box(content = { content() })
+
+        @Composable
+        override fun Menu(expanded: Boolean, onDismissRequest: () -> Unit, content: @Composable () -> Unit) =
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = onDismissRequest,
+            ) {
+                content()
+            }
+
+        @OptIn(ExperimentalMaterial3Api::class)
+        @Composable
+        override fun Item(
+            icon: ImageVector,
+            choice: Boolean?,
+            @StringRes text: Int,
+            onClick: () -> Unit,
+            onDismiss: () -> Unit,
+        ) {
+            DropdownMenuItem(
+                onClick = {
+                    onClick()
+                    onDismiss()
+                },
+                leadingIcon = { Icon(icon, contentDescription = null) },
+                trailingIcon = if (choice != null) {
+                    { RadioButton(choice, { onClick(); onDismiss() }) }
+                } else {
+                    null
+                },
+                text = { Text(stringResource(text)) }
+            )
+        }
+    }
+
+//    object Fake : DropdownMenuStrategy {
+//
+//        @Composable
+//        override fun Container(content: @Composable () -> Unit) = content()
+//
+//        @Composable
+//        override fun Menu(expanded: Boolean, onDismissRequest: () -> Unit, content: @Composable () -> Unit) {
+//            if (expanded) {
+//                content()
+//            }
+//        }
+//
+//        @Composable
+//        override fun Item(
+//            icon: ImageVector,
+//            choice: Boolean?,
+//            text: Int,
+//            onClick: () -> Unit,
+//            onDismiss: () -> Unit,
+//        ) {
+//            Text(
+//                stringResource(text),
+//                modifier = Modifier.size(10.dp).clickable { onClick();onDismiss() },
+//                fontSize = 1.sp
+//            )
+//        }
+//    }
+}
+
 @Composable
 internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
 ) {
-//    Box {
+    DropdownMenuStrategy.Real.Container {
         var expanded by remember { mutableStateOf(false) }
         IconButton(onClick = { expanded = true }) {
             Icon(
@@ -198,7 +285,7 @@ internal fun MenuButton(
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
         )
-//    }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -210,11 +297,7 @@ private fun DropdownMenu(
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
 ) {
-    if (expanded) {
-//    DropdownMenu(
-//        expanded = expanded,
-//        onDismissRequest = onDismiss,
-//    ) {
+    DropdownMenuStrategy.Real.Menu(expanded, onDismiss) {
         @Composable
         fun Item(
             icon: ImageVector,
@@ -222,20 +305,13 @@ private fun DropdownMenu(
             @StringRes text: Int,
             onClick: () -> Unit,
         ) {
-    Text(stringResource(text), modifier = Modifier.size(10.dp).clickable { onClick();onDismiss() }, fontSize = 1.sp)
-//            DropdownMenuItem(
-//                onClick = {
-//                    onClick()
-//                    onDismiss()
-//                },
-//                leadingIcon = { Icon(icon, contentDescription = null) },
-//                trailingIcon = if (choice != null) {
-//                    { RadioButton(choice, { onClick(); onDismiss() }) }
-//                } else {
-//                    null
-//                },
-//                text = { Text(stringResource(text)) }
-//            )
+            DropdownMenuStrategy.Real.Item(
+                icon = icon,
+                choice = choice,
+                text = text,
+                onClick = onClick,
+                onDismiss = onDismiss,
+            )
         }
 
         Item(
