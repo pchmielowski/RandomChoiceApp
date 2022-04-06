@@ -6,8 +6,14 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.captureToImage
@@ -18,6 +24,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -76,7 +84,7 @@ internal abstract class AbstractTest {
                     deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                 )
             }),
-            menuStrategy = DropdownMenuStrategy.Fake,
+            menuStrategy = FakeDropdownMenuStrategy,
         )
     }
 
@@ -261,4 +269,39 @@ internal fun fakeThemePreference(theme: Theme) = object : ThemePreference {
     override val current = theme
 
     override fun write(theme: Theme) {}
+}
+
+@Suppress("TestFunctionName")
+object FakeDropdownMenuStrategy : DropdownMenuStrategy {
+
+    @Composable
+    override fun Container(content: @Composable () -> Unit) = content()
+
+    @Composable
+    override fun Menu(
+        expanded: Boolean,
+        onDismissRequest: () -> Unit,
+        content: @Composable () -> Unit
+    ) {
+        if (expanded) {
+            content()
+        }
+    }
+
+    @Composable
+    override fun Item(
+        icon: ImageVector,
+        choice: Boolean?,
+        text: Int,
+        onClick: () -> Unit,
+        onDismiss: () -> Unit,
+    ) = Text(
+        stringResource(text),
+        modifier = Modifier.size(10.dp).clickable { onClick();onDismiss() },
+        fontSize = 1.sp
+    )
+
+    @Composable
+    override fun Divider(modifier: Modifier) {
+    }
 }
