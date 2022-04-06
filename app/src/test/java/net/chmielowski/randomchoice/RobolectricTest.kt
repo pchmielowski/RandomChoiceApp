@@ -1,6 +1,5 @@
 package net.chmielowski.randomchoice
 
-import android.app.Application
 import org.junit.After
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
