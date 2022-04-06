@@ -17,7 +17,7 @@ internal fun interface ObserveSavedDilemmas {
 
 internal class ObserveSavedDilemmasImpl(
     private val database: Database,
-    private val context: CoroutineContext=Dispatchers.IO,
+    private val context: CoroutineContext = Dispatchers.IO,
 ) : ObserveSavedDilemmas {
 
     override operator fun invoke() = database.choiceQueries
