@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                 preference = get(),
                 observeSavedDilemmas = get(),
                 store = stateStore,
-                strategy = DropdownMenuStrategy.Real(),
+                menuStrategy = DropdownMenuStrategy.Real(),
             )
         }
     }

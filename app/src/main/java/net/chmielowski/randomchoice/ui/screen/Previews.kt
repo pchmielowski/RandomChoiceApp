@@ -26,7 +26,7 @@ internal fun InputScreenPreview() {
         state = State(Dilemma()),
         onIntent = {},
         focusRequester = FocusRequester(),
-        strategy = DropdownMenuStrategy.Real(),
+        menuStrategy = DropdownMenuStrategy.Real(),
     )
 }
 

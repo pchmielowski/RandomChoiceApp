@@ -89,7 +89,7 @@ import net.chmielowski.randomchoice.utils.Observe
 internal fun InputScreen(
     navigator: DestinationsNavigator,
     store: Store<Intent, State, Label>,
-    strategy: DropdownMenuStrategy,
+    menuStrategy: DropdownMenuStrategy,
 ) {
     val state by store.states.collectAsState(State())
     val focusRequester = remember { FocusRequester() }
@@ -104,7 +104,7 @@ internal fun InputScreen(
         state = state,
         onIntent = store::accept,
         focusRequester = focusRequester,
-        strategy = strategy, // TODO@ Rename
+        menuStrategy = menuStrategy,
     )
 }
 
@@ -116,7 +116,7 @@ internal fun InputScreen(
     state: State,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
-    strategy: DropdownMenuStrategy,
+    menuStrategy: DropdownMenuStrategy,
 ) {
     var transitionVisible by remember { mutableStateOf(false) }
     Scaffold(
@@ -135,7 +135,7 @@ internal fun InputScreen(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
-                strategy = strategy, // TODO@ Rename
+                menuStrategy = menuStrategy,
             )
         },
         floatingActionButton = {
@@ -293,9 +293,9 @@ internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
-    strategy: DropdownMenuStrategy,
+    menuStrategy: DropdownMenuStrategy,
 ) {
-    strategy.Container {
+    menuStrategy.Container {
         var expanded by remember { mutableStateOf(false) }
         IconButton(onClick = { expanded = true }) {
             Icon(
@@ -309,7 +309,7 @@ internal fun MenuButton(
             onThemeChoose = onThemeChoose,
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
-            strategy = strategy,
+            strategy = menuStrategy,
         )
     }
 }

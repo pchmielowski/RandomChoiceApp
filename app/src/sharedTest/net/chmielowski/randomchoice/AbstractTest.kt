@@ -76,7 +76,7 @@ internal abstract class AbstractTest {
                     deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                 )
             }),
-            strategy = DropdownMenuStrategy.Fake,
+            menuStrategy = DropdownMenuStrategy.Fake,
         )
     }
 

@@ -39,7 +39,7 @@ internal fun Content(
     preference: ThemePreference,
     observeSavedDilemmas: ObserveSavedDilemmas,
     store: Store<Intent, State, Label>,
-    strategy: DropdownMenuStrategy, // TODO@ Rename
+    menuStrategy: DropdownMenuStrategy,
 ) {
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         CompositionLocalProvider(LocalTheme provides preference.current) {
@@ -55,7 +55,7 @@ internal fun Content(
                             InputScreen(
                                 navigator = destinationsNavigator,
                                 store = store,
-                                strategy = strategy, // TODO@ Rename
+                                menuStrategy = menuStrategy,
                             )
                         }
                         composable(SavedScreenDestination) {
