@@ -3,6 +3,7 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -179,7 +181,7 @@ internal fun MenuButton(
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
 ) {
-    Box {
+//    Box {
         var expanded by remember { mutableStateOf(false) }
         IconButton(onClick = { expanded = true }) {
             Icon(
@@ -194,7 +196,7 @@ internal fun MenuButton(
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
         )
-    }
+//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -206,10 +208,11 @@ private fun DropdownMenu(
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
 ) {
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismiss,
-    ) {
+    if (expanded) {
+//    DropdownMenu(
+//        expanded = expanded,
+//        onDismissRequest = onDismiss,
+//    ) {
         @Composable
         fun Item(
             icon: ImageVector,
@@ -217,19 +220,20 @@ private fun DropdownMenu(
             @StringRes text: Int,
             onClick: () -> Unit,
         ) {
-            DropdownMenuItem(
-                onClick = {
-                    onClick()
-                    onDismiss()
-                },
-                leadingIcon = { Icon(icon, contentDescription = null) },
-                trailingIcon = if (choice != null) {
-                    { RadioButton(choice, { onClick(); onDismiss() }) }
-                } else {
-                    null
-                },
-                text = { Text(stringResource(text)) }
-            )
+    Text(stringResource(text), modifier = Modifier.width(36.dp).clickable { onClick();onDismiss() })
+//            DropdownMenuItem(
+//                onClick = {
+//                    onClick()
+//                    onDismiss()
+//                },
+//                leadingIcon = { Icon(icon, contentDescription = null) },
+//                trailingIcon = if (choice != null) {
+//                    { RadioButton(choice, { onClick(); onDismiss() }) }
+//                } else {
+//                    null
+//                },
+//                text = { Text(stringResource(text)) }
+//            )
         }
 
         Item(
@@ -237,7 +241,7 @@ private fun DropdownMenu(
             text = R.string.label_saved,
             onClick = { onShowSavedClick() },
         )
-        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
+//        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
         val theme = LocalTheme.current
         Item(
             icon = Icons.Outlined.WbSunny,
@@ -257,7 +261,7 @@ private fun DropdownMenu(
             choice = theme == Theme.System,
             onClick = { onThemeChoose(Theme.System) },
         )
-        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
+////        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
         Item(
             icon = Icons.Outlined.Info,
             text = R.string.label_about,
