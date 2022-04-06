@@ -17,6 +17,7 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.State
@@ -33,7 +34,8 @@ import net.chmielowski.randomchoice.ui.theme.isDark
 
 @OptIn(
     ExperimentalAnimationApi::class,
-    ExperimentalMaterialNavigationApi::class, kotlinx.coroutines.ExperimentalCoroutinesApi::class,
+    ExperimentalMaterialNavigationApi::class,
+    ExperimentalCoroutinesApi::class,
 )
 @Composable
 internal fun Content(
