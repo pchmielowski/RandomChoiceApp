@@ -10,6 +10,7 @@ CREATE TABLE choice (
 selectAllDilemmas:
 SELECT id, option.name
 FROM choice JOIN option ON id = option.choice
+WHERE deleted = 0
 ;
 
 selectLastInsertedId:
