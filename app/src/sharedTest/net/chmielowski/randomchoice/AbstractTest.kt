@@ -38,9 +38,9 @@ internal abstract class AbstractTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
-    protected open val choice get() = Choice { 0 }
+    protected open val choice = Choice { 0 }
 
-    protected open val preference get() = fakeThemePreference(Theme.Light)
+    protected open val preference = fakeThemePreference(Theme.Light)
 
     protected open val prepopulateDatabase = PrepopulateDatabase {}
 

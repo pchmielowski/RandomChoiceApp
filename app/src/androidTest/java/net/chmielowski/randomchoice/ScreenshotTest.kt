@@ -100,8 +100,8 @@ private class PrepopulateWithSavedChoices : PrepopulateDatabase {
 internal abstract class AbstractScreenshotTest(
     override val choice: Choice,
     override val prepopulateDatabase: PrepopulateDatabase = PrepopulateDatabase {},
-    private val theme: Theme,
+    theme: Theme,
 ) : AbstractTest() {
 
-    override val preference get() = fakeThemePreference(theme)
+    override val preference = fakeThemePreference(theme)
 }
