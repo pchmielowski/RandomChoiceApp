@@ -62,15 +62,15 @@ internal fun SavedScreen(
         @Suppress("UnnecessaryVariable")
         val current = loadable
         if (current is Loadable.Loaded) {
-            val items = current.content
-            if (items.isEmpty()) {
-                EmptyView()
-            } else {
-                Column {
-                    // TODO@ Snackbar
-                    Button(onClick = { onIntent(DilemmaIntent.UndoDeleting) }) {
-                        Text(stringResource(R.string.action_undo))
-                    }
+            Column {
+                // TODO@ Snackbar
+                Button(onClick = { onIntent(DilemmaIntent.UndoDeleting) }) {
+                    Text(stringResource(R.string.action_undo))
+                }
+                val items = current.content
+                if (items.isEmpty()) {
+                    EmptyView()
+                } else {
                     ItemList(
                         items = items,
                         onIntent = onIntent,
