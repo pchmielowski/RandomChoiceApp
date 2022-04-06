@@ -11,6 +11,7 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.core.createStateStore
 import net.chmielowski.randomchoice.ui.Content
+import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +25,12 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         intentDelegate.onCreate(intent)
         setContent {
-            Content(get(), get(), stateStore)
+            Content(
+                preference = get(),
+                observeSavedDilemmas = get(),
+                store = stateStore,
+                strategy = DropdownMenuStrategy.Real(),
+            )
         }
     }
 

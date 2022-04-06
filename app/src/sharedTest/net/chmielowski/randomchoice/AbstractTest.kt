@@ -74,7 +74,7 @@ internal abstract class AbstractTest {
                     saveDilemma = SaveDilemmaImpl(database, NonCancellableTask.fake),
                     deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                 )
-            }),
+            }),,
         )
     }
 

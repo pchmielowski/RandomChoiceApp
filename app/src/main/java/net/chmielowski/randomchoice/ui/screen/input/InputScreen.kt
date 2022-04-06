@@ -88,6 +88,7 @@ import net.chmielowski.randomchoice.utils.Observe
 internal fun InputScreen(
     navigator: DestinationsNavigator,
     store: Store<Intent, State, Label>,
+    strategy: DropdownMenuStrategy,
 ) {
     val state by store.states.collectAsState(State())
     val focusRequester = remember { FocusRequester() }
@@ -102,6 +103,7 @@ internal fun InputScreen(
         state = state,
         onIntent = store::accept,
         focusRequester = focusRequester,
+        strategy = strategy, // TODO@ Rename
     )
 }
 
@@ -113,6 +115,7 @@ internal fun InputScreen(
     state: State,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
+    strategy: DropdownMenuStrategy,
 ) {
     var transitionVisible by remember { mutableStateOf(false) }
     Scaffold(
@@ -131,6 +134,7 @@ internal fun InputScreen(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
+                strategy = strategy, // TODO@ Rename
             )
         },
         floatingActionButton = {
@@ -277,7 +281,7 @@ internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
-    strategy: DropdownMenuStrategy = DropdownMenuStrategy.Real(), // TODO@
+    strategy: DropdownMenuStrategy,
 ) {
     strategy.Container {
         var expanded by remember { mutableStateOf(false) }
