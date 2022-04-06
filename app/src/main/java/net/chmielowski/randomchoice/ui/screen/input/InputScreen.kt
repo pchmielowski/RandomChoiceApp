@@ -325,22 +325,19 @@ private fun DropdownMenu(
     strategy: DropdownMenuStrategy,
 ) {
     strategy.Menu(expanded, onDismiss) {
-        // TODO@ Consider flattening
         @Composable
         fun Item(
             icon: ImageVector,
             choice: Boolean? = null,
             @StringRes text: Int,
             onClick: () -> Unit,
-        ) {
-            strategy.Item(
-                icon = icon,
-                choice = choice,
-                text = text,
-                onClick = onClick,
-                onDismiss = onDismiss,
-            )
-        }
+        ) = strategy.Item(
+            icon = icon,
+            choice = choice,
+            text = text,
+            onClick = onClick,
+            onDismiss = onDismiss,
+        )
 
         Item(
             icon = Icons.Outlined.ListAlt,
