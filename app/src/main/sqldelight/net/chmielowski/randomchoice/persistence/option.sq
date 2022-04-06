@@ -9,6 +9,6 @@ CREATE TABLE option (
 );
 
 insertOption:
-INSERT INTO option (name, choice)
+INSERT OR IGNORE INTO option (name, choice)
 VALUES (?, ?)
 ;

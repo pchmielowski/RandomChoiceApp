@@ -66,6 +66,8 @@ internal abstract class BehaviorTest : AbstractTest() {
         enterOption2("Salad")
         clickAddOption()
         enterOption3("Sandwich")
+        clickAddOption()
+        enterOption4("Sandwich") // To verify that duplicates are ignored.
 
         assertSaveIsDisplayed()
         clickSave()
