@@ -99,11 +99,11 @@ private class PrepopulateWithSavedChoices : PrepopulateDatabase {
 
 internal abstract class AbstractScreenshotTest(
     override val choice: Choice,
-    theme: Theme,
-    prepopulateDatabase: PrepopulateDatabase = PrepopulateDatabase {},
+    private val theme: Theme,
+    private val prepopulateDatabase: PrepopulateDatabase = PrepopulateDatabase {},
 ) : AbstractTest() {
 
-    override val preference = fakeThemePreference(theme)
+    override val preference get() = fakeThemePreference(theme)
 
-    override val database = createInMemoryAndroidDatabase(rule, prepopulateDatabase)
+    override val database get() = createInMemoryAndroidDatabase(rule, prepopulateDatabase)
 }

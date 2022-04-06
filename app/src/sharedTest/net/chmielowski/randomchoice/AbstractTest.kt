@@ -38,16 +38,16 @@ internal abstract class AbstractTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
+    protected open val choice get() = Choice { 0 }
+
+    protected open val preference get() = fakeThemePreference(Theme.Light)
+
+    protected open val database get() = createInMemoryAndroidDatabase(rule)
+
     @Before
     fun setUp() {
         rule.setContent { Content() }
     }
-
-    protected open val choice: Choice = Choice { 0 }
-
-    protected open val preference: ThemePreference = fakeThemePreference(Theme.Light)
-
-    protected open val database: Database = createInMemoryAndroidDatabase(rule)
 
     @Suppress("TestFunctionName")
     @Composable
