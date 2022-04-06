@@ -198,7 +198,7 @@ internal fun MenuButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongParameterList")
 @Composable
 private fun DropdownMenu(
     expanded: Boolean,

@@ -60,6 +60,7 @@ private object FakeDropdownMenuStrategy : DropdownMenuStrategy {
         fontSize = 1.sp
     )
 
+    @Suppress("EmptyFunctionBlock")
     @Composable
     override fun Divider(modifier: Modifier) {
     }
