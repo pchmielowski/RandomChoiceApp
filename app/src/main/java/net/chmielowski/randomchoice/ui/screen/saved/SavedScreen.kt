@@ -4,7 +4,6 @@ package net.chmielowski.randomchoice.ui.screen.saved
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,16 +14,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,16 +33,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.Flow
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.DilemmaId
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
+import net.chmielowski.randomchoice.core.Label
+import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
+import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
+import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Loadable
+import net.chmielowski.randomchoice.utils.Observe
 import net.chmielowski.randomchoice.utils.collectAsLoadableState
 
 @Destination
@@ -50,34 +57,46 @@ internal fun SavedScreen(
     navigator: DestinationsNavigator,
     observeSavedDilemmas: ObserveSavedDilemmas,
     onIntent: (Intent) -> Unit,
+    labels: Flow<Label>,
 ) {
     val scrollBehavior = rememberScrollBehavior()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val action = stringResource(R.string.action_undo)
+    labels.Observe { label ->
+        when (label) {
+            ShowDilemmaDeleted -> {
+                val result = snackbarHostState
+                    .showSnackbar("TODO@", action)
+                when (result) {
+                    SnackbarResult.Dismissed -> {}
+                    SnackbarResult.ActionPerformed -> onIntent(DilemmaIntent.UndoDeleting)
+                }
+            }
+            is ShowResult, FocusFirstOptionInput -> {
+            }
+        }
+    }
     Scaffold(
         navigateUp = navigator::navigateUp,
         title = stringResource(R.string.label_saved),
         scrollBehavior = scrollBehavior,
+        snackbarHostState = snackbarHostState,
     ) {
         val loadable by observeSavedDilemmas().collectAsLoadableState()
 
         @Suppress("UnnecessaryVariable")
         val current = loadable
         if (current is Loadable.Loaded) {
-            Column {
-                // TODO@ Snackbar
-                Button(onClick = { onIntent(DilemmaIntent.UndoDeleting) }) {
-                    Text(stringResource(R.string.action_undo))
-                }
-                val items = current.content
-                if (items.isEmpty()) {
-                    EmptyView()
-                } else {
-                    ItemList(
-                        items = items,
-                        onIntent = onIntent,
-                        navigator = navigator,
-                        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                    )
-                }
+            val items = current.content
+            if (items.isEmpty()) {
+                EmptyView()
+            } else {
+                ItemList(
+                    items = items,
+                    onIntent = onIntent,
+                    navigator = navigator,
+                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                )
             }
         }
     }

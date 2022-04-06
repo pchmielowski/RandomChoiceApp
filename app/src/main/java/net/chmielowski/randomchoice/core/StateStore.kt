@@ -78,6 +78,8 @@ internal sealed interface Label {
     object FocusFirstOptionInput : Label
 
     data class ShowResult(val result: Result) : Label
+
+    object ShowDilemmaDeleted : Label
 }
 
 internal class MainExecutor(
@@ -120,6 +122,7 @@ internal class MainExecutor(
                 is DilemmaIntent.Delete -> {
                     deleteDilemma(intent.dilemma)
                     dispatchState { copy(lastDeleted = intent.dilemma) }
+                    publish(Label.ShowDilemmaDeleted)
                 }
                 DilemmaIntent.UndoDeleting -> undeleteDilemma(getState().lastDeleted!!)
             }

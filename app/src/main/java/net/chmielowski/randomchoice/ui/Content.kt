@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import com.arkivanov.mvikotlin.core.store.Store
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -32,7 +33,7 @@ import net.chmielowski.randomchoice.ui.theme.isDark
 
 @OptIn(
     ExperimentalAnimationApi::class,
-    ExperimentalMaterialNavigationApi::class,
+    ExperimentalMaterialNavigationApi::class, kotlinx.coroutines.ExperimentalCoroutinesApi::class,
 )
 @Composable
 internal fun Content(
@@ -62,6 +63,7 @@ internal fun Content(
                             SavedScreen(
                                 navigator = destinationsNavigator,
                                 observeSavedDilemmas = observeSavedDilemmas,
+                                labels = store.labels,
                                 onIntent = store::accept,
                             )
                         }
