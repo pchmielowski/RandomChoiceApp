@@ -235,33 +235,33 @@ internal interface DropdownMenuStrategy {
         }
     }
 
-//    object Fake : DropdownMenuStrategy {
-//
-//        @Composable
-//        override fun Container(content: @Composable () -> Unit) = content()
-//
-//        @Composable
-//        override fun Menu(expanded: Boolean, onDismissRequest: () -> Unit, content: @Composable () -> Unit) {
-//            if (expanded) {
-//                content()
-//            }
-//        }
-//
-//        @Composable
-//        override fun Item(
-//            icon: ImageVector,
-//            choice: Boolean?,
-//            text: Int,
-//            onClick: () -> Unit,
-//            onDismiss: () -> Unit,
-//        ) {
-//            Text(
-//                stringResource(text),
-//                modifier = Modifier.size(10.dp).clickable { onClick();onDismiss() },
-//                fontSize = 1.sp
-//            )
-//        }
-//    }
+    object Fake : DropdownMenuStrategy {
+
+        @Composable
+        override fun Container(content: @Composable () -> Unit) = content()
+
+        @Composable
+        override fun Menu(expanded: Boolean, onDismissRequest: () -> Unit, content: @Composable () -> Unit) {
+            if (expanded) {
+                content()
+            }
+        }
+
+        @Composable
+        override fun Item(
+            icon: ImageVector,
+            choice: Boolean?,
+            text: Int,
+            onClick: () -> Unit,
+            onDismiss: () -> Unit,
+        ) {
+            Text(
+                stringResource(text),
+                modifier = Modifier.size(10.dp).clickable { onClick();onDismiss() },
+                fontSize = 1.sp
+            )
+        }
+    }
 }
 
 @Composable
