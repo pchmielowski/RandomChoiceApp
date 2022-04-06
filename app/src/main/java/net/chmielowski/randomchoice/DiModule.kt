@@ -11,6 +11,8 @@ import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmasImpl
 import net.chmielowski.randomchoice.persistence.SaveDilemma
 import net.chmielowski.randomchoice.persistence.SaveDilemmaImpl
+import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemma
+import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemmaImpl
 import net.chmielowski.randomchoice.persistence.createPersistentAndroidDatabase
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 import net.chmielowski.randomchoice.ui.theme.ThemePreferenceImpl
@@ -28,5 +30,6 @@ internal val diModule = module {
     factory<SaveDilemma> { SaveDilemmaImpl(get(), get()) }
     factory<ObserveSavedDilemmas> { ObserveSavedDilemmasImpl(get()) }
     factory<DeleteSavedDilemma> { DeleteSavedDilemmaImpl(get(), get()) }
-    factory { MainExecutor.Factory { MainExecutor(get(), get(), get(), get()) } }
+    factory<UndeleteSavedDilemma> { UndeleteSavedDilemmaImpl(get(), get()) }
+    factory { MainExecutor.Factory { MainExecutor(get(), get(), get(), get(), get()) } }
 }

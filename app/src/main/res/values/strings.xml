@@ -15,11 +15,13 @@
     <string name="action_open_webpage">Open webpage</string>
     <string name="action_delete">Delete</string>
     <string name="action_reuse">Use again</string>
+    <string name="action_undo">Undo</string>
 
     <string name="message_throwing_dice">Throwing the dice…</string>
     <string name="message_done">Done!</string>
     <string name="message_email_copied">E-mail address copied to the clipboard!</string>
     <string name="message_saved">Saved!</string>
+    <string name="message_deleted">Dilemma deleted</string>
     <string name="message_empty">The list is empty</string>
 
     <string name="error_no_email_client">No e-mail client installed!</string>

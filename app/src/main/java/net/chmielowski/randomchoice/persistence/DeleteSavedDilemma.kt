@@ -5,7 +5,7 @@ import net.chmielowski.randomchoice.core.DilemmaId
 
 internal fun interface DeleteSavedDilemma {
 
-    operator fun invoke(id: DilemmaId)
+    suspend operator fun invoke(id: DilemmaId)
 }
 
 internal class DeleteSavedDilemmaImpl(
@@ -13,7 +13,7 @@ internal class DeleteSavedDilemmaImpl(
     private val task: NonCancellableTask,
 ) : DeleteSavedDilemma {
 
-    override fun invoke(id: DilemmaId) = task.runNotObserving {
+    override suspend fun invoke(id: DilemmaId) = task.run {
         database.choiceQueries.deleteDilemma(id)
     }
 }

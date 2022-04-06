@@ -66,6 +66,12 @@ android {
     }
 }
 
+sqldelight {
+    Database {
+        schemaOutputDirectory = file("src/main/sqldelight/databases")
+    }
+}
+
 tasks.withType(Test) {
     failFast = true
     testLogging {

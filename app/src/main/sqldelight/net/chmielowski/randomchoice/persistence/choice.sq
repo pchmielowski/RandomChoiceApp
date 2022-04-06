@@ -1,13 +1,16 @@
+import java.lang.Boolean;
 import net.chmielowski.randomchoice.core.DilemmaId;
 
 -- TODO: Rename to dilemma
 CREATE TABLE choice (
-  id INTEGER AS DilemmaId NOT NULL PRIMARY KEY AUTOINCREMENT
+  id INTEGER AS DilemmaId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  deleted INTEGER AS Boolean NOT NULL DEFAULT 0
 );
 
 selectAllDilemmas:
 SELECT id, option.name
 FROM choice JOIN option ON id = option.choice
+WHERE deleted = 0
 ;
 
 selectLastInsertedId:
@@ -18,6 +21,13 @@ INSERT INTO choice DEFAULT VALUES
 ;
 
 deleteDilemma:
-DELETE FROM choice
+UPDATE choice
+SET deleted = 1
+WHERE id = ?
+;
+
+undeleteDilemma:
+UPDATE choice
+SET deleted = 0
 WHERE id = ?
 ;
