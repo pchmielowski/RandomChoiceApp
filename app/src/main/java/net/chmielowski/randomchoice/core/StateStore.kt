@@ -90,6 +90,7 @@ internal class MainExecutor(
     private val undeleteDilemma: UndeleteSavedDilemma,
 ) : SuspendExecutor<Intent, Nothing, State, State, Label>() {
 
+    @Suppress("ComplexMethod")
     override suspend fun executeIntent(intent: Intent, getState: () -> State) {
         fun dispatchState(function: State.() -> State) {
             dispatch(getState().function())
