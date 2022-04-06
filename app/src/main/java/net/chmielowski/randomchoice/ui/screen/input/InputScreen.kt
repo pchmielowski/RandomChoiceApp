@@ -3,7 +3,6 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,16 +25,12 @@ import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -86,6 +81,7 @@ import net.chmielowski.randomchoice.utils.Observe
 internal fun InputScreen(
     navigator: DestinationsNavigator,
     store: Store<Intent, State, Label>,
+    menuStrategy: DropdownMenuStrategy,
 ) {
     val state by store.states.collectAsState(State())
     val focusRequester = remember { FocusRequester() }
@@ -100,6 +96,7 @@ internal fun InputScreen(
         state = state,
         onIntent = store::accept,
         focusRequester = focusRequester,
+        menuStrategy = menuStrategy,
     )
 }
 
@@ -111,6 +108,7 @@ internal fun InputScreen(
     state: State,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
+    menuStrategy: DropdownMenuStrategy,
 ) {
     var transitionVisible by remember { mutableStateOf(false) }
     Scaffold(
@@ -129,6 +127,7 @@ internal fun InputScreen(
                 onThemeChoose = { theme -> onIntent(Intent.SetTheme(theme)) },
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
+                menuStrategy = menuStrategy,
             )
         },
         floatingActionButton = {
@@ -178,8 +177,9 @@ internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
+    menuStrategy: DropdownMenuStrategy,
 ) {
-    Box {
+    menuStrategy.Container {
         var expanded by remember { mutableStateOf(false) }
         IconButton(onClick = { expanded = true }) {
             Icon(
@@ -193,11 +193,12 @@ internal fun MenuButton(
             onThemeChoose = onThemeChoose,
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
+            strategy = menuStrategy,
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongParameterList")
 @Composable
 private fun DropdownMenu(
     expanded: Boolean,
@@ -205,39 +206,29 @@ private fun DropdownMenu(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
+    strategy: DropdownMenuStrategy,
 ) {
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismiss,
-    ) {
+    strategy.Menu(expanded, onDismiss) {
         @Composable
         fun Item(
             icon: ImageVector,
             choice: Boolean? = null,
             @StringRes text: Int,
             onClick: () -> Unit,
-        ) {
-            DropdownMenuItem(
-                onClick = {
-                    onClick()
-                    onDismiss()
-                },
-                leadingIcon = { Icon(icon, contentDescription = null) },
-                trailingIcon = if (choice != null) {
-                    { RadioButton(choice, { onClick(); onDismiss() }) }
-                } else {
-                    null
-                },
-                text = { Text(stringResource(text)) }
-            )
-        }
+        ) = strategy.Item(
+            icon = icon,
+            choice = choice,
+            text = text,
+            onClick = onClick,
+            onDismiss = onDismiss,
+        )
 
         Item(
             icon = Icons.Outlined.ListAlt,
             text = R.string.label_saved,
             onClick = { onShowSavedClick() },
         )
-        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
+        strategy.Divider(modifier = Modifier.padding(vertical = 4.dp))
         val theme = LocalTheme.current
         Item(
             icon = Icons.Outlined.WbSunny,
@@ -257,7 +248,7 @@ private fun DropdownMenu(
             choice = theme == Theme.System,
             onClick = { onThemeChoose(Theme.System) },
         )
-        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
+        strategy.Divider(modifier = Modifier.padding(vertical = 4.dp))
         Item(
             icon = Icons.Outlined.Info,
             text = R.string.label_about,

@@ -14,6 +14,7 @@ import net.chmielowski.randomchoice.ui.ResultScreen
 import net.chmielowski.randomchoice.ui.screen.about.AboutScreen
 import net.chmielowski.randomchoice.ui.screen.about.LibrariesScreen
 import net.chmielowski.randomchoice.ui.screen.about.LicenseScreen
+import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.screen.input.InputScreen
 import net.chmielowski.randomchoice.ui.screen.saved.SavedScreen
 
@@ -25,6 +26,7 @@ internal fun InputScreenPreview() {
         state = State(Dilemma()),
         onIntent = {},
         focusRequester = FocusRequester(),
+        menuStrategy = DropdownMenuStrategy.Real(),
     )
 }
 

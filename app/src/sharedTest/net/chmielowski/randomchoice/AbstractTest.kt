@@ -19,6 +19,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.Dispatchers
 import net.chmielowski.randomchoice.core.Choice
 import net.chmielowski.randomchoice.core.MainExecutor
 import net.chmielowski.randomchoice.core.createStateStore
@@ -27,6 +28,7 @@ import net.chmielowski.randomchoice.persistence.NonCancellableTask
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmasImpl
 import net.chmielowski.randomchoice.persistence.SaveDilemmaImpl
 import net.chmielowski.randomchoice.ui.Content
+import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 import org.junit.Before
@@ -44,6 +46,8 @@ internal abstract class AbstractTest {
 
     protected open val prepopulateDatabase = PrepopulateDatabase {}
 
+    protected open val menuStrategy: DropdownMenuStrategy = DropdownMenuStrategy.Real()
+
     @Before
     fun setUp() {
         rule.setContent { Content() }
@@ -56,7 +60,7 @@ internal abstract class AbstractTest {
         val database = createInMemoryAndroidDatabase(rule, prepopulateDatabase)
         Content(
             preference = preference,
-            observeSavedDilemmas = ObserveSavedDilemmasImpl(database),
+            observeSavedDilemmas = ObserveSavedDilemmasImpl(database, Dispatchers.Unconfined),
             store = createStateStore({
                 MainExecutor(
                     choice = choice,
@@ -65,6 +69,7 @@ internal abstract class AbstractTest {
                     deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                 )
             }),
+            menuStrategy = menuStrategy,
         )
     }
 

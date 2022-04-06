@@ -4,8 +4,6 @@ import org.junit.Test
 
 internal abstract class BehaviorTest : AbstractTest() {
 
-    protected open val isRobolectric = false
-
     @Test
     fun choosesOneOption() {
         enterOption1("Pizza")
@@ -64,11 +62,6 @@ internal abstract class BehaviorTest : AbstractTest() {
 
     @Test
     fun savesOptions() {
-        // Robolectric tests have problems with DropdownMenu: test hangs after clicking on menu button.
-        if (isRobolectric) {
-            return
-        }
-
         enterOption1("Pizza")
         enterOption2("Salad")
         clickAddOption()
@@ -88,11 +81,6 @@ internal abstract class BehaviorTest : AbstractTest() {
 
     @Test
     fun removesSavedOptions() {
-        // Robolectric tests have problems with DropdownMenu: test hangs after clicking on menu button.
-        if (isRobolectric) {
-            return
-        }
-
         enterOption1("Pizza")
         enterOption2("Salad")
         clickSave()
@@ -104,11 +92,6 @@ internal abstract class BehaviorTest : AbstractTest() {
 
     @Test
     fun reusesSavedOptions() {
-        // Robolectric tests have problems with DropdownMenu: test hangs after clicking on menu button.
-        if (isRobolectric) {
-            return
-        }
-
         enterOption1("Pizza")
         enterOption2("Salad")
         clickSave()
