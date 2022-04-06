@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.google.accompanist.insets.statusBarsPadding
 import net.chmielowski.randomchoice.ui.screen.component.BackButton
 import net.chmielowski.randomchoice.ui.screen.component.TopBar
 
@@ -42,7 +41,6 @@ internal fun Scaffold(
         },
         floatingActionButton = floatingActionButton,
         modifier = Modifier
-            .statusBarsPadding()
             .navigationBarsWithImePadding()
     ) {
         // Using legacy Material2 just for the correct colors on Material2 widgets.
