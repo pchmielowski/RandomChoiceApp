@@ -19,6 +19,8 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineScope
 import net.chmielowski.randomchoice.core.Choice
 import net.chmielowski.randomchoice.core.MainExecutor
 import net.chmielowski.randomchoice.core.createStateStore
@@ -51,6 +53,7 @@ internal abstract class AbstractTest {
         database = createInMemoryAndroidDatabase(rule),
     )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Suppress("TestFunctionName")
     @Composable
     protected fun Content(
@@ -60,7 +63,7 @@ internal abstract class AbstractTest {
     ) {
         Content(
             preference = preference,
-            observeSavedDilemmas = ObserveSavedDilemmasImpl(database),
+            observeSavedDilemmas = ObserveSavedDilemmasImpl(database, TestCoroutineScope().coroutineContext),
             store = createStateStore({
                 MainExecutor(
                     choice = choice,
