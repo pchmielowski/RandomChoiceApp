@@ -21,16 +21,15 @@ internal fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior?,
 ) {
     val colors = TopAppBarDefaults.largeTopAppBarColors()
-    val color by colors.containerColor(scrollBehavior?.scrollFraction ?: 0F)
-    Surface(color = color, modifier = Modifier) {
+    val containerColor by colors.containerColor(scrollBehavior?.scrollFraction ?: 0F)
+    Surface(color = containerColor, modifier = Modifier) {
         LargeTopAppBar(
             navigationIcon = navigationIcon,
             title = { Text(title) },
             actions = actions,
             scrollBehavior = scrollBehavior,
             colors = colors,
-            modifier = Modifier
-                .statusBarsPadding(),
+            modifier = Modifier.statusBarsPadding()
         )
     }
 }
