@@ -196,13 +196,17 @@ internal interface DropdownMenuStrategy {
         onDismiss: () -> Unit,
     )
 
-    object Real : DropdownMenuStrategy {
+    class Real : DropdownMenuStrategy {
 
         @Composable
         override fun Container(content: @Composable () -> Unit) = Box(content = { content() })
 
         @Composable
-        override fun Menu(expanded: Boolean, onDismissRequest: () -> Unit, content: @Composable () -> Unit) =
+        override fun Menu(
+            expanded: Boolean,
+            onDismissRequest: () -> Unit,
+            content: @Composable () -> Unit
+        ) =
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = onDismissRequest,
@@ -241,7 +245,11 @@ internal interface DropdownMenuStrategy {
         override fun Container(content: @Composable () -> Unit) = content()
 
         @Composable
-        override fun Menu(expanded: Boolean, onDismissRequest: () -> Unit, content: @Composable () -> Unit) {
+        override fun Menu(
+            expanded: Boolean,
+            onDismissRequest: () -> Unit,
+            content: @Composable () -> Unit
+        ) {
             if (expanded) {
                 content()
             }
@@ -269,8 +277,9 @@ internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
+    strategy: DropdownMenuStrategy = DropdownMenuStrategy.Real(), // TODO@
 ) {
-    DropdownMenuStrategy.Real.Container {
+    strategy.Container {
         var expanded by remember { mutableStateOf(false) }
         IconButton(onClick = { expanded = true }) {
             Icon(
@@ -284,6 +293,7 @@ internal fun MenuButton(
             onThemeChoose = onThemeChoose,
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
+            strategy = strategy,
         )
     }
 }
@@ -296,8 +306,10 @@ private fun DropdownMenu(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
+    strategy: DropdownMenuStrategy,
 ) {
-    DropdownMenuStrategy.Real.Menu(expanded, onDismiss) {
+    strategy.Menu(expanded, onDismiss) {
+        // TODO@ Consider flattening
         @Composable
         fun Item(
             icon: ImageVector,
@@ -305,7 +317,7 @@ private fun DropdownMenu(
             @StringRes text: Int,
             onClick: () -> Unit,
         ) {
-            DropdownMenuStrategy.Real.Item(
+            strategy.Item(
                 icon = icon,
                 choice = choice,
                 text = text,
