@@ -1,8 +1,10 @@
+import java.lang.Boolean;
 import net.chmielowski.randomchoice.core.DilemmaId;
 
 -- TODO: Rename to dilemma
 CREATE TABLE choice (
-  id INTEGER AS DilemmaId NOT NULL PRIMARY KEY AUTOINCREMENT
+  id INTEGER AS DilemmaId NOT NULL PRIMARY KEY AUTOINCREMENT,
+  deleted INTEGER AS Boolean NOT NULL DEFAULT 0
 );
 
 selectAllDilemmas:
