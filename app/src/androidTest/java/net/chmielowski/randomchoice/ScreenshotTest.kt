@@ -1,6 +1,5 @@
 package net.chmielowski.randomchoice
 
-import androidx.compose.runtime.Composable
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import net.chmielowski.randomchoice.core.Choice
 import net.chmielowski.randomchoice.persistence.NonCancellableTask
@@ -99,16 +98,7 @@ private class PrepopulateWithSavedChoices : PrepopulateDatabase {
 }
 
 internal abstract class AbstractScreenshotTest(
-    private val choice: Choice,
-    private val theme: Theme,
-    private val prepopulateDatabase: PrepopulateDatabase = PrepopulateDatabase {},
-) : AbstractTest() {
-
-    @Suppress("TestFunctionName")
-    @Composable
-    override fun Content() = Content(
-        choice = choice,
-        preference = fakeThemePreference(theme),
-        database = createInMemoryAndroidDatabase(rule, prepopulateDatabase),
-    )
-}
+    override val choice: Choice,
+    override val prepopulateDatabase: PrepopulateDatabase = PrepopulateDatabase {},
+    override val theme: Theme,
+) : AbstractTest()
