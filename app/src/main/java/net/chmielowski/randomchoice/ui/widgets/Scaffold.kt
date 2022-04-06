@@ -33,7 +33,6 @@ internal fun Scaffold(
 ) {
     androidx.compose.material3.Scaffold(
         topBar = {
-            Surface(color = Color.Blue, modifier = Modifier.fillMaxWidth()) { }
             TopBar(
                 navigationIcon = {
                     if (navigateUp != null) {

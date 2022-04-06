@@ -32,7 +32,6 @@ import net.chmielowski.randomchoice.ui.theme.AppTheme
 import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 
-@Suppress("UNUSED_PARAMETER")
 @OptIn(
     ExperimentalAnimationApi::class,
     ExperimentalMaterialNavigationApi::class,
@@ -43,33 +42,29 @@ internal fun Content(
     observeSavedDilemmas: ObserveSavedDilemmas,
     store: Store<Intent, State, Label>,
 ) {
-
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         CompositionLocalProvider(LocalTheme provides preference.current) {
             AppTheme {
                 Surface {
+                    SetStatusBarColor()
+
                     DestinationsNavHost(
                         navGraph = NavGraphs.root,
                         engine = rememberAnimatedNavHostEngine(rootDefaultAnimations = animations()),
                     ) {
-//                        composable(InputScreenDestination) {
-//                            InputScreen(
-//                                navigator = destinationsNavigator,
-//                                store = store,
-//                            )
-//                        }
-//                            InputScreen(
-//                                navigator = destinationsNavigator,
-//                                store = store,
-//                            )
-//                        }
-//                        composable(SavedScreenDestination) {
-//                            SavedScreen(
-//                                navigator = destinationsNavigator,
-//                                observeSavedDilemmas = observeSavedDilemmas,
-//                                onIntent = store::accept,
-//                            )
-//                        }
+                        composable(InputScreenDestination) {
+                            InputScreen(
+                                navigator = destinationsNavigator,
+                                store = store,
+                            )
+                        }
+                        composable(SavedScreenDestination) {
+                            SavedScreen(
+                                navigator = destinationsNavigator,
+                                observeSavedDilemmas = observeSavedDilemmas,
+                                onIntent = store::accept,
+                            )
+                        }
                     }
                 }
             }
