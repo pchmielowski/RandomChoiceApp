@@ -60,25 +60,7 @@ internal fun SavedScreen(
     labels: Flow<Label>,
 ) {
     val scrollBehavior = rememberScrollBehavior()
-
-    val snackbarHostState = remember { SnackbarHostState() }
-    val message = stringResource(R.string.message_deleted)
-    val action = stringResource(R.string.action_undo)
-    labels.Observe { label ->
-        when (label) {
-            ShowDilemmaDeleted -> {
-                val result = snackbarHostState
-                    .showSnackbar(message, action)
-                when (result) {
-                    SnackbarResult.Dismissed -> {}
-                    SnackbarResult.ActionPerformed -> onIntent(DilemmaIntent.UndoDeleting)
-                }
-            }
-            is ShowResult, FocusFirstOptionInput -> {
-            }
-        }
-    }
-
+    val snackbarHostState = undoDeletingSnackbarHostState(labels, onIntent)
     Scaffold(
         navigateUp = navigator::navigateUp,
         title = stringResource(R.string.label_saved),
@@ -103,6 +85,29 @@ internal fun SavedScreen(
             }
         }
     }
+}
+
+@Composable
+private fun undoDeletingSnackbarHostState(
+    labels: Flow<Label>,
+    onIntent: (Intent) -> Unit,
+): SnackbarHostState {
+    val state = remember { SnackbarHostState() }
+    val message = stringResource(R.string.message_deleted)
+    val action = stringResource(R.string.action_undo)
+    labels.Observe { label ->
+        when (label) {
+            ShowDilemmaDeleted -> {
+                when (state.showSnackbar(message, action)) {
+                    SnackbarResult.Dismissed -> {}
+                    SnackbarResult.ActionPerformed -> onIntent(DilemmaIntent.UndoDeleting)
+                }
+            }
+            is ShowResult, FocusFirstOptionInput -> {
+            }
+        }
+    }
+    return state
 }
 
 @OptIn(ExperimentalFoundationApi::class)
