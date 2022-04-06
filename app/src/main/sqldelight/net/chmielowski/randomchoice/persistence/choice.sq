@@ -20,6 +20,7 @@ INSERT INTO choice DEFAULT VALUES
 ;
 
 deleteDilemma:
-DELETE FROM choice
+UPDATE choice
+SET deleted = 1
 WHERE id = ?
 ;
