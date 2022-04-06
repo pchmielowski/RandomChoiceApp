@@ -53,6 +53,8 @@ internal sealed interface Intent {
         object Save : DilemmaIntent
 
         data class Delete(val dilemma: DilemmaId) : DilemmaIntent
+
+        object UndoDeleting : DilemmaIntent
     }
 }
 
@@ -113,6 +115,7 @@ internal class MainExecutor(
                 }
                 is DilemmaIntent.Reuse -> dispatchState { copy(dilemma = intent.dilemma) }
                 is DilemmaIntent.Delete -> deleteDilemma(intent.dilemma)
+                DilemmaIntent.UndoDeleting -> TODO() // TODO@
             }
         }
     }

@@ -4,6 +4,7 @@ package net.chmielowski.randomchoice.ui.screen.saved
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,12 +66,18 @@ internal fun SavedScreen(
             if (items.isEmpty()) {
                 EmptyView()
             } else {
-                ItemList(
-                    items = items,
-                    onIntent = onIntent,
-                    navigator = navigator,
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                )
+                Column {
+                    // TODO@ Snackbar
+                    Button(onClick = { onIntent(DilemmaIntent.UndoDeleting) }) {
+                        Text(stringResource(R.string.action_undo))
+                    }
+                    ItemList(
+                        items = items,
+                        onIntent = onIntent,
+                        navigator = navigator,
+                        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    )
+                }
             }
         }
     }
