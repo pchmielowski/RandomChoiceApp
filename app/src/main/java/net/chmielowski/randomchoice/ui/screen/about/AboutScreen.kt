@@ -21,7 +21,6 @@ import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,6 +43,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import net.chmielowski.randomchoice.BuildConfig
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.ui.destinations.LibrariesScreenDestination
+import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 
 @Preview
