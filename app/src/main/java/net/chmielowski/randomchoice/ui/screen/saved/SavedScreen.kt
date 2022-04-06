@@ -60,13 +60,15 @@ internal fun SavedScreen(
     labels: Flow<Label>,
 ) {
     val scrollBehavior = rememberScrollBehavior()
+
     val snackbarHostState = remember { SnackbarHostState() }
+    val message = stringResource(R.string.message_deleted)
     val action = stringResource(R.string.action_undo)
     labels.Observe { label ->
         when (label) {
             ShowDilemmaDeleted -> {
                 val result = snackbarHostState
-                    .showSnackbar("TODO@", action)
+                    .showSnackbar(message, action)
                 when (result) {
                     SnackbarResult.Dismissed -> {}
                     SnackbarResult.ActionPerformed -> onIntent(DilemmaIntent.UndoDeleting)
@@ -76,6 +78,7 @@ internal fun SavedScreen(
             }
         }
     }
+
     Scaffold(
         navigateUp = navigator::navigateUp,
         title = stringResource(R.string.label_saved),

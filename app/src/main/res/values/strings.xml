@@ -21,6 +21,7 @@
     <string name="message_done">Done!</string>
     <string name="message_email_copied">E-mail address copied to the clipboard!</string>
     <string name="message_saved">Saved!</string>
+    <string name="message_deleted">Dilemma deleted</string>
     <string name="message_empty">The list is empty</string>
 
     <string name="error_no_email_client">No e-mail client installed!</string>
