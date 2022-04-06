@@ -49,6 +49,12 @@ internal abstract class AbstractTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
+    protected open val choice = Choice { 0 }
+
+    protected open val theme = Theme.Light
+
+    protected open val prepopulateDatabase = PrepopulateDatabase {}
+
     @Before
     fun setUp() {
         rule.setContent { Content() }
@@ -56,20 +62,9 @@ internal abstract class AbstractTest {
 
     @Suppress("TestFunctionName")
     @Composable
-    protected open fun Content() = Content(
-        choice = { 0 },
-        preference = fakeThemePreference(Theme.Light),
-        database = createInMemoryAndroidDatabase(rule),
-    )
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Suppress("TestFunctionName")
-    @Composable
-    protected fun Content(
-        choice: Choice,
-        preference: ThemePreference,
-        database: Database,
-    ) {
+    protected open fun Content() {
+        val preference = fakeThemePreference(theme)
+        val database = createInMemoryAndroidDatabase(rule, prepopulateDatabase)
         Content(
             preference = preference,
             observeSavedDilemmas = ObserveSavedDilemmasImpl(
