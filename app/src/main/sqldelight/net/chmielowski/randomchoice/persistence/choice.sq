@@ -25,3 +25,9 @@ UPDATE choice
 SET deleted = 1
 WHERE id = ?
 ;
+
+undeleteDilemma:
+UPDATE choice
+SET deleted = 0
+WHERE id = ?
+;

@@ -15,6 +15,7 @@ import net.chmielowski.randomchoice.core.Intent.MakeChoice
 import net.chmielowski.randomchoice.core.Intent.SetTheme
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemma
 import net.chmielowski.randomchoice.persistence.SaveDilemma
+import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemma
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 
@@ -62,6 +63,7 @@ internal sealed interface Intent {
 internal data class State(
     val dilemma: Dilemma = Dilemma(),
     private val lastSaved: Dilemma? = null,
+    val lastDeleted: DilemmaId? = null,
 ) : Parcelable {
 
     val showResetButton get() = dilemma.canResetOrSave
@@ -83,6 +85,7 @@ internal class MainExecutor(
     private val preference: ThemePreference,
     private val saveDilemma: SaveDilemma,
     private val deleteDilemma: DeleteSavedDilemma,
+    private val undeleteDilemma: UndeleteSavedDilemma,
 ) : SuspendExecutor<Intent, Nothing, State, State, Label>() {
 
     override suspend fun executeIntent(intent: Intent, getState: () -> State) {
@@ -114,8 +117,11 @@ internal class MainExecutor(
                     dispatchState { copy(lastSaved = current) }
                 }
                 is DilemmaIntent.Reuse -> dispatchState { copy(dilemma = intent.dilemma) }
-                is DilemmaIntent.Delete -> deleteDilemma(intent.dilemma)
-                DilemmaIntent.UndoDeleting -> TODO() // TODO@
+                is DilemmaIntent.Delete -> {
+                    deleteDilemma(intent.dilemma)
+                    dispatchState { copy(lastDeleted = intent.dilemma) }
+                }
+                DilemmaIntent.UndoDeleting -> undeleteDilemma(getState().lastDeleted!!)
             }
         }
     }
