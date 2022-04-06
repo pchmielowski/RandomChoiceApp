@@ -60,10 +60,7 @@ internal abstract class AbstractTest {
         val database = createInMemoryAndroidDatabase(rule, prepopulateDatabase)
         Content(
             preference = preference,
-            observeSavedDilemmas = ObserveSavedDilemmasImpl(
-                database,
-                Dispatchers.Unconfined
-            ),
+            observeSavedDilemmas = ObserveSavedDilemmasImpl(database, Dispatchers.Unconfined),
             store = createStateStore({
                 MainExecutor(
                     choice = choice,

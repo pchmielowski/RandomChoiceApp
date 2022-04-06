@@ -84,7 +84,6 @@ internal abstract class BehaviorTest : AbstractTest() {
         enterOption1("Pizza")
         enterOption2("Salad")
         clickSave()
-        println("Will navigate")
         navigateToSaved()
 
         clickDelete()
