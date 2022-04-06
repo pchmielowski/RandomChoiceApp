@@ -51,18 +51,20 @@ internal abstract class AbstractTest {
 
     @Suppress("TestFunctionName")
     @Composable
-    protected open fun Content() = Content(
-        preference = preference,
-        observeSavedDilemmas = ObserveSavedDilemmasImpl(database),
-        store = createStateStore({
-            MainExecutor(
-                choice = choice,
-                preference = preference,
-                saveDilemma = SaveDilemmaImpl(database, NonCancellableTask.fake),
-                deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
-            )
-        }),
-    )
+    protected open fun Content() {
+        Content(
+            preference = preference,
+            observeSavedDilemmas = ObserveSavedDilemmasImpl(database),
+            store = createStateStore({
+                MainExecutor(
+                    choice = choice,
+                    preference = preference,
+                    saveDilemma = SaveDilemmaImpl(database, NonCancellableTask.fake),
+                    deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
+                )
+            }),
+        )
+    }
 
     protected fun assertOptionTextFieldsHaveValues(first: String, second: String) {
         rule
