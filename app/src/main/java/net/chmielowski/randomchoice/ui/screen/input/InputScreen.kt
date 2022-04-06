@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -57,6 +58,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.states
@@ -220,7 +222,7 @@ private fun DropdownMenu(
             @StringRes text: Int,
             onClick: () -> Unit,
         ) {
-    Text(stringResource(text), modifier = Modifier.width(36.dp).clickable { onClick();onDismiss() })
+    Text(stringResource(text), modifier = Modifier.size(10.dp).clickable { onClick();onDismiss() }, fontSize = 1.sp)
 //            DropdownMenuItem(
 //                onClick = {
 //                    onClick()

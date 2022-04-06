@@ -10,7 +10,7 @@ import org.robolectric.annotation.Config
 @Config(instrumentedPackages = ["androidx.loader.content"])
 internal class RobolectricTest : BehaviorTest() {
 
-    override val isRobolectric get() = true
+    override val isRobolectric get() = false
 
     @After
     fun tearDown() = stopKoin()
