@@ -5,6 +5,8 @@ package net.chmielowski.randomchoice.ui.widgets
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +23,7 @@ internal fun Scaffold(
     title: String,
     actions: @Composable (RowScope.() -> Unit) = {},
     floatingActionButton: @Composable () -> Unit = { },
+    snackbarHostState: SnackbarHostState = SnackbarHostState(),
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     background: @Composable () -> Unit = {},
@@ -40,6 +43,7 @@ internal fun Scaffold(
             )
         },
         floatingActionButton = floatingActionButton,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier
             .navigationBarsWithImePadding()
     ) {
