@@ -10,6 +10,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import net.chmielowski.randomchoice.ui.screen.component.BackButton
@@ -51,7 +52,7 @@ internal fun Scaffold(
         androidx.compose.material.Scaffold(backgroundColor = backgroundColor) {
             background()
             content()
-            Divider()
+            Divider(modifier = Modifier.alpha(1F - (scrollBehavior?.scrollFraction ?: 0F)))
         }
     }
 }

@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -74,6 +75,7 @@ import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
 import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
+import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -113,6 +115,7 @@ internal fun InputScreen(
     menuStrategy: DropdownMenuStrategy,
 ) {
     var transitionVisible by remember { mutableStateOf(false) }
+    val scrollBehavior = rememberScrollBehavior()
     Scaffold(
         title = stringResource(R.string.label_enter_options),
         actions = {
@@ -132,6 +135,7 @@ internal fun InputScreen(
                 menuStrategy = menuStrategy,
             )
         },
+        scrollBehavior = scrollBehavior,
         floatingActionButton = {
             if (state.dilemma.allFilled) {
                 val keyboardController = LocalSoftwareKeyboardController.current
@@ -152,6 +156,7 @@ internal fun InputScreen(
     ) {
         Column(
             modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
         ) {
