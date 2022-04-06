@@ -36,6 +36,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -200,6 +201,9 @@ internal interface DropdownMenuStrategy {
         onDismiss: () -> Unit,
     )
 
+    @Composable
+    fun Divider(modifier: Modifier)
+
     class Real : DropdownMenuStrategy {
 
         @Composable
@@ -241,6 +245,9 @@ internal interface DropdownMenuStrategy {
                 text = { Text(stringResource(text)) }
             )
         }
+
+        @Composable
+        override fun Divider(modifier: Modifier) = MenuDefaults.Divider(modifier = modifier)
     }
 
     // TODO@ Move to test
@@ -273,6 +280,10 @@ internal interface DropdownMenuStrategy {
                 modifier = Modifier.size(10.dp).clickable { onClick();onDismiss() },
                 fontSize = 1.sp
             )
+        }
+
+        @Composable
+        override fun Divider(modifier: Modifier) {
         }
     }
 }
@@ -336,7 +347,7 @@ private fun DropdownMenu(
             text = R.string.label_saved,
             onClick = { onShowSavedClick() },
         )
-//        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
+        strategy.Divider(modifier = Modifier.padding(vertical = 4.dp))
         val theme = LocalTheme.current
         Item(
             icon = Icons.Outlined.WbSunny,
@@ -356,7 +367,7 @@ private fun DropdownMenu(
             choice = theme == Theme.System,
             onClick = { onThemeChoose(Theme.System) },
         )
-////        MenuDefaults.Divider(modifier = Modifier.padding(vertical = 4.dp))
+        strategy.Divider(modifier = Modifier.padding(vertical = 4.dp))
         Item(
             icon = Icons.Outlined.Info,
             text = R.string.label_about,
