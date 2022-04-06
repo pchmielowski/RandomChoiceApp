@@ -26,6 +26,10 @@ internal class RobolectricTest : BehaviorTest() {
     fun tearDown() = stopKoin()
 }
 
+/**
+ * Robolectric can not deal with [androidx.compose.material3.DropdownMenu] (test hangs after expanding it),
+ * so we are replacing the real menu with fake one made from text views.
+ */
 @Suppress("TestFunctionName")
 private object FakeDropdownMenuStrategy : DropdownMenuStrategy {
 
