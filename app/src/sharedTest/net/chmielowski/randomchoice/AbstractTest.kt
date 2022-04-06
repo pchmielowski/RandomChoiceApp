@@ -43,34 +43,26 @@ internal abstract class AbstractTest {
         rule.setContent { Content() }
     }
 
-    @Suppress("TestFunctionName")
-    @Composable
-    protected open fun Content() = Content(
-        choice = { 0 },
-        preference = fakeThemePreference(Theme.Light),
-        database = createInMemoryAndroidDatabase(rule),
-    )
+    protected open val choice: Choice = Choice { 0 }
+
+    protected open val preference: ThemePreference = fakeThemePreference(Theme.Light)
+
+    protected open val database: Database = createInMemoryAndroidDatabase(rule)
 
     @Suppress("TestFunctionName")
     @Composable
-    protected fun Content(
-        choice: Choice,
-        preference: ThemePreference,
-        database: Database,
-    ) {
-        Content(
-            preference = preference,
-            observeSavedDilemmas = ObserveSavedDilemmasImpl(database),
-            store = createStateStore({
-                MainExecutor(
-                    choice = choice,
-                    preference = preference,
-                    saveDilemma = SaveDilemmaImpl(database, NonCancellableTask.fake),
-                    deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
-                )
-            }),
-        )
-    }
+    protected open fun Content() = Content(
+        preference = preference,
+        observeSavedDilemmas = ObserveSavedDilemmasImpl(database),
+        store = createStateStore({
+            MainExecutor(
+                choice = choice,
+                preference = preference,
+                saveDilemma = SaveDilemmaImpl(database, NonCancellableTask.fake),
+                deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
+            )
+        }),
+    )
 
     protected fun assertOptionTextFieldsHaveValues(first: String, second: String) {
         rule
