@@ -40,7 +40,7 @@ internal abstract class AbstractTest {
 
     protected open val choice = Choice { 0 }
 
-    protected open val preference = fakeThemePreference(Theme.Light)
+    protected open val theme = Theme.Light
 
     protected open val prepopulateDatabase = PrepopulateDatabase {}
 
@@ -52,6 +52,7 @@ internal abstract class AbstractTest {
     @Suppress("TestFunctionName")
     @Composable
     protected open fun Content() {
+        val preference = fakeThemePreference(theme)
         val database = createInMemoryAndroidDatabase(rule, prepopulateDatabase)
         Content(
             preference = preference,
