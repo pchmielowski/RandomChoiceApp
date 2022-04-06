@@ -3,7 +3,6 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.DropdownMenu
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
@@ -27,15 +25,12 @@ import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -174,77 +169,6 @@ internal fun InputScreen(
             }
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
-    }
-}
-
-internal interface DropdownMenuStrategy {
-
-    @Composable
-    fun Container(content: @Composable () -> Unit)
-
-    @Composable
-    fun Menu(
-        expanded: Boolean,
-        onDismissRequest: () -> Unit,
-        content: @Composable () -> Unit,
-    )
-
-    @Composable
-    fun Item(
-        icon: ImageVector,
-        choice: Boolean?,
-        @StringRes text: Int,
-        onClick: () -> Unit,
-        onDismiss: () -> Unit,
-    )
-
-    @Composable
-    fun Divider(modifier: Modifier)
-
-    class Real : DropdownMenuStrategy {
-
-        @Composable
-        override fun Container(content: @Composable () -> Unit) = Box(content = { content() })
-
-        @Composable
-        override fun Menu(
-            expanded: Boolean,
-            onDismissRequest: () -> Unit,
-            content: @Composable () -> Unit
-        ) =
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = onDismissRequest,
-            ) {
-                content()
-            }
-
-        @OptIn(ExperimentalMaterial3Api::class)
-        @Composable
-        override fun Item(
-            icon: ImageVector,
-            choice: Boolean?,
-            @StringRes text: Int,
-            onClick: () -> Unit,
-            onDismiss: () -> Unit,
-        ) {
-            DropdownMenuItem(
-                onClick = {
-                    onClick()
-                    onDismiss()
-                },
-                leadingIcon = { Icon(icon, contentDescription = null) },
-                trailingIcon = if (choice != null) {
-                    { RadioButton(choice, { onClick(); onDismiss() }) }
-                } else {
-                    null
-                },
-                text = { Text(stringResource(text)) }
-            )
-        }
-
-        @Composable
-        override fun Divider(modifier: Modifier) = MenuDefaults.Divider(modifier = modifier)
     }
 }
 
