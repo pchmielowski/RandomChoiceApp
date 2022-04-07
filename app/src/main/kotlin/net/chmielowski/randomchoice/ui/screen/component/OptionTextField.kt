@@ -5,6 +5,7 @@ package net.chmielowski.randomchoice.ui.screen.component
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.LocalActivityResultRegistryOwner
@@ -13,6 +14,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,14 +34,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -88,20 +95,26 @@ internal fun OptionTextField(
         )
         val owner = LocalActivityResultRegistryOwner.current!!
         val registry = owner.activityResultRegistry
+        var bmp by remember { mutableStateOf<Bitmap?>(null) }
         val launcher = registry.register(
             "Camera",
-            object : ActivityResultContract<Unit, String>() {
+            object : ActivityResultContract<Unit, Bitmap>() {
 
                 override fun createIntent(context: Context, input: Unit): Intent {
                     return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 }
 
-                override fun parseResult(resultCode: Int, intent: Intent?): String {
+                override fun parseResult(resultCode: Int, intent: Intent?): Bitmap {
                     Log.d("pchm", "parseResult")
-                    return "Synthetic result"
+                    // TODO@ Handle errors, cancels and null data
+                    val imageBitmap = intent!!.extras!!.get("data") as Bitmap
+                    return imageBitmap
                 }
             },
-            { result -> Log.d("pchm", "onActivityResult $result") },
+            { result ->
+                bmp = result
+                Log.d("pchm", "onActivityResult $result")
+            },
         )
         IconButton(onClick = {
             try {
@@ -115,6 +128,9 @@ internal fun OptionTextField(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary, // TODO@ Description
             )
+        }
+        bmp?.let {
+            Image(it.asImageBitmap(), contentDescription = null)
         }
         AnimatedVisibility(canRemove) { // TODO: Overshoot interpolator.
             Spacer(modifier = Modifier.width(8.dp))
