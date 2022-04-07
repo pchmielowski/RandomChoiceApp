@@ -2,6 +2,13 @@
 
 package net.chmielowski.randomchoice.ui.screen.component
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.provider.MediaStore
+import android.util.Log
+import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -79,7 +86,30 @@ internal fun OptionTextField(
                 .weight(1F)
                 .animateFirstAppearance()
         )
-        IconButton(onClick = {}) {
+        val owner = LocalActivityResultRegistryOwner.current!!
+        val registry = owner.activityResultRegistry
+        val launcher = registry.register(
+            "Camera",
+            object : ActivityResultContract<Unit, String>() {
+
+                override fun createIntent(context: Context, input: Unit): Intent {
+                    return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                }
+
+                override fun parseResult(resultCode: Int, intent: Intent?): String {
+                    Log.d("pchm", "parseResult")
+                    return "Synthetic result"
+                }
+            },
+            { result -> Log.d("pchm", "onActivityResult $result") },
+        )
+        IconButton(onClick = {
+            try {
+                launcher.launch(Unit)
+            } catch (e: ActivityNotFoundException) {
+                // TODO@
+            }
+        }) {
             Icon(
                 imageVector = Icons.Default.CameraAlt,
                 contentDescription = null,

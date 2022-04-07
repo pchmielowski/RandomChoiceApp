@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="net.chmielowski.randomchoice">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
         android:name=".RandomChoiceApplication"
         android:dataExtractionRules="@xml/data_extraction_rules"
