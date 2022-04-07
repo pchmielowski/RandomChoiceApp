@@ -61,8 +61,8 @@ android {
         warningsAsErrors true
     }
     sourceSets {
-        test { java.srcDirs += "$projectDir/src/sharedTest" }
-        androidTest { java.srcDirs += "$projectDir/src/sharedTest" }
+        test { kotlin.srcDirs += "$projectDir/src/sharedTest" }
+        androidTest { kotlin.srcDirs += "$projectDir/src/sharedTest" }
     }
 }
 
