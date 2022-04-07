@@ -17,6 +17,7 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -78,6 +79,9 @@ internal fun OptionTextField(
                 .weight(1F)
                 .animateFirstAppearance()
         )
+        IconButton(onClick = {}) {
+            Icon(Icons.Default.CameraAlt, contentDescription = null) // TODO@ Description
+        }
         AnimatedVisibility(canRemove) { // TODO: Overshoot interpolator.
             Spacer(modifier = Modifier.width(8.dp))
             IconButton(onClick = onRemoveOption) {
