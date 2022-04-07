@@ -1,7 +1,8 @@
 import net.chmielowski.randomchoice.core.DilemmaId;
+import net.chmielowski.randomchoice.core.Option;
 
 CREATE TABLE option (
-    name TEXT NOT NULL, -- TODO: Rename to text
+    name TEXT AS Option NOT NULL, -- TODO: Rename to text
     choice INTEGER AS DilemmaId NOT NULL, -- TODO: Rename to dilemma
 
     PRIMARY KEY (name, choice),
