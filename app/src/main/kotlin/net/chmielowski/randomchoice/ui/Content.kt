@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import com.arkivanov.mvikotlin.core.store.Store
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -16,6 +17,7 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.State
@@ -33,6 +35,7 @@ import net.chmielowski.randomchoice.ui.theme.isDark
 @OptIn(
     ExperimentalAnimationApi::class,
     ExperimentalMaterialNavigationApi::class,
+    ExperimentalCoroutinesApi::class,
 )
 @Composable
 internal fun Content(
@@ -62,6 +65,7 @@ internal fun Content(
                             SavedScreen(
                                 navigator = destinationsNavigator,
                                 observeSavedDilemmas = observeSavedDilemmas,
+                                labels = store.labels,
                                 onIntent = store::accept,
                             )
                         }

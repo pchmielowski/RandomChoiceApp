@@ -15,6 +15,7 @@ import net.chmielowski.randomchoice.core.Intent.MakeChoice
 import net.chmielowski.randomchoice.core.Intent.SetTheme
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemma
 import net.chmielowski.randomchoice.persistence.SaveDilemma
+import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemma
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 
@@ -53,6 +54,8 @@ internal sealed interface Intent {
         object Save : DilemmaIntent
 
         data class Delete(val dilemma: DilemmaId) : DilemmaIntent
+
+        object UndoDeleting : DilemmaIntent
     }
 }
 
@@ -60,6 +63,7 @@ internal sealed interface Intent {
 internal data class State(
     val dilemma: Dilemma = Dilemma(),
     private val lastSaved: Dilemma? = null,
+    val lastDeleted: DilemmaId? = null,
 ) : Parcelable {
 
     val showResetButton get() = dilemma.canResetOrSave
@@ -74,6 +78,8 @@ internal sealed interface Label {
     object FocusFirstOptionInput : Label
 
     data class ShowResult(val result: Result) : Label
+
+    object ShowDilemmaDeleted : Label
 }
 
 internal class MainExecutor(
@@ -81,8 +87,10 @@ internal class MainExecutor(
     private val preference: ThemePreference,
     private val saveDilemma: SaveDilemma,
     private val deleteDilemma: DeleteSavedDilemma,
+    private val undeleteDilemma: UndeleteSavedDilemma,
 ) : SuspendExecutor<Intent, Nothing, State, State, Label>() {
 
+    @Suppress("ComplexMethod")
     override suspend fun executeIntent(intent: Intent, getState: () -> State) {
         fun dispatchState(function: State.() -> State) {
             dispatch(getState().function())
@@ -112,7 +120,12 @@ internal class MainExecutor(
                     dispatchState { copy(lastSaved = current) }
                 }
                 is DilemmaIntent.Reuse -> dispatchState { copy(dilemma = intent.dilemma) }
-                is DilemmaIntent.Delete -> deleteDilemma(intent.dilemma)
+                is DilemmaIntent.Delete -> {
+                    deleteDilemma(intent.dilemma)
+                    dispatchState { copy(lastDeleted = intent.dilemma) }
+                    publish(Label.ShowDilemmaDeleted)
+                }
+                DilemmaIntent.UndoDeleting -> undeleteDilemma(getState().lastDeleted!!)
             }
         }
     }

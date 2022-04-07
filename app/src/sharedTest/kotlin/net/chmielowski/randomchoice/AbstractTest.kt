@@ -27,6 +27,7 @@ import net.chmielowski.randomchoice.persistence.DeleteSavedDilemmaImpl
 import net.chmielowski.randomchoice.persistence.NonCancellableTask
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmasImpl
 import net.chmielowski.randomchoice.persistence.SaveDilemmaImpl
+import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemmaImpl
 import net.chmielowski.randomchoice.ui.Content
 import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.theme.Theme
@@ -67,6 +68,7 @@ internal abstract class AbstractTest {
                     preference = preference,
                     saveDilemma = SaveDilemmaImpl(database, NonCancellableTask.fake),
                     deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
+                    undeleteDilemma = UndeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                 )
             }),
             menuStrategy = menuStrategy,
@@ -221,6 +223,12 @@ internal abstract class AbstractTest {
     protected fun clickDelete() {
         rule
             .onNodeWithText(R.string.action_delete)
+            .performClick()
+    }
+
+    protected fun clickUndo() {
+        rule
+            .onNodeWithText(R.string.action_undo)
             .performClick()
     }
 }

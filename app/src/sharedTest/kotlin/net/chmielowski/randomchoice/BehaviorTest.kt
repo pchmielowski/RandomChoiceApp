@@ -93,6 +93,18 @@ internal abstract class BehaviorTest : AbstractTest() {
     }
 
     @Test
+    fun undoesRemovingSavedOptions() {
+        enterOption1("Pizza")
+        enterOption2("Salad")
+        clickSave()
+        navigateToSaved()
+
+        clickDelete()
+        clickUndo()
+        assertSavedOptionsArePresent("Pizza or Salad")
+    }
+
+    @Test
     fun reusesSavedOptions() {
         enterOption1("Pizza")
         enterOption2("Salad")

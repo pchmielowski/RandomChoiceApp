@@ -19,10 +19,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -30,16 +33,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.Flow
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.DilemmaId
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
+import net.chmielowski.randomchoice.core.Label
+import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
+import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
+import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Loadable
+import net.chmielowski.randomchoice.utils.Observe
 import net.chmielowski.randomchoice.utils.collectAsLoadableState
 
 @Destination
@@ -48,12 +57,15 @@ internal fun SavedScreen(
     navigator: DestinationsNavigator,
     observeSavedDilemmas: ObserveSavedDilemmas,
     onIntent: (Intent) -> Unit,
+    labels: Flow<Label>,
 ) {
     val scrollBehavior = rememberScrollBehavior()
+    val snackbarHostState = undoDeletingSnackbarHostState(labels, onIntent)
     Scaffold(
         navigateUp = navigator::navigateUp,
         title = stringResource(R.string.label_saved),
         scrollBehavior = scrollBehavior,
+        snackbarHostState = snackbarHostState,
     ) {
         val loadable by observeSavedDilemmas().collectAsLoadableState()
 
@@ -73,6 +85,29 @@ internal fun SavedScreen(
             }
         }
     }
+}
+
+@Composable
+private fun undoDeletingSnackbarHostState(
+    labels: Flow<Label>,
+    onIntent: (Intent) -> Unit,
+): SnackbarHostState {
+    val state = remember { SnackbarHostState() }
+    val message = stringResource(R.string.message_deleted)
+    val action = stringResource(R.string.action_undo)
+    labels.Observe { label ->
+        when (label) {
+            ShowDilemmaDeleted -> {
+                when (state.showSnackbar(message, action)) {
+                    SnackbarResult.Dismissed -> {}
+                    SnackbarResult.ActionPerformed -> onIntent(DilemmaIntent.UndoDeleting)
+                }
+            }
+            is ShowResult, FocusFirstOptionInput -> {
+            }
+        }
+    }
+    return state
 }
 
 @OptIn(ExperimentalFoundationApi::class)
