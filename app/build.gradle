@@ -34,7 +34,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             signingConfig signingConfigs.release
         }
     }
@@ -45,7 +45,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.1.0-rc02"
+        kotlinCompilerExtensionVersion compose_version
     }
     packagingOptions {
         resources {
