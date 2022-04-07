@@ -80,7 +80,11 @@ internal fun OptionTextField(
                 .animateFirstAppearance()
         )
         IconButton(onClick = {}) {
-            Icon(Icons.Default.CameraAlt, contentDescription = null) // TODO@ Description
+            Icon(
+                imageVector = Icons.Default.CameraAlt,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary, // TODO@ Description
+            )
         }
         AnimatedVisibility(canRemove) { // TODO: Overshoot interpolator.
             Spacer(modifier = Modifier.width(8.dp))
