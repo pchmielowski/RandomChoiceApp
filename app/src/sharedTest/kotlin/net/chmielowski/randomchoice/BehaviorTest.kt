@@ -1,5 +1,7 @@
 package net.chmielowski.randomchoice
 
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import org.junit.Test
 
 internal abstract class BehaviorTest : AbstractTest() {
@@ -118,5 +120,11 @@ internal abstract class BehaviorTest : AbstractTest() {
 
     @Test
     fun switchesToPhotoMode() {
+        rule
+            .onNodeWithContentDescription(R.string.label_more)
+            .performClick()
+        rule
+            .onNodeWithText(R.string.label_mode_photo)
+            .performClick()
     }
 }
