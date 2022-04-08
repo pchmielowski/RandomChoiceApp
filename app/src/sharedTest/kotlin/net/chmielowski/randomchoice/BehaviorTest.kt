@@ -115,4 +115,8 @@ internal abstract class BehaviorTest : AbstractTest() {
         clickReuse()
         assertOptionTextFieldsHaveValues("Pizza", "Salad")
     }
+
+    @Test
+    fun switchesToPhotoMode() {
+    }
 }

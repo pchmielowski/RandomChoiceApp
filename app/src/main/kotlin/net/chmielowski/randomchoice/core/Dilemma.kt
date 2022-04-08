@@ -26,7 +26,7 @@ import net.chmielowski.randomchoice.utils.removeIndex
 import net.chmielowski.randomchoice.utils.replace
 
 @Parcelize
-internal data class Dilemma(private val options: List<Option> = listOf(Image(), Image())) : // TODO@ Start with Text mode
+internal data class Dilemma(private val options: List<Option> = listOf(Text(), Text())) :
     Parcelable {
 
     init {
