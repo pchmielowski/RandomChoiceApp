@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
 import kotlinx.parcelize.Parcelize
 import net.chmielowski.randomchoice.R
+import net.chmielowski.randomchoice.core.Option.Image
 import net.chmielowski.randomchoice.core.Option.Text
 import net.chmielowski.randomchoice.utils.removeIndex
 import net.chmielowski.randomchoice.utils.replace
@@ -75,6 +76,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
             }
             val text = when (item) {
                 is Text -> item.text
+                is Image -> throw SavingImagesNotSupportedException()
             }
             append(text)
             if (index != options.lastIndex) {
@@ -93,12 +95,15 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         append(" ")
     }
 
-    fun render() = options.mapIndexed(::textField)
+    fun render() = options.mapIndexed { index, item ->
+        when (item) {
+            is Text -> textField(index, item)
+            is Image -> ImageField(item)
+        }
+    }
 
-    private fun textField(index: Int, item: Option) = TextField(
-        value = when (item) {
-            is Text -> item
-        },
+    private fun textField(index: Int, item: Text) = TextField(
+        value = item,
         imeAction = if (index == options.lastIndex) {
             ImeAction.Done
         } else {
@@ -110,6 +115,8 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         isLast = index == options.lastIndex,
     )
 
+    sealed interface OptionField
+
     data class TextField(
         val value: Text,
         val imeAction: ImeAction,
@@ -117,7 +124,11 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         val id: Int,
         val humanIndex: Int,
         val isLast: Boolean,
-    )
+    ) : OptionField
+
+    data class ImageField(
+        val value: Image,
+    ) : OptionField
 
     @Composable
     fun LaunchWhenOptionAdded(block: suspend () -> Unit) {

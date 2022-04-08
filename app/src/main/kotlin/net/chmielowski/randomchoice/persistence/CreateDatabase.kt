@@ -7,6 +7,7 @@ import com.squareup.sqldelight.db.SqlDriver
 import net.chmielowski.randomchoice.Database
 import net.chmielowski.randomchoice.core.DilemmaId
 import net.chmielowski.randomchoice.core.Option
+import net.chmielowski.randomchoice.core.SavingImagesNotSupportedException
 import net.chmielowski.randomchoice.persistence.Option as DbOption
 
 internal fun createPersistentAndroidDatabase(context: Context) =
@@ -24,6 +25,7 @@ internal fun createDatabase(driver: SqlDriver): Database {
         override fun decode(databaseValue: String) = Option.Text(databaseValue)
         override fun encode(value: Option) = when (value) {
             is Option.Text -> value.text
+            is Option.Image -> throw SavingImagesNotSupportedException()
         }
     }
     return Database(
