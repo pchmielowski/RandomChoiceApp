@@ -186,6 +186,7 @@ internal fun InputScreen(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
