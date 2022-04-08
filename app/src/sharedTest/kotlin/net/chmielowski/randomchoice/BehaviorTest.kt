@@ -1,10 +1,24 @@
 package net.chmielowski.randomchoice
 
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.performClick
 import org.junit.Test
 
 internal abstract class BehaviorTest : AbstractTest() {
+
+    @Test
+    fun initial() {
+        // TODO@ Cleanup
+        rule
+            .onNodeWithText(R.string.action_save)
+            .assertDoesNotExist()
+        rule
+            .onNodeWithText(R.string.action_reset)
+            .assertDoesNotExist()
+        rule
+            .onNodeWithContentDescription(R.string.action_make_choice)
+            .assertDoesNotExist()
+    }
 
     @Test
     fun choosesOneOption() {
