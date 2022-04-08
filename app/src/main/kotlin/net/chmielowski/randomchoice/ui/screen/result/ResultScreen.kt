@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import net.chmielowski.randomchoice.R
+import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 import net.chmielowski.randomchoice.ui.screen.component.AnimatedResult
 import net.chmielowski.randomchoice.ui.screen.component.offset
@@ -48,7 +49,11 @@ internal fun ResultScreen(
                 modifier = Modifier
                     .clearAndSetSemantics {
                         contentDescription = description
-                        text = AnnotatedString(result.chosen.text)
+                        text = AnnotatedString(
+                            when (val chosen = result.chosen) {
+                                is Option.Text -> chosen.text
+                            }
+                        )
                     }
             )
         }

@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 
 @Composable
@@ -34,11 +35,13 @@ internal fun AnimatedResult(
         content = {
             ProvideTextStyle(textStyle) {
                 for (item in (items + items.first())) {
-                    Text(
-                        text = item.text,
-                        maxLines = if (finished) Int.MAX_VALUE else 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    when (item) {
+                        is Option.Text -> Text(
+                            text = item.text,
+                            maxLines = if (finished) Int.MAX_VALUE else 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
                 }
             }
         },

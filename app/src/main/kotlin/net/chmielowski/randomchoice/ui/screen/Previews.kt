@@ -37,7 +37,7 @@ internal fun InputScreenPreview() {
 internal fun ResultScreenPreview() {
     ResultScreen(
         navigator = EmptyDestinationsNavigator,
-        result = Result(listOf(Option("Pizza")), 0),
+        result = Result(listOf(Option.Text("Pizza")), 0),
     )
 }
 

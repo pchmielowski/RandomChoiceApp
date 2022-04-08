@@ -21,8 +21,10 @@ internal fun createDatabase(driver: SqlDriver): Database {
         override fun encode(value: DilemmaId) = value.value
     }
     val optionAdapter = object : ColumnAdapter<Option, String> {
-        override fun decode(databaseValue: String) = Option(databaseValue)
-        override fun encode(value: Option) = value.text
+        override fun decode(databaseValue: String) = Option.Text(databaseValue)
+        override fun encode(value: Option) = when (value) {
+            is Option.Text -> value.text
+        }
     }
     return Database(
         driver = driver,
