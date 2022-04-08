@@ -24,6 +24,6 @@ internal class ShareIntentDelegate(private val store: Store<Intent, *, *>) {
             val text = (extras.getString(android.content.Intent.EXTRA_SUBJECT)
                 ?: extras.getString(android.content.Intent.EXTRA_TEXT))
                 ?: return null
-            return Option(text)
+            return Option.Text(text)
         }
 }
