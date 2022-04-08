@@ -16,9 +16,11 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
@@ -66,6 +68,7 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
 import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
+import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
@@ -195,12 +198,15 @@ internal fun MenuButton(
                 contentDescription = stringResource(R.string.label_more)
             )
         }
+        var mode by remember { mutableStateOf(Mode.Text) }
         DropdownMenu(
             expanded = expanded,
             onDismiss = { expanded = false },
             onThemeChoose = onThemeChoose,
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
+            mode = mode,
+            onEnterModeClick = { mode = it },
             strategy = menuStrategy,
         )
     }
@@ -214,6 +220,8 @@ private fun DropdownMenu(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
+    mode: Mode,
+    onEnterModeClick: (Mode) -> Unit,
     strategy: DropdownMenuStrategy,
 ) {
     strategy.Menu(expanded, onDismiss) {
@@ -231,6 +239,18 @@ private fun DropdownMenu(
             onDismiss = onDismiss,
         )
 
+        when (mode) {
+            Mode.Text -> Item(
+                icon = Icons.Filled.CameraAlt,
+                text = R.string.label_mode_photo,
+                onClick = { onEnterModeClick(Mode.Photo) },
+            )
+            Mode.Photo -> Item(
+                icon = Icons.Filled.ShortText,
+                text = R.string.label_mode_text,
+                onClick = { onEnterModeClick(Mode.Text) },
+            )
+        }
         Item(
             icon = Icons.Outlined.ListAlt,
             text = R.string.label_saved,
