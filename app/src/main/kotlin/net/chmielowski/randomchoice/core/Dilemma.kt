@@ -22,6 +22,7 @@ import kotlinx.parcelize.Parcelize
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Option.Image
 import net.chmielowski.randomchoice.core.Option.Text
+import net.chmielowski.randomchoice.utils.AndroidString
 import net.chmielowski.randomchoice.utils.removeIndex
 import net.chmielowski.randomchoice.utils.replace
 
@@ -108,13 +109,14 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     }
 
     fun render() = options.mapIndexed { index, item ->
+        val label = AndroidString(R.string.label_option, index + 1)
         when (item) {
-            is Text -> textField(index, item)
-            is Image -> ImageField(item, index + 1)
+            is Text -> textField(index, item, label)
+            is Image -> ImageField(item, label)
         }
     }
 
-    private fun textField(index: Int, item: Text) = TextField(
+    private fun textField(index: Int, item: Text, label: AndroidString) = TextField(
         value = item,
         imeAction = if (index == options.lastIndex) {
             ImeAction.Done
@@ -125,9 +127,13 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         humanIndex = index + 1,
         id = index,
         isLast = index == options.lastIndex,
+        label = label,
     )
 
-    sealed interface OptionField
+    sealed interface OptionField {
+
+        val label: AndroidString
+    }
 
     data class TextField(
         val value: Text,
@@ -136,11 +142,12 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         val id: Int,
         val humanIndex: Int,
         val isLast: Boolean,
+        override val label: AndroidString,
     ) : OptionField
 
     data class ImageField(
         val value: Image,
-        val humanIndex: Int,
+        override val label: AndroidString,
     ) : OptionField
 
     @Composable

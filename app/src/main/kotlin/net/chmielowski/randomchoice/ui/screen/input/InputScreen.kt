@@ -88,6 +88,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
+import net.chmielowski.randomchoice.utils.stringResource
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Destination(start = true)
@@ -369,6 +370,7 @@ private fun OptionTextFields(
                     ),
                     index = field.humanIndex,
                     canRemove = dilemma.canRemove,
+                    label=field.label,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -391,7 +393,7 @@ private fun OptionTextFields(
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = stringResource(R.string.label_option, field.humanIndex),
+                        text = stringResource(field.label),
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
