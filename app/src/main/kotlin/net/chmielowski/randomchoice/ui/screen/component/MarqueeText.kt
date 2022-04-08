@@ -41,7 +41,7 @@ internal fun AnimatedResult(
                             maxLines = if (finished) Int.MAX_VALUE else 1,
                             overflow = TextOverflow.Ellipsis,
                         )
-                        is Option.Image -> TODO() // TODO@
+                        is Option.Image -> TODO()
                     }
                 }
             }

@@ -52,7 +52,7 @@ internal fun ResultScreen(
                         text = AnnotatedString(
                             when (val chosen = result.chosen) {
                                 is Option.Text -> chosen.text
-                                is Option.Image -> TODO() // TODO@
+                                is Option.Image -> TODO()
                             }
                         )
                     }
