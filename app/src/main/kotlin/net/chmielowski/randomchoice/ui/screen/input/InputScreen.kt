@@ -137,6 +137,8 @@ internal fun InputScreen(
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
                 menuStrategy = menuStrategy,
+                mode =state.mode,
+                onSelectMode = {onIntent(EnterOptionsIntent.SelectMode(it))},
             )
         },
         scrollBehavior = scrollBehavior,
@@ -189,6 +191,8 @@ internal fun MenuButton(
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
     menuStrategy: DropdownMenuStrategy,
+    mode: Mode,
+    onSelectMode: (Mode) -> Unit,
 ) {
     menuStrategy.Container {
         var expanded by remember { mutableStateOf(false) }
@@ -198,7 +202,6 @@ internal fun MenuButton(
                 contentDescription = stringResource(R.string.label_more)
             )
         }
-        var mode by remember { mutableStateOf(Mode.Text) }
         DropdownMenu(
             expanded = expanded,
             onDismiss = { expanded = false },
@@ -206,7 +209,7 @@ internal fun MenuButton(
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
             mode = mode,
-            onEnterModeClick = { mode = it },
+            onEnterModeClick = onSelectMode,
             strategy = menuStrategy,
         )
     }
