@@ -4,6 +4,7 @@ package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -367,7 +368,11 @@ private fun OptionTextFields(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                Card(
+                    modifier = Modifier
+                        .clickable { }
+                        .fillMaxWidth()
+                ) {
                     // TODO@ Content description
                     val bitmap = field.value.bitmap?.asImageBitmap()
                     if (bitmap != null) {
