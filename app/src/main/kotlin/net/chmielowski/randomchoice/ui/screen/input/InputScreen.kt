@@ -395,7 +395,7 @@ private fun OptionTextFields(
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Option 1",
+                        text = stringResource(R.string.label_option, field.humanIndex),
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)

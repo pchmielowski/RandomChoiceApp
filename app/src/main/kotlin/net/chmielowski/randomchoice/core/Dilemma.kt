@@ -110,7 +110,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     fun render() = options.mapIndexed { index, item ->
         when (item) {
             is Text -> textField(index, item)
-            is Image -> ImageField(item)
+            is Image -> ImageField(item, index + 1)
         }
     }
 
@@ -140,6 +140,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     data class ImageField(
         val value: Image,
+        val humanIndex: Int,
     ) : OptionField
 
     @Composable
