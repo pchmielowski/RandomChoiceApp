@@ -32,7 +32,7 @@ internal sealed interface Intent {
 
     sealed interface EnterOptionsIntent : Intent {
 
-        data class ChangeText(val text: String, val id: Int) : EnterOptionsIntent
+        data class ChangeText(val text: Option, val id: Int) : EnterOptionsIntent
 
         object AddNew : EnterOptionsIntent
 

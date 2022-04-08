@@ -35,7 +35,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
 
     val canResetOrSave get() = options.any { it != Option() }
 
-    fun updateText(id: Int, text: String) = Dilemma(options.replace(id, Option(text)))
+    fun updateText(id: Int, text: Option) = Dilemma(options.replace(id, text))
 
     fun reset() = Dilemma()
 
@@ -92,7 +92,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
     fun render() = options.mapIndexed(::textField)
 
     private fun textField(index: Int, item: Option) = TextField(
-        value = item.text,
+        value = item,
         imeAction = if (index == options.lastIndex) {
             ImeAction.Done
         } else {
@@ -105,7 +105,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
     )
 
     data class TextField(
-        val value: String,
+        val value: Option,
         val imeAction: ImeAction,
         val focused: Boolean,
         val id: Int,

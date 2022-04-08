@@ -37,12 +37,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import net.chmielowski.randomchoice.R
+import net.chmielowski.randomchoice.core.Option
 
 @Suppress("LongParameterList")
 @Composable
 internal fun OptionTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: Option,
+    onValueChange: (Option) -> Unit,
     onRemoveOption: () -> Unit,
     imeAction: ImeAction,
     index: Int,
@@ -56,8 +57,8 @@ internal fun OptionTextField(
             .fillMaxWidth(),
     ) {
         TextField(
-            value = value,
-            onValueChange = onValueChange,
+            value = value.text,
+            onValueChange = { onValueChange(Option(it)) },
             placeholder = {
                 Text(
                     stringResource(R.string.label_option, index),
