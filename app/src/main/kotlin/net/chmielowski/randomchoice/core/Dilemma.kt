@@ -42,13 +42,13 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     val canRemove get() = options.size > 2
 
-    val canResetOrSave get() = options.any { it != Text() }
+    val canResetOrSave get() = options.any(Option::hasValue)
 
     fun updateText(id: Int, text: Option) = Dilemma(options.replace(id, text))
 
     fun reset() = Dilemma()
 
-    val allFilled get() = options.all { it != Text() }
+    val allFilled get() = options.all(Option::hasValue)
 
     fun addNew() = Dilemma(options + Text())
 
