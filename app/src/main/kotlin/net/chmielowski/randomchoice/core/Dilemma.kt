@@ -44,14 +44,14 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
     fun addNew() = Dilemma(options + Option())
 
     // TODO: Rename
-    fun addShared(text: String) = copy(
-        options = options.replaceFirstEmptyOrAdd(text),
+    fun addShared(option: Option) = copy(
+        options = options.replaceFirstEmptyOrAdd(option),
     )
 
-    private fun List<Option>.replaceFirstEmptyOrAdd(text: String) =
+    private fun List<Option>.replaceFirstEmptyOrAdd(option: Option) =
         when (val empty = indexOfFirst { it == Option() }) {
-            -1 -> this + Option(text)
-            else -> replace(empty, Option(text))
+            -1 -> this + option
+            else -> replace(empty, option)
         }
 
     fun remove(id: Int): Dilemma {
