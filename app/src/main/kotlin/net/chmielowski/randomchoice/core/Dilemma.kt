@@ -33,6 +33,12 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         check(options.size >= 2)
     }
 
+    val mode
+        get() = when (options.first()) {
+            is Text -> Mode.Text
+            is Image -> Mode.Image
+        }
+
     val canRemove get() = options.size > 2
 
     val canResetOrSave get() = options.any { it != Text() }
@@ -68,7 +74,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     fun selectMode(mode: Mode) = when (mode) {
         Mode.Text -> Dilemma()
-        Mode.Photo -> Dilemma(listOf(Image(), Image()))
+        Mode.Image -> Dilemma(listOf(Image(), Image()))
     }
 
     fun persistable() = options

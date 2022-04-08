@@ -248,9 +248,9 @@ private fun DropdownMenu(
             Mode.Text -> Item(
                 icon = Icons.Filled.CameraAlt,
                 text = R.string.label_mode_photo,
-                onClick = { onEnterModeClick(Mode.Photo) },
+                onClick = { onEnterModeClick(Mode.Image) },
             )
-            Mode.Photo -> Item(
+            Mode.Image -> Item(
                 icon = Icons.Filled.ShortText,
                 text = R.string.label_mode_text,
                 onClick = { onEnterModeClick(Mode.Text) },

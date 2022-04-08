@@ -69,7 +69,6 @@ internal data class State(
     val dilemma: Dilemma = Dilemma(),
     private val lastSaved: Dilemma? = null,
     val lastDeleted: DilemmaId? = null,
-    val mode: Mode = Mode.Text,
 ) : Parcelable {
 
     val showResetButton get() = dilemma.canResetOrSave
@@ -77,6 +76,8 @@ internal data class State(
     val showSaveButton get() = dilemma.canResetOrSave && dilemma != lastSaved
 
     val showSavedMessage get() = dilemma == lastSaved
+
+    val mode get() = dilemma.mode
 }
 
 internal sealed interface Label {
