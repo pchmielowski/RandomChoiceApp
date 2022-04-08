@@ -62,7 +62,7 @@ internal class ScreenshotTest3 : AbstractScreenshotTest(
 
 private class FakeChoice(private val chosen: String) : Choice {
 
-    override fun make(options: List<Option>) = options.indexOfFirst { it == Option(chosen) }
+    override fun make(options: List<Option>) = options.indexOfFirst { it == Option.Text(chosen) }
 }
 
 private class PrepopulateWithSavedChoices : PrepopulateDatabase {
