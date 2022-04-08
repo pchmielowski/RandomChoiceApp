@@ -23,11 +23,13 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,10 +45,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -322,6 +326,7 @@ private fun SavedMessage() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OptionTextFields(
     dilemma: Dilemma,
@@ -362,14 +367,31 @@ private fun OptionTextFields(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
-                // TODO@ Content description
-                val bitmap = field.value.bitmap?.asImageBitmap()
-                if (bitmap != null) {
-                    Image(bitmap, contentDescription = null)
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    // TODO@ Content description
+                    val bitmap = field.value.bitmap?.asImageBitmap()
+                    if (bitmap != null) {
+                        Image(bitmap, contentDescription = null)
+                    } else {
+                        Spacer(modifier = Modifier.height(32.dp))
+                        Image(
+                            imageVector = Icons.Outlined.CameraAlt,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Option 1",
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
-                TextButton(onClick = {}) {
-                    Text("Open camera")
-                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
