@@ -34,21 +34,15 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         check(options.all { it is Text } || options.all { it is Image })
     }
 
-    val mode
-        get() = when (options.first()) {
-            is Text -> Mode.Text
-            is Image -> Mode.Image
-        }
-
     val canRemove get() = options.size > 2
 
-    val canResetOrSave get() = options.any(Option::hasValue)
+    val canResetOrSave get() = options.any { it != Text() }
 
     fun updateText(id: Int, text: Option) = Dilemma(options.replace(id, text))
 
     fun reset() = Dilemma()
 
-    val allFilled get() = options.all(Option::hasValue)
+    val allFilled get() = options.all { it != Text() }
 
     fun addNew() = Dilemma(options + Text())
 
@@ -72,11 +66,6 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     }
 
     fun choose(choice: Choice) = Result(options, choice.make(options))
-
-    fun selectMode(mode: Mode) = when (mode) {
-        Mode.Text -> Dilemma()
-        Mode.Image -> Dilemma(listOf(Image(), Image()))
-    }
 
     fun persistable() = options
 

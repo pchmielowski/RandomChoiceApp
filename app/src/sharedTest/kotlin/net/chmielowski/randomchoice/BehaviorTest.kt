@@ -1,23 +1,8 @@
 package net.chmielowski.randomchoice
 
-import androidx.compose.ui.test.performClick
 import org.junit.Test
 
 internal abstract class BehaviorTest : AbstractTest() {
-
-    @Test
-    fun initial() {
-        // TODO@ Cleanup
-        rule
-            .onNodeWithText(R.string.action_save)
-            .assertDoesNotExist()
-        rule
-            .onNodeWithText(R.string.action_reset)
-            .assertDoesNotExist()
-        rule
-            .onNodeWithContentDescription(R.string.action_make_choice)
-            .assertDoesNotExist()
-    }
 
     @Test
     fun choosesOneOption() {
@@ -129,25 +114,5 @@ internal abstract class BehaviorTest : AbstractTest() {
         navigateToSaved()
         clickReuse()
         assertOptionTextFieldsHaveValues("Pizza", "Salad")
-    }
-
-    // TODO@ Cleanup
-    @Test
-    fun switchesToPhotoMode() {
-        rule
-            .onNodeWithContentDescription(R.string.label_more)
-            .performClick()
-        rule
-            .onNodeWithText(R.string.label_mode_photo)
-            .performClick()
-        rule
-            .onNodeWithText(R.string.action_save)
-            .assertDoesNotExist()
-        rule
-            .onNodeWithText(R.string.action_reset)
-            .assertDoesNotExist()
-        rule
-            .onNodeWithContentDescription(R.string.action_make_choice)
-            .assertDoesNotExist()
     }
 }

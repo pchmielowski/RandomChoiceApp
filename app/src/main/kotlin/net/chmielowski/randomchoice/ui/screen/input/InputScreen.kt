@@ -3,8 +3,6 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,19 +16,15 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
-import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -46,13 +40,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
@@ -75,7 +66,6 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
 import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
-import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
@@ -144,8 +134,6 @@ internal fun InputScreen(
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
                 menuStrategy = menuStrategy,
-                mode = state.mode,
-                onSelectMode = { onIntent(EnterOptionsIntent.SelectMode(it)) },
             )
         },
         scrollBehavior = scrollBehavior,
@@ -198,8 +186,6 @@ internal fun MenuButton(
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
     menuStrategy: DropdownMenuStrategy,
-    mode: Mode,
-    onSelectMode: (Mode) -> Unit,
 ) {
     menuStrategy.Container {
         var expanded by remember { mutableStateOf(false) }
@@ -215,8 +201,6 @@ internal fun MenuButton(
             onThemeChoose = onThemeChoose,
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
-            mode = mode,
-            onEnterModeClick = onSelectMode,
             strategy = menuStrategy,
         )
     }
@@ -230,8 +214,6 @@ private fun DropdownMenu(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
-    mode: Mode,
-    onEnterModeClick: (Mode) -> Unit,
     strategy: DropdownMenuStrategy,
 ) {
     strategy.Menu(expanded, onDismiss) {
@@ -249,18 +231,6 @@ private fun DropdownMenu(
             onDismiss = onDismiss,
         )
 
-        when (mode) {
-            Mode.Text -> Item(
-                icon = Icons.Filled.CameraAlt,
-                text = R.string.label_mode_photo,
-                onClick = { onEnterModeClick(Mode.Image) },
-            )
-            Mode.Image -> Item(
-                icon = Icons.Filled.ShortText,
-                text = R.string.label_mode_text,
-                onClick = { onEnterModeClick(Mode.Text) },
-            )
-        }
         Item(
             icon = Icons.Outlined.ListAlt,
             text = R.string.label_saved,
@@ -368,35 +338,6 @@ private fun OptionTextFields(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
-                Card(
-                    modifier = Modifier
-                        .clickable { }
-                        .fillMaxWidth()
-                ) {
-                    // TODO@ Content description
-                    val bitmap = field.value.bitmap?.asImageBitmap()
-                    if (bitmap != null) {
-                        Image(bitmap, contentDescription = null)
-                    } else {
-                        Spacer(modifier = Modifier.height(32.dp))
-                        Image(
-                            imageVector = Icons.Outlined.CameraAlt,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Option 1",
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
