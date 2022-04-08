@@ -3,6 +3,7 @@ package net.chmielowski.randomchoice.persistence
 import net.chmielowski.randomchoice.Database
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.DilemmaId
+import net.chmielowski.randomchoice.core.Option
 
 internal interface SaveDilemma {
 
@@ -18,9 +19,9 @@ internal class SaveDilemmaImpl(
 
     override fun invoke(dilemma: Dilemma) = database.doSave(dilemma.persistable())
 
-    override fun invoke(vararg options: String) = database.doSave(options.toList())
+    override fun invoke(vararg options: String) = database.doSave(options.map(::Option))
 
-    private fun Database.doSave(options: Iterable<String>) = task.runNotObserving {
+    private fun Database.doSave(options: Iterable<Option>) = task.runNotObserving {
         transaction {
             choiceQueries.insertDilemma()
             val choice = choiceQueries

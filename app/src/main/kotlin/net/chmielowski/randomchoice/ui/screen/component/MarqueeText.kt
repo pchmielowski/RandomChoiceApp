@@ -35,9 +35,9 @@ internal fun AnimatedResult(
             ProvideTextStyle(textStyle) {
                 for (item in (items + items.first())) {
                     Text(
-                        item,
+                        text = item.text,
                         maxLines = if (finished) Int.MAX_VALUE else 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }

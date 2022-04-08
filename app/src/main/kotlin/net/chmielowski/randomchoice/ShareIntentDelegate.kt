@@ -3,27 +3,27 @@ package net.chmielowski.randomchoice
 import com.arkivanov.mvikotlin.core.store.Store
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
+import net.chmielowski.randomchoice.core.Option
 
 internal class ShareIntentDelegate(private val store: Store<Intent, *, *>) {
 
-    fun onCreate(intent: android.content.Intent) {
-        val sharedText = intent.sharedText
-        if (sharedText != null) {
-            store.accept(EnterOptionsIntent.Add(sharedText))
+    fun onCreate(intent: android.content.Intent) = handleIntent(intent)
+
+    fun onNewIntent(intent: android.content.Intent?) = handleIntent(intent)
+
+    private fun handleIntent(intent: android.content.Intent?) {
+        val option = intent?.sharedOption
+        if (option != null) {
+            store.accept(EnterOptionsIntent.Add(option))
         }
     }
 
-    fun onNewIntent(intent: android.content.Intent?) {
-        val sharedText = intent?.sharedText
-        if (sharedText != null) {
-            store.accept(EnterOptionsIntent.Add(sharedText))
-        }
-    }
-
-    private val android.content.Intent.sharedText: String?
+    private val android.content.Intent.sharedOption: Option?
         get() {
             val extras = extras ?: return null
-            return extras.getString(android.content.Intent.EXTRA_SUBJECT)
-                ?: extras.getString(android.content.Intent.EXTRA_TEXT)
+            val text = (extras.getString(android.content.Intent.EXTRA_SUBJECT)
+                ?: extras.getString(android.content.Intent.EXTRA_TEXT))
+                ?: return null
+            return Option(text)
         }
 }

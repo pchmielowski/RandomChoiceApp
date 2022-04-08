@@ -9,6 +9,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import net.chmielowski.randomchoice.core.Dilemma
+import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.ResultScreen
@@ -36,7 +37,7 @@ internal fun InputScreenPreview() {
 internal fun ResultScreenPreview() {
     ResultScreen(
         navigator = EmptyDestinationsNavigator,
-        result = Result(listOf("Pizza"), 0),
+        result = Result(listOf(Option("Pizza")), 0),
     )
 }
 

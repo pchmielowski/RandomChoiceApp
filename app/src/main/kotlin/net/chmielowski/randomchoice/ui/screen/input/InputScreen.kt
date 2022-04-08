@@ -66,6 +66,7 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
 import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
+import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
 import net.chmielowski.randomchoice.ui.destinations.AboutScreenDestination
@@ -354,7 +355,7 @@ private fun MakeChoiceButton(onActionClick: () -> Unit) {
 @Composable
 private fun PasteButton(onIntent: (Intent) -> Unit) {
     val clipboardManager = LocalClipboardManager.current
-    TextButton(onClick = { onIntent(EnterOptionsIntent.Add(clipboardManager.textOrEmpty)) }) {
+    TextButton(onClick = { onIntent(EnterOptionsIntent.Add(Option(clipboardManager.textOrEmpty))) }) {
         Icon(Icons.Default.ContentPaste, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
         Text("Paste option")
