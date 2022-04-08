@@ -16,9 +16,11 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
@@ -66,7 +68,9 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
 import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
+import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
+import net.chmielowski.randomchoice.core.PhotoModeSupported
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
 import net.chmielowski.randomchoice.ui.destinations.AboutScreenDestination
@@ -134,6 +138,8 @@ internal fun InputScreen(
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
                 menuStrategy = menuStrategy,
+                mode = state.mode,
+                onSelectMode = { onIntent(EnterOptionsIntent.SelectMode(it)) },
             )
         },
         scrollBehavior = scrollBehavior,
@@ -180,12 +186,15 @@ internal fun InputScreen(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
     menuStrategy: DropdownMenuStrategy,
+    mode: Mode,
+    onSelectMode: (Mode) -> Unit,
 ) {
     menuStrategy.Container {
         var expanded by remember { mutableStateOf(false) }
@@ -201,6 +210,8 @@ internal fun MenuButton(
             onThemeChoose = onThemeChoose,
             onAboutClick = onAboutClick,
             onShowSavedClick = onShowSavedClick,
+            mode = mode,
+            onEnterModeClick = onSelectMode,
             strategy = menuStrategy,
         )
     }
@@ -214,6 +225,8 @@ private fun DropdownMenu(
     onThemeChoose: (Theme) -> Unit,
     onAboutClick: () -> Unit,
     onShowSavedClick: () -> Unit,
+    mode: Mode,
+    onEnterModeClick: (Mode) -> Unit,
     strategy: DropdownMenuStrategy,
 ) {
     strategy.Menu(expanded, onDismiss) {
@@ -231,6 +244,20 @@ private fun DropdownMenu(
             onDismiss = onDismiss,
         )
 
+        if (PhotoModeSupported) {
+            when (mode) {
+                Mode.Text -> Item(
+                    icon = Icons.Filled.CameraAlt,
+                    text = R.string.label_mode_photo,
+                    onClick = { onEnterModeClick(Mode.Image) },
+                )
+                Mode.Image -> Item(
+                    icon = Icons.Filled.ShortText,
+                    text = R.string.label_mode_text,
+                    onClick = { onEnterModeClick(Mode.Text) },
+                )
+            }
+        }
         Item(
             icon = Icons.Outlined.ListAlt,
             text = R.string.label_saved,

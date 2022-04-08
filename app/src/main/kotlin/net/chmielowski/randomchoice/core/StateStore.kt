@@ -11,6 +11,7 @@ import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.AddNew
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ChangeText
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.Remove
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ResetAll
+import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.SelectMode
 import net.chmielowski.randomchoice.core.Intent.MakeChoice
 import net.chmielowski.randomchoice.core.Intent.SetTheme
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemma
@@ -43,6 +44,8 @@ internal sealed interface Intent {
         data class Remove(val id: Int) : EnterOptionsIntent
 
         object ResetAll : EnterOptionsIntent
+
+        data class SelectMode(val mode: Mode) : EnterOptionsIntent
     }
 
     data class SetTheme(val theme: Theme) : Intent
@@ -73,6 +76,8 @@ internal data class State(
     val showSaveButton get() = dilemma.canResetOrSave && dilemma != lastSaved
 
     val showSavedMessage get() = dilemma == lastSaved
+
+    val mode get() = dilemma.mode
 }
 
 internal sealed interface Label {
@@ -109,6 +114,7 @@ internal class MainExecutor(
                     dispatchState { copy(dilemma = dilemma.reset()) }
                     publish(Label.FocusFirstOptionInput)
                 }
+                is SelectMode -> dispatchState { copy(dilemma = dilemma.selectMode(intent.mode)) }
             }
             MakeChoice -> {
                 val result = getState().dilemma.choose(choice)
