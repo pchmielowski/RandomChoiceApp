@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import net.chmielowski.randomchoice.core.MakingDecisionWithImagesNotSupportedException
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 
@@ -41,7 +42,7 @@ internal fun AnimatedResult(
                             maxLines = if (finished) Int.MAX_VALUE else 1,
                             overflow = TextOverflow.Ellipsis,
                         )
-                        is Option.Image -> TODO()
+                        is Option.Image -> throw MakingDecisionWithImagesNotSupportedException()
                     }
                 }
             }
