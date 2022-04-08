@@ -77,6 +77,7 @@ import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
+import net.chmielowski.randomchoice.core.PhotoModeSupported
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
 import net.chmielowski.randomchoice.ui.destinations.AboutScreenDestination
@@ -192,6 +193,7 @@ internal fun InputScreen(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 internal fun MenuButton(
     onThemeChoose: (Theme) -> Unit,
@@ -249,17 +251,19 @@ private fun DropdownMenu(
             onDismiss = onDismiss,
         )
 
-        when (mode) {
-            Mode.Text -> Item(
-                icon = Icons.Filled.CameraAlt,
-                text = R.string.label_mode_photo,
-                onClick = { onEnterModeClick(Mode.Image) },
-            )
-            Mode.Image -> Item(
-                icon = Icons.Filled.ShortText,
-                text = R.string.label_mode_text,
-                onClick = { onEnterModeClick(Mode.Text) },
-            )
+        if (PhotoModeSupported) {
+            when (mode) {
+                Mode.Text -> Item(
+                    icon = Icons.Filled.CameraAlt,
+                    text = R.string.label_mode_photo,
+                    onClick = { onEnterModeClick(Mode.Image) },
+                )
+                Mode.Image -> Item(
+                    icon = Icons.Filled.ShortText,
+                    text = R.string.label_mode_text,
+                    onClick = { onEnterModeClick(Mode.Text) },
+                )
+            }
         }
         Item(
             icon = Icons.Outlined.ListAlt,
