@@ -297,6 +297,7 @@ private fun SavedMessage() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OptionTextFields(
     dilemma: Dilemma,
@@ -309,23 +310,36 @@ private fun OptionTextFields(
     }
 
     for (field in dilemma.render()) {
-        if (field.focused) {
-            LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
+        when (field) {
+            is Dilemma.TextField -> {
+                if (field.focused) {
+                    LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
+                }
+                OptionTextField(
+                    value = field.value,
+                    onValueChange = { value ->
+                        onIntent(
+                            EnterOptionsIntent.ChangeText(
+                                value,
+                                field.id
+                            )
+                        )
+                    },
+                    onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+                    imeAction = field.imeAction,
+                    modifier = Modifier.chooseRequester(
+                        field = field,
+                        first = focusRequester,
+                        added = addedFocusRequester
+                    ),
+                    index = field.humanIndex,
+                    canRemove = dilemma.canRemove,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            is Dilemma.ImageField -> {
+            }
         }
-        OptionTextField(
-            value = field.value,
-            onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeText(value, field.id)) },
-            onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
-            imeAction = field.imeAction,
-            modifier = Modifier.chooseRequester(
-                field = field,
-                first = focusRequester,
-                added = addedFocusRequester
-            ),
-            index = field.humanIndex,
-            canRemove = dilemma.canRemove,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
