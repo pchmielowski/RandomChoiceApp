@@ -248,12 +248,10 @@ private fun Bitmap.save(file: String) {
     Log.d("Screenshot", "Saved screenshot to $path/$file.png")
 }
 
-// TODO@ Private
-internal fun ComposeContentTestRule.onNodeWithText(@StringRes string: Int) =
+private fun ComposeContentTestRule.onNodeWithText(@StringRes string: Int) =
     onNodeWithText(getString(string))
 
-// TODO@ Private
-internal fun ComposeContentTestRule.onNodeWithContentDescription(@StringRes string: Int) =
+private fun ComposeContentTestRule.onNodeWithContentDescription(@StringRes string: Int) =
     onNodeWithContentDescription(getString(string))
 
 private fun getString(string: Int) =
