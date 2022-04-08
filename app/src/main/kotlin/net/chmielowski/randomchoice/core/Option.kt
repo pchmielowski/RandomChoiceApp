@@ -6,11 +6,19 @@ import kotlinx.parcelize.Parcelize
 
 sealed interface Option : Parcelable {
 
-    @JvmInline
-    @Parcelize
-    value class Text(val text: String = "") : Option
+    val hasValue: Boolean
 
     @JvmInline
     @Parcelize
-    value class Image(val bitmap: Bitmap? = null) : Option
+    value class Text(val text: String = "") : Option {
+
+        override val hasValue get() = text.isNotEmpty()
+    }
+
+    @JvmInline
+    @Parcelize
+    value class Image(val bitmap: Bitmap? = null) : Option {
+
+        override val hasValue get() = bitmap != null
+    }
 }
