@@ -179,14 +179,16 @@ internal fun InputScreen(
                 onIntent = onIntent,
                 focusRequester = focusRequester,
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                PasteButton(onIntent = onIntent)
-                Spacer(modifier = Modifier.width(8.dp))
-                AddOptionButton(
-                    onIntent = onIntent,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            if (state.dilemma.mode == Mode.Text) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row {
+                    PasteButton(onIntent = onIntent)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    AddOptionButton(
+                        onIntent = onIntent,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
