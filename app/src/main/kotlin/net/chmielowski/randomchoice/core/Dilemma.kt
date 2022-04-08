@@ -31,6 +31,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     init {
         check(options.size >= 2)
+        check(options.all { it is Text } || options.all { it is Image })
     }
 
     val mode
