@@ -2,6 +2,7 @@ package net.chmielowski.randomchoice
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import net.chmielowski.randomchoice.core.Choice
+import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.persistence.NonCancellableTask
 import net.chmielowski.randomchoice.persistence.SaveDilemmaImpl
 import net.chmielowski.randomchoice.ui.theme.Theme
@@ -61,7 +62,7 @@ internal class ScreenshotTest3 : AbstractScreenshotTest(
 
 private class FakeChoice(private val chosen: String) : Choice {
 
-    override fun make(options: List<String>) = options.indexOfFirst { it == chosen }
+    override fun make(options: List<Option>) = options.indexOfFirst { it == Option.Text(chosen) }
 }
 
 private class PrepopulateWithSavedChoices : PrepopulateDatabase {
