@@ -1,6 +1,5 @@
 package net.chmielowski.randomchoice
 
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.performClick
 import org.junit.Test
 
@@ -132,6 +131,7 @@ internal abstract class BehaviorTest : AbstractTest() {
         assertOptionTextFieldsHaveValues("Pizza", "Salad")
     }
 
+    // TODO@ Cleanup
     @Test
     fun switchesToPhotoMode() {
         rule
@@ -140,5 +140,14 @@ internal abstract class BehaviorTest : AbstractTest() {
         rule
             .onNodeWithText(R.string.label_mode_photo)
             .performClick()
+        rule
+            .onNodeWithText(R.string.action_save)
+            .assertDoesNotExist()
+        rule
+            .onNodeWithText(R.string.action_reset)
+            .assertDoesNotExist()
+        rule
+            .onNodeWithContentDescription(R.string.action_make_choice)
+            .assertDoesNotExist()
     }
 }
