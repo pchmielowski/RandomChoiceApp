@@ -57,8 +57,8 @@ import net.chmielowski.randomchoice.core.Option
 @Suppress("LongParameterList")
 @Composable
 internal fun OptionTextField(
-    value: Option,
-    onValueChange: (Option) -> Unit,
+    value: Option.Text,
+    onValueChange: (Option.Text) -> Unit,
     onRemoveOption: () -> Unit,
     imeAction: ImeAction,
     index: Int,
@@ -73,7 +73,7 @@ internal fun OptionTextField(
     ) {
         TextField(
             value = value.text,
-            onValueChange = { onValueChange(Option(it)) },
+            onValueChange = { onValueChange(Option.Text(it)) },
             placeholder = {
                 Text(
                     stringResource(R.string.label_option, index),

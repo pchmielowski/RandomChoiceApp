@@ -378,7 +378,7 @@ private fun MakeChoiceButton(onActionClick: () -> Unit) {
 @Composable
 private fun PasteButton(onIntent: (Intent) -> Unit) {
     val clipboardManager = LocalClipboardManager.current
-    TextButton(onClick = { onIntent(EnterOptionsIntent.Add(Option(clipboardManager.textOrEmpty))) }) {
+    TextButton(onClick = { onIntent(EnterOptionsIntent.Add(Option.Text(clipboardManager.textOrEmpty))) }) {
         Icon(Icons.Default.ContentPaste, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
         Text("Paste option")
