@@ -20,11 +20,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
 import kotlinx.parcelize.Parcelize
 import net.chmielowski.randomchoice.R
+import net.chmielowski.randomchoice.core.Option.Text
 import net.chmielowski.randomchoice.utils.removeIndex
 import net.chmielowski.randomchoice.utils.replace
 
 @Parcelize
-internal data class Dilemma(private val options: List<Option> = listOf(Option(), Option())) :
+internal data class Dilemma(private val options: List<Option> = listOf(Text(), Text())) :
     Parcelable {
 
     init {
@@ -33,15 +34,15 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
 
     val canRemove get() = options.size > 2
 
-    val canResetOrSave get() = options.any { it != Option() }
+    val canResetOrSave get() = options.any { it != Text() }
 
     fun updateText(id: Int, text: Option) = Dilemma(options.replace(id, text))
 
     fun reset() = Dilemma()
 
-    val allFilled get() = options.all { it != Option() }
+    val allFilled get() = options.all { it != Text() }
 
-    fun addNew() = Dilemma(options + Option())
+    fun addNew() = Dilemma(options + Text())
 
     // TODO: Rename
     fun addShared(option: Option) = copy(
@@ -49,7 +50,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
     )
 
     private fun List<Option>.replaceFirstEmptyOrAdd(option: Option) =
-        when (val empty = indexOfFirst { it == Option() }) {
+        when (val empty = indexOfFirst { it == Text() }) {
             -1 -> this + option
             else -> replace(empty, option)
         }
@@ -69,10 +70,13 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
     @Composable
     fun summary() = buildAnnotatedString {
         for ((index, item) in options.withIndex()) {
-            if (item == Option()) {
+            if (item == Text()) {
                 continue
             }
-            append(item.text)
+            val text = when (item) {
+                is Text -> item.text
+            }
+            append(text)
             if (index != options.lastIndex) {
                 appendSeparator()
             }
@@ -92,7 +96,9 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
     fun render() = options.mapIndexed(::textField)
 
     private fun textField(index: Int, item: Option) = TextField(
-        value = item,
+        value = when (item) {
+            is Text -> item
+        },
         imeAction = if (index == options.lastIndex) {
             ImeAction.Done
         } else {
@@ -105,7 +111,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
     )
 
     data class TextField(
-        val value: Option,
+        val value: Text,
         val imeAction: ImeAction,
         val focused: Boolean,
         val id: Int,

@@ -19,7 +19,7 @@ internal class SaveDilemmaImpl(
 
     override fun invoke(dilemma: Dilemma) = database.doSave(dilemma.persistable())
 
-    override fun invoke(vararg options: String) = database.doSave(options.map(::Option))
+    override fun invoke(vararg options: String) = database.doSave(options.map(Option::Text))
 
     private fun Database.doSave(options: Iterable<Option>) = task.runNotObserving {
         transaction {
