@@ -115,24 +115,4 @@ internal abstract class BehaviorTest : AbstractTest() {
         clickReuse()
         assertOptionTextFieldsHaveValues("Pizza", "Salad")
     }
-
-    // TODO@ Cleanup
-    @Test
-    fun switchesToPhotoMode() {
-        rule
-            .onNodeWithContentDescription(R.string.label_more)
-            .performClick()
-        rule
-            .onNodeWithText(R.string.label_mode_photo)
-            .performClick()
-        rule
-            .onNodeWithText(R.string.action_save)
-            .assertDoesNotExist()
-        rule
-            .onNodeWithText(R.string.action_reset)
-            .assertDoesNotExist()
-        rule
-            .onNodeWithContentDescription(R.string.action_make_choice)
-            .assertDoesNotExist()
-    }
 }
