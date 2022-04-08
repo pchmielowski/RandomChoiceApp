@@ -62,7 +62,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Option(),
         return Dilemma(options.removeIndex(id))
     }
 
-    fun choose(choice: Choice) = Result(options.map(Option::text), choice.make(options))
+    fun choose(choice: Choice) = Result(options, choice.make(options))
 
     fun persistable() = options
 

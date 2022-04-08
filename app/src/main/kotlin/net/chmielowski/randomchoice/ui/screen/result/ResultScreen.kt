@@ -48,7 +48,7 @@ internal fun ResultScreen(
                 modifier = Modifier
                     .clearAndSetSemantics {
                         contentDescription = description
-                        text = AnnotatedString(result.chosen)
+                        text = AnnotatedString(result.chosen.text)
                     }
             )
         }
