@@ -113,7 +113,7 @@ internal class MainExecutor(
                     dispatchState { copy(dilemma = dilemma.reset()) }
                     publish(Label.FocusFirstOptionInput)
                 }
-                is SelectMode -> dispatchState { copy(mode = intent.mode) }
+                is SelectMode -> dispatchState { copy(dilemma = dilemma.selectMode(intent.mode)) }
             }
             MakeChoice -> {
                 val result = getState().dilemma.choose(choice)

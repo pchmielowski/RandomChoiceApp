@@ -139,8 +139,8 @@ internal fun InputScreen(
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
                 menuStrategy = menuStrategy,
-                mode =state.mode,
-                onSelectMode = {onIntent(EnterOptionsIntent.SelectMode(it))},
+                mode = state.mode,
+                onSelectMode = { onIntent(EnterOptionsIntent.SelectMode(it)) },
             )
         },
         scrollBehavior = scrollBehavior,
@@ -334,14 +334,21 @@ private fun OptionTextFields(
     }
 
     for (field in dilemma.render()) {
-        when(field) {
+        when (field) {
             is Dilemma.TextField -> {
                 if (field.focused) {
                     LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
                 }
                 OptionTextField(
                     value = field.value,
-                    onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeText(value, field.id)) },
+                    onValueChange = { value ->
+                        onIntent(
+                            EnterOptionsIntent.ChangeText(
+                                value,
+                                field.id
+                            )
+                        )
+                    },
                     onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
                     imeAction = field.imeAction,
                     modifier = Modifier.chooseRequester(
@@ -356,7 +363,13 @@ private fun OptionTextFields(
             }
             is Dilemma.ImageField -> {
                 // TODO@ Content description
-                Image(field.value.bitmap.asImageBitmap(),contentDescription = null)
+                val bitmap = field.value.bitmap?.asImageBitmap()
+                if (bitmap != null) {
+                    Image(bitmap, contentDescription = null)
+                }
+                TextButton(onClick = {}) {
+                    Text("Open camera")
+                }
             }
         }
     }

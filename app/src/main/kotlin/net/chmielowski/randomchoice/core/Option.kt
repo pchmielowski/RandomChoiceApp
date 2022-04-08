@@ -12,5 +12,5 @@ sealed interface Option : Parcelable {
 
     @JvmInline
     @Parcelize
-    value class Image(val bitmap: Bitmap) : Option
+    value class Image(val bitmap: Bitmap? = null) : Option
 }

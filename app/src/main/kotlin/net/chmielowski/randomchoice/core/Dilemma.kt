@@ -66,6 +66,11 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     fun choose(choice: Choice) = Result(options, choice.make(options))
 
+    fun selectMode(mode: Mode) = when (mode) {
+        Mode.Text -> Dilemma()
+        Mode.Photo -> Dilemma(listOf(Image(), Image()))
+    }
+
     fun persistable() = options
 
     @Composable
