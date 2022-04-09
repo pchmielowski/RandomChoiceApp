@@ -365,7 +365,10 @@ private fun OptionTextFields(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
-                ImageField(field)
+                ImageField(
+                    field = field,
+                    onIntent = onIntent,
+                )
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
