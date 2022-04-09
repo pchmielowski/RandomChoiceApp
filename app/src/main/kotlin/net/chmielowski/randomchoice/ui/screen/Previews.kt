@@ -38,7 +38,7 @@ internal fun InputScreenTextPreview() {
 internal fun InputScreenImagePreview() {
     InputScreen(
         navigator = EmptyDestinationsNavigator,
-        state = State(Dilemma(listOf(Image(), Image()))),
+        state = State(Dilemma(listOf(Image(), Image(), Image()))),
         onIntent = {},
         focusRequester = FocusRequester(),
         menuStrategy = DropdownMenuStrategy.Real(),
