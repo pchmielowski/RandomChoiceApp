@@ -180,7 +180,12 @@ internal fun InputScreen(
         Column(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-//                .verticalScroll(rememberScrollState()) // TODO@
+                .run {
+                    when (state.dilemma.mode) {
+                        Mode.Text -> verticalScroll(rememberScrollState())
+                        Mode.Image -> this
+                    }
+                }
                 .padding(16.dp),
         ) {
             OptionTextFields(
