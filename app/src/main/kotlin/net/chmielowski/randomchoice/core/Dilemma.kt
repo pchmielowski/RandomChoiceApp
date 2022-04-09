@@ -45,7 +45,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     val canResetOrSave get() = options.any(Option::hasValue)
 
-    fun updateText(id: Int, text: Option) = Dilemma(options.replace(id, text))
+    fun updateText(id: OptionId, text: Option) = Dilemma(options.replace(id.value, text))
 
     fun reset() = Dilemma()
 
@@ -64,12 +64,12 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
             else -> replace(empty, option)
         }
 
-    fun remove(id: Int): Dilemma {
+    fun remove(id: OptionId): Dilemma {
         if (!canRemove) {
             // Happen when user clicks REMOVE button before they are hidden.
             return this
         }
-        return Dilemma(options.removeIndex(id))
+        return Dilemma(options.removeIndex(id.value))
     }
 
     fun choose(choice: Choice) = Result(options, choice.make(options))
@@ -111,14 +111,16 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     fun render() = options.mapIndexed(::renderOption)
 
     private fun renderOption(index: Int, item: Option): OptionField {
+        val id = OptionId(index)
         val label = AndroidString(R.string.label_option, index + 1)
         return when (item) {
-            is Text -> textField(index, item, label)
-            is Image -> ImageField(item, label)
+            is Text -> textField(id, index, item, label)
+            is Image -> ImageField(id, item, label)
         }
     }
 
-    private fun textField(index: Int, item: Text, label: AndroidString) = TextField(
+    private fun textField(id: OptionId, index: Int, item: Text, label: AndroidString) = TextField(
+        id = id,
         value = item,
         imeAction = if (index == options.lastIndex) {
             ImeAction.Done
@@ -127,27 +129,29 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         },
         focused = index == 0,
         humanIndex = index + 1,
-        id = index,
         isLast = index == options.lastIndex,
         label = label,
     )
 
     sealed interface OptionField {
 
+        val id: OptionId
+
         val label: AndroidString
     }
 
     data class TextField(
+        override val id: OptionId,
         val value: Text,
         val imeAction: ImeAction,
         val focused: Boolean,
-        val id: Int,
         val humanIndex: Int,
         val isLast: Boolean,
         override val label: AndroidString,
     ) : OptionField
 
     data class ImageField(
+        override val id: OptionId,
         val value: Image,
         override val label: AndroidString,
     ) : OptionField
