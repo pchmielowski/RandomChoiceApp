@@ -62,6 +62,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -446,22 +447,22 @@ private fun ImageField(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(field.label),
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         } else {
             Image(
                 bitmap = bitmap.asImageBitmap(),
                 contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth()
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(field.label),
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
