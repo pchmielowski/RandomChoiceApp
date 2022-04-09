@@ -70,6 +70,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
+import net.chmielowski.randomchoice.core.Dilemma.OptionField
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
@@ -348,40 +349,69 @@ private fun OptionTextFields(
     dilemma.LaunchWhenOptionAdded {
         addedFocusRequester.requestFocus()
     }
+    FieldsLayout(dilemma) { field, modifier ->
+        Field(
+            field = field,
+            focusRequester = focusRequester,
+            onIntent = onIntent,
+            addedFocusRequester = addedFocusRequester,
+            dilemma = dilemma,
+            modifier = modifier,
+        )
+    }
+}
 
+@Composable
+private fun FieldsLayout(
+    dilemma: Dilemma,
+    fieldContent: @Composable (OptionField, Modifier) -> Unit,
+) {
     val fields = dilemma.render()
     when (dilemma.mode) {
         Mode.Text -> {
             for (field in fields) {
-                field as Dilemma.TextField // TODO@
-                TextField(
-                    field = field,
-                    focusRequester = focusRequester,
-                    onIntent = onIntent,
-                    addedFocusRequester = addedFocusRequester,
-                    dilemma = dilemma,
-                )
+                fieldContent(field, Modifier)
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
         Mode.Image -> {
-            for (pair in fields.windowed(2, 2, partialWindows = true)) {
+            val rows = fields.windowed(2, 2, partialWindows = true)
+            for (row in rows) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    for (field in pair) {
-                        field as Dilemma.ImageField // TODO@
-                        ImageField(
-                            field = field,
-                            onOptionChange = { option ->
-                                onIntent(EnterOptionsIntent.ChangeText(option, field.id))
-                            },
-                            modifier = Modifier
-                                .weight(1F),
-                        )
+                    for (field in row) {
+                        fieldContent(field, Modifier.weight(1F))
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun Field(
+    field: OptionField,
+    focusRequester: FocusRequester,
+    onIntent: (Intent) -> Unit,
+    addedFocusRequester: FocusRequester,
+    dilemma: Dilemma,
+    modifier: Modifier = Modifier,
+) {
+    when (field) {
+        is Dilemma.TextField -> TextField(
+            field = field,
+            focusRequester = focusRequester,
+            onIntent = onIntent,
+            addedFocusRequester = addedFocusRequester,
+            dilemma = dilemma,
+        )
+        is Dilemma.ImageField -> ImageField(
+            field = field,
+            onOptionChange = { option ->
+                onIntent(EnterOptionsIntent.ChangeText(option, field.id))
+            },
+            modifier = modifier,
+        )
     }
 }
 
