@@ -416,7 +416,6 @@ private fun ImageField(
 
         override fun parseResult(resultCode: Int, intent: android.content.Intent?): Bitmap? {
             // TODO@ Errors!
-            // TODO@ Cancellation!
             if (resultCode != Activity.RESULT_OK) {
                 return null
             }
