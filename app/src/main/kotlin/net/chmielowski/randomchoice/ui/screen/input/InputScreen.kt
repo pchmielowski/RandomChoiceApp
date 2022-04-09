@@ -333,7 +333,6 @@ private fun SavedMessage() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OptionTextFields(
     dilemma: Dilemma,
@@ -392,6 +391,7 @@ private fun TextField(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImageField(field: Dilemma.ImageField) {
     Card(
