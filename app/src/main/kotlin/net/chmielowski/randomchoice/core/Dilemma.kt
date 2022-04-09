@@ -140,9 +140,6 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         val label: AndroidString
     }
 
-    @JvmInline
-    value class Id(val value: Int)
-
     data class TextField(
         override val id: OptionId,
         val value: Text,
