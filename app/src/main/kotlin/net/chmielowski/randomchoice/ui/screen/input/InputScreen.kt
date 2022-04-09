@@ -3,6 +3,7 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -55,7 +57,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -175,8 +176,8 @@ internal fun InputScreen(
     ) {
         Column(
             modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .verticalScroll(rememberScrollState())
+//                .nestedScroll(scrollBehavior.nestedScrollConnection) // TODO@
+//                .verticalScroll(rememberScrollState())
                 .padding(16.dp),
         ) {
             OptionTextFields(
@@ -361,6 +362,7 @@ private fun OptionTextFields(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FieldsLayout(
     dilemma: Dilemma,
@@ -375,14 +377,14 @@ private fun FieldsLayout(
             }
         }
         Mode.Image -> {
-            val rows = fields.windowed(2, 2, partialWindows = true)
-            for (row in rows) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    for (field in row) {
-                        fieldContent(field, Modifier.weight(1F))
-                    }
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(fields) { field ->
+                    fieldContent(field, Modifier)
                 }
-                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
