@@ -2,12 +2,12 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.graphics.Bitmap
 import android.provider.MediaStore
-import android.util.Log
-import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -401,32 +401,25 @@ private fun TextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ImageField(field: Dilemma.ImageField) {
+private fun ImageField(
+    field: Dilemma.ImageField,
+    @Suppress("UNUSED_PARAMETER") onIntent: (Intent) -> Unit,
+) {
 
-
-    val owner = LocalActivityResultRegistryOwner.current!!
-    val registry = owner.activityResultRegistry
     var bmp by remember { mutableStateOf<Bitmap?>(null) }
-    val launcher = registry.register(
-        "Camera",
-        object : ActivityResultContract<Unit, Bitmap>() {
+    val contract = object : ActivityResultContract<Unit, Bitmap?>() {
+        override fun createIntent(context: Context, input: Unit) =
+            android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            override fun createIntent(context: Context, input: Unit): android.content.Intent {
-                return android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        override fun parseResult(resultCode: Int, intent: android.content.Intent?): Bitmap? {
+            // TODO@ Errors!
+            if (resultCode != Activity.RESULT_OK) {
+                return null
             }
-
-            override fun parseResult(resultCode: Int, intent: android.content.Intent?): Bitmap {
-                Log.d("pchm", "parseResult")
-                // TODO@ Handle errors, cancels and null data
-                val imageBitmap = intent!!.extras!!.get("data") as Bitmap
-                return imageBitmap
-            }
-        },
-        { result ->
-            bmp = result
-            Log.d("pchm", "onActivityResult $result")
-        },
-    )
+            return intent?.extras?.get("data") as Bitmap?
+        }
+    }
+    val launcher = rememberLauncherForActivityResult(contract) { bmp = it }
     IconButton(onClick = {
         try {
             launcher.launch(Unit)
