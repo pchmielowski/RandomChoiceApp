@@ -108,9 +108,11 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         append(" ")
     }
 
-    fun render() = options.mapIndexed { index, item ->
+    fun render() = options.mapIndexed(::renderOption)
+
+    private fun renderOption(index: Int, item: Option): OptionField {
         val label = AndroidString(R.string.label_option, index + 1)
-        when (item) {
+        return when (item) {
             is Text -> textField(index, item, label)
             is Image -> ImageField(item, label)
         }
