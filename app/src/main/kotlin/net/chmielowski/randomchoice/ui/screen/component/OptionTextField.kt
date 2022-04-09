@@ -53,6 +53,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Option
+import net.chmielowski.randomchoice.utils.AndroidString
+import net.chmielowski.randomchoice.utils.stringResource
 
 @Suppress("LongParameterList")
 @Composable
@@ -64,6 +66,7 @@ internal fun OptionTextField(
     index: Int,
     canRemove: Boolean,
     modifier: Modifier = Modifier,
+    label: AndroidString,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -76,7 +79,7 @@ internal fun OptionTextField(
             onValueChange = { onValueChange(Option.Text(it)) },
             placeholder = {
                 Text(
-                    stringResource(R.string.label_option, index),
+                    text = stringResource(label),
                     color = MaterialTheme.colorScheme.onSurface.copy(ContentAlpha.medium),
                 )
             },
