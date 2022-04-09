@@ -45,7 +45,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     val canResetOrSave get() = options.any(Option::hasValue)
 
-    fun updateText(id: Id, text: Option) = Dilemma(options.replace(id.value, text))
+    fun updateText(id: OptionId, text: Option) = Dilemma(options.replace(id.value, text))
 
     fun reset() = Dilemma()
 
@@ -64,7 +64,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
             else -> replace(empty, option)
         }
 
-    fun remove(id: Id): Dilemma {
+    fun remove(id: OptionId): Dilemma {
         if (!canRemove) {
             // Happen when user clicks REMOVE button before they are hidden.
             return this
@@ -111,7 +111,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     fun render() = options.mapIndexed(::renderOption)
 
     private fun renderOption(index: Int, item: Option): OptionField {
-        val id = Id(index)
+        val id = OptionId(index)
         val label = AndroidString(R.string.label_option, index + 1)
         return when (item) {
             is Text -> textField(id, index, item, label)
@@ -119,7 +119,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         }
     }
 
-    private fun textField(id: Id, index: Int, item: Text, label: AndroidString) = TextField(
+    private fun textField(id: OptionId, index: Int, item: Text, label: AndroidString) = TextField(
         id = id,
         value = item,
         imeAction = if (index == options.lastIndex) {
@@ -135,16 +135,16 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     sealed interface OptionField {
 
-        val id: Id
+        val id: OptionId
 
         val label: AndroidString
     }
 
     @JvmInline
-    value class Id(val value: Int)
+    value class OptionId(val value: Int)
 
     data class TextField(
-        override val id: Id,
+        override val id: OptionId,
         val value: Text,
         val imeAction: ImeAction,
         val focused: Boolean,
@@ -154,7 +154,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     ) : OptionField
 
     data class ImageField(
-        override val id: Id,
+        override val id: OptionId,
         val value: Image,
         override val label: AndroidString,
     ) : OptionField
