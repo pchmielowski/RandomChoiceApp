@@ -348,61 +348,76 @@ private fun OptionTextFields(
     for (field in dilemma.render()) {
         when (field) {
             is Dilemma.TextField -> {
-                if (field.focused) {
-                    LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
-                }
-                OptionTextField(
-                    value = field.value,
-                    onValueChange = { value ->
-                        onIntent(
-                            EnterOptionsIntent.ChangeText(
-                                value,
-                                field.id
-                            )
-                        )
-                    },
-                    onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
-                    imeAction = field.imeAction,
-                    modifier = Modifier.chooseRequester(
-                        field = field,
-                        first = focusRequester,
-                        added = addedFocusRequester
-                    ),
-                    index = field.humanIndex,
-                    canRemove = dilemma.canRemove,
-                    label=field.label,
+                TextField(
+                    field = field,
+                    focusRequester = focusRequester,
+                    onIntent = onIntent,
+                    addedFocusRequester = addedFocusRequester,
+                    dilemma = dilemma,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
-                Card(
-                    modifier = Modifier
-                        .clickable { }
-                        .fillMaxWidth()
-                ) {
-                    val bitmap = field.value.bitmap
-                    if (bitmap == null) {
-                        Spacer(modifier = Modifier.height(32.dp))
-                        Image(
-                            imageVector = Icons.Outlined.CameraAlt,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(field.label),
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                Spacer(modifier = Modifier.height(8.dp))
+                ImageField(field)
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
+
+@Composable
+private fun TextField(
+    field: Dilemma.TextField,
+    focusRequester: FocusRequester,
+    onIntent: (Intent) -> Unit,
+    addedFocusRequester: FocusRequester,
+    dilemma: Dilemma,
+) {
+    if (field.focused) {
+        LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
+    }
+    OptionTextField(
+        value = field.value,
+        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeText(value, field.id)) },
+        onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+        imeAction = field.imeAction,
+        modifier = Modifier.chooseRequester(
+            field = field,
+            first = focusRequester,
+            added = addedFocusRequester
+        ),
+        index = field.humanIndex,
+        canRemove = dilemma.canRemove,
+        label = field.label,
+    )
+}
+
+@Composable
+private fun ImageField(field: Dilemma.ImageField) {
+    Card(
+        modifier = Modifier
+            .clickable { }
+            .fillMaxWidth()
+    ) {
+        val bitmap = field.value.bitmap
+        if (bitmap == null) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Image(
+                imageVector = Icons.Outlined.CameraAlt,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(field.label),
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
