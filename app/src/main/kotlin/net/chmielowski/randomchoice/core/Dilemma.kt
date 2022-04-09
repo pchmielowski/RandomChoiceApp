@@ -45,7 +45,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     val canResetOrSave get() = options.any(Option::hasValue)
 
-    fun updateText(id: Int, text: Option) = Dilemma(options.replace(id, text))
+    fun updateText(id: Id, text: Option) = Dilemma(options.replace(id.value, text))
 
     fun reset() = Dilemma()
 
@@ -64,12 +64,12 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
             else -> replace(empty, option)
         }
 
-    fun remove(id: Int): Dilemma {
+    fun remove(id: Id): Dilemma {
         if (!canRemove) {
             // Happen when user clicks REMOVE button before they are hidden.
             return this
         }
-        return Dilemma(options.removeIndex(id))
+        return Dilemma(options.removeIndex(id.value))
     }
 
     fun choose(choice: Choice) = Result(options, choice.make(options))

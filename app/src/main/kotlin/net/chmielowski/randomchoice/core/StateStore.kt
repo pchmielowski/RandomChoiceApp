@@ -34,14 +34,14 @@ internal sealed interface Intent {
     sealed interface EnterOptionsIntent : Intent {
 
         // TODO: ChangeText -> ChangeOption, text -> option
-        data class ChangeText(val text: Option, val id: Int) : EnterOptionsIntent
+        data class ChangeText(val text: Option, val id: Dilemma.Id) : EnterOptionsIntent
 
         object AddNew : EnterOptionsIntent
 
         // TODO: text -> option
         data class Add(val text: Option) : EnterOptionsIntent
 
-        data class Remove(val id: Int) : EnterOptionsIntent
+        data class Remove(val id: Dilemma.Id) : EnterOptionsIntent
 
         object ResetAll : EnterOptionsIntent
 
