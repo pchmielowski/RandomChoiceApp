@@ -18,6 +18,7 @@ internal fun createLaunchCamera(onResult: (Bitmap?) -> Unit): () -> Unit {
     val launcher = rememberLauncherForActivityResult(CameraResultContract(), onResult)
     val context = LocalContext.current
     return {
+        @Suppress("SwallowedException")
         try {
             launcher.launch(Unit)
         } catch (e: ActivityNotFoundException) {
