@@ -5,6 +5,7 @@ package net.chmielowski.randomchoice.ui.screen.input
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -336,6 +337,7 @@ private fun SavedMessage() {
     }
 }
 
+// TODO: Rename
 @Composable
 private fun OptionTextFields(
     dilemma: Dilemma,
@@ -347,9 +349,11 @@ private fun OptionTextFields(
         addedFocusRequester.requestFocus()
     }
 
-    for (field in dilemma.render()) {
-        when (field) {
-            is Dilemma.TextField -> {
+    val fields = dilemma.render()
+    when (dilemma.mode) {
+        Mode.Text -> {
+            for (field in fields) {
+                field as Dilemma.TextField // TODO@
                 TextField(
                     field = field,
                     focusRequester = focusRequester,
@@ -359,16 +363,25 @@ private fun OptionTextFields(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            is Dilemma.ImageField -> {
-                ImageField(
-                    field = field,
-                    onOptionChange = { option ->
-                        onIntent(EnterOptionsIntent.ChangeText(option, field.id))
-                    },
-                )
+        }
+        Mode.Image -> {
+            for (pair in fields.windowed(2, 2, partialWindows = true)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    for (field in pair) {
+                        field as Dilemma.ImageField // TODO@
+                        ImageField(
+                            field = field,
+                            onOptionChange = { option ->
+                                onIntent(EnterOptionsIntent.ChangeText(option, field.id))
+                            },
+                            modifier = Modifier
+                                .weight(1F),
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -404,14 +417,14 @@ private fun TextField(
 private fun ImageField(
     field: Dilemma.ImageField,
     onOptionChange: (Option) -> Unit,
+    modifier: Modifier,
 ) {
     val launchCamera = createLaunchCamera(onResult = { bitmap ->
         onOptionChange(Option.Image(bitmap))
     })
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable(onClick = launchCamera)
-            .fillMaxWidth()
     ) {
         val bitmap = field.value.bitmap
         if (bitmap != null) {
@@ -419,7 +432,7 @@ private fun ImageField(
                 bitmap = bitmap.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth()
+//                modifier = Modifier.fillMaxWidth()
             )
         } else {
             Spacer(modifier = Modifier.height(32.dp))
