@@ -59,7 +59,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
@@ -405,11 +404,10 @@ private fun TextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImageField(
+    id: Int,
     field: Dilemma.ImageField,
-    @Suppress("UNUSED_PARAMETER") onIntent: (Intent) -> Unit,
+    onIntent: (Intent) -> Unit,
 ) {
-
-    var bmp by remember { mutableStateOf<Bitmap?>(null) }
     val contract = object : ActivityResultContract<Unit, Bitmap?>() {
         override fun createIntent(context: Context, input: Unit) =
             android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -422,9 +420,8 @@ private fun ImageField(
             return intent?.extras?.get("data") as Bitmap?
         }
     }
-    val launcher = rememberLauncherForActivityResult(contract) { bmp = it }
-    bmp?.let {
-        Image(it.asImageBitmap(), contentDescription = null)
+    val launcher = rememberLauncherForActivityResult(contract) { bitmap ->
+        onIntent(EnterOptionsIntent.ChangeText(Option.Image(bitmap), id))
     }
     Card(
         modifier = Modifier

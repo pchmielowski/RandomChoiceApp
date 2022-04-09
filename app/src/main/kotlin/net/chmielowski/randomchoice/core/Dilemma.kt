@@ -134,8 +134,13 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     sealed interface OptionField {
 
+        val id: Id
+
         val label: AndroidString
     }
+
+    @JvmInline
+    value class Id(val value: Int)
 
     data class TextField(
         val value: Text,
