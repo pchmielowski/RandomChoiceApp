@@ -3,6 +3,8 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,11 +24,13 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -42,10 +46,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
@@ -82,6 +88,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
+import net.chmielowski.randomchoice.utils.stringResource
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Destination(start = true)
@@ -326,7 +333,6 @@ private fun SavedMessage() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OptionTextFields(
     dilemma: Dilemma,
@@ -341,34 +347,77 @@ private fun OptionTextFields(
     for (field in dilemma.render()) {
         when (field) {
             is Dilemma.TextField -> {
-                if (field.focused) {
-                    LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
-                }
-                OptionTextField(
-                    value = field.value,
-                    onValueChange = { value ->
-                        onIntent(
-                            EnterOptionsIntent.ChangeText(
-                                value,
-                                field.id
-                            )
-                        )
-                    },
-                    onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
-                    imeAction = field.imeAction,
-                    modifier = Modifier.chooseRequester(
-                        field = field,
-                        first = focusRequester,
-                        added = addedFocusRequester
-                    ),
-                    index = field.humanIndex,
-                    canRemove = dilemma.canRemove,
+                TextField(
+                    field = field,
+                    focusRequester = focusRequester,
+                    onIntent = onIntent,
+                    addedFocusRequester = addedFocusRequester,
+                    dilemma = dilemma,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
+                ImageField(field)
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
+
+@Composable
+private fun TextField(
+    field: Dilemma.TextField,
+    focusRequester: FocusRequester,
+    onIntent: (Intent) -> Unit,
+    addedFocusRequester: FocusRequester,
+    dilemma: Dilemma,
+) {
+    if (field.focused) {
+        LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
+    }
+    OptionTextField(
+        value = field.value,
+        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeText(value, field.id)) },
+        onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+        imeAction = field.imeAction,
+        modifier = Modifier.chooseRequester(
+            field = field,
+            first = focusRequester,
+            added = addedFocusRequester
+        ),
+        index = field.humanIndex,
+        canRemove = dilemma.canRemove,
+        label = field.label,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ImageField(field: Dilemma.ImageField) {
+    Card(
+        modifier = Modifier
+            .clickable { }
+            .fillMaxWidth()
+    ) {
+        val bitmap = field.value.bitmap
+        if (bitmap == null) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Image(
+                imageVector = Icons.Outlined.CameraAlt,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(field.label),
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
