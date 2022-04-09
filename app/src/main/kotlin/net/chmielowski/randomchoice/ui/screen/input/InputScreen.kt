@@ -414,7 +414,14 @@ private fun ImageField(
             .fillMaxWidth()
     ) {
         val bitmap = field.value.bitmap
-        if (bitmap == null) {
+        if (bitmap != null) {
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
             Spacer(modifier = Modifier.height(32.dp))
             Image(
                 imageVector = Icons.Outlined.CameraAlt,
@@ -431,13 +438,6 @@ private fun ImageField(
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(16.dp))
-        } else {
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth()
-            )
         }
     }
 }
