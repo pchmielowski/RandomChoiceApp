@@ -2,13 +2,6 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.graphics.Bitmap
-import android.provider.MediaStore
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -97,6 +90,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
+import net.chmielowski.randomchoice.utils.createLaunchCamera
 import net.chmielowski.randomchoice.utils.stringResource
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -411,29 +405,12 @@ private fun ImageField(
     field: Dilemma.ImageField,
     onOptionChange: (Option) -> Unit,
 ) {
-    val contract = object : ActivityResultContract<Unit, Bitmap?>() {
-        override fun createIntent(context: Context, input: Unit) =
-            android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        override fun parseResult(resultCode: Int, intent: android.content.Intent?) =
-            if (resultCode == Activity.RESULT_OK) {
-                intent?.extras?.get("data") as Bitmap?
-            } else {
-                null
-            }
-    }
-    val launcher = rememberLauncherForActivityResult(contract) { bitmap ->
+    val launchCamera = createLaunchCamera(onResult = { bitmap ->
         onOptionChange(Option.Image(bitmap))
-    }
+    })
     Card(
         modifier = Modifier
-            .clickable {
-                try {
-                    launcher.launch(Unit)
-                } catch (e: ActivityNotFoundException) {
-                    // TODO@
-                }
-            }
+            .clickable(onClick = launchCamera)
             .fillMaxWidth()
     ) {
         val bitmap = field.value.bitmap
