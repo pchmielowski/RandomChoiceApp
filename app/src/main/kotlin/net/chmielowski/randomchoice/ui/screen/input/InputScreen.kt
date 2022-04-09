@@ -423,28 +423,18 @@ private fun ImageField(
         }
     }
     val launcher = rememberLauncherForActivityResult(contract) { bmp = it }
-    IconButton(onClick = {
-        try {
-            launcher.launch(Unit)
-        } catch (e: ActivityNotFoundException) {
-            // TODO@
-        }
-    }) {
-        Icon(
-            imageVector = Icons.Default.CameraAlt,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary, // TODO@ Description
-        )
-    }
     bmp?.let {
         Image(it.asImageBitmap(), contentDescription = null)
     }
-
-
-
     Card(
         modifier = Modifier
-            .clickable { }
+            .clickable {
+                try {
+                    launcher.launch(Unit)
+                } catch (e: ActivityNotFoundException) {
+                    // TODO@
+                }
+            }
             .fillMaxWidth()
     ) {
         val bitmap = field.value.bitmap
