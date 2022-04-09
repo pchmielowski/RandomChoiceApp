@@ -2,13 +2,6 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.graphics.Bitmap
-import android.provider.MediaStore
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -364,10 +357,7 @@ private fun OptionTextFields(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
-                ImageField(
-                    field = field,
-                    onIntent = onIntent,
-                )
+                ImageField(field)
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -403,35 +393,10 @@ private fun TextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ImageField(
-    id: Int,
-    field: Dilemma.ImageField,
-    onIntent: (Intent) -> Unit,
-) {
-    val contract = object : ActivityResultContract<Unit, Bitmap?>() {
-        override fun createIntent(context: Context, input: Unit) =
-            android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        override fun parseResult(resultCode: Int, intent: android.content.Intent?): Bitmap? {
-            // TODO@ Errors!
-            if (resultCode != Activity.RESULT_OK) {
-                return null
-            }
-            return intent?.extras?.get("data") as Bitmap?
-        }
-    }
-    val launcher = rememberLauncherForActivityResult(contract) { bitmap ->
-        onIntent(EnterOptionsIntent.ChangeText(Option.Image(bitmap), id))
-    }
+private fun ImageField(field: Dilemma.ImageField) {
     Card(
         modifier = Modifier
-            .clickable {
-                try {
-                    launcher.launch(Unit)
-                } catch (e: ActivityNotFoundException) {
-                    // TODO@
-                }
-            }
+            .clickable { }
             .fillMaxWidth()
     ) {
         val bitmap = field.value.bitmap
