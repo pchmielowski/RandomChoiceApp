@@ -53,7 +53,13 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         return Dilemma(options.replace(id.value, text))
     }
 
-    fun reset() = Dilemma()
+    fun reset(): Dilemma {
+        val options = when (mode) {
+            Mode.Text -> listOf(Text(), Text())
+            Mode.Image -> listOf(Image(), Image())
+        }
+        return Dilemma(options)
+    }
 
     val allFilled get() = options.all(Option::hasValue)
 

@@ -102,7 +102,7 @@ internal class MainExecutor(
         fun dispatchState(function: State.() -> State) {
             dispatch(getState().function())
         }
-        return when (intent) {
+        when (intent) {
             is EnterOptionsIntent -> when (intent) {
                 is ChangeText -> dispatchState {
                     copy(dilemma = dilemma.updateText(intent.id, intent.text))
@@ -112,7 +112,9 @@ internal class MainExecutor(
                 is Remove -> dispatchState { copy(dilemma = dilemma.remove(intent.id)) }
                 ResetAll -> {
                     dispatchState { copy(dilemma = dilemma.reset()) }
-                    publish(Label.FocusFirstOptionInput)
+                    if (getState().mode == Mode.Text) {
+                        publish(Label.FocusFirstOptionInput)
+                    }
                 }
                 is SelectMode -> dispatchState { copy(dilemma = dilemma.selectMode(intent.mode)) }
             }
