@@ -432,7 +432,7 @@ private fun ImageField(
                 bitmap = bitmap.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-//                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         } else {
             Spacer(modifier = Modifier.height(32.dp))
