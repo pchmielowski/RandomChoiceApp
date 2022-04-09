@@ -52,8 +52,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -88,6 +90,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
+import net.chmielowski.randomchoice.utils.createLaunchCamera
 import net.chmielowski.randomchoice.utils.stringResource
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -357,7 +360,12 @@ private fun OptionTextFields(
                 Spacer(modifier = Modifier.height(8.dp))
             }
             is Dilemma.ImageField -> {
-                ImageField(field)
+                ImageField(
+                    field = field,
+                    onOptionChange = { option ->
+                        onIntent(EnterOptionsIntent.ChangeText(option, field.id))
+                    },
+                )
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -393,14 +401,27 @@ private fun TextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ImageField(field: Dilemma.ImageField) {
+private fun ImageField(
+    field: Dilemma.ImageField,
+    onOptionChange: (Option) -> Unit,
+) {
+    val launchCamera = createLaunchCamera(onResult = { bitmap ->
+        onOptionChange(Option.Image(bitmap))
+    })
     Card(
         modifier = Modifier
-            .clickable { }
+            .clickable(onClick = launchCamera)
             .fillMaxWidth()
     ) {
         val bitmap = field.value.bitmap
-        if (bitmap == null) {
+        if (bitmap != null) {
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth()
+            )
+        } else {
             Spacer(modifier = Modifier.height(32.dp))
             Image(
                 imageVector = Icons.Outlined.CameraAlt,
@@ -409,15 +430,15 @@ private fun ImageField(field: Dilemma.ImageField) {
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(field.label),
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(field.label),
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
