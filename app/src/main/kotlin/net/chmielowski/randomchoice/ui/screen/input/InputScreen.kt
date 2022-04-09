@@ -350,14 +350,13 @@ private fun OptionTextFields(
     dilemma.LaunchWhenOptionAdded {
         addedFocusRequester.requestFocus()
     }
-    FieldsLayout(dilemma) { field, modifier ->
+    FieldsLayout(dilemma) { field ->
         Field(
             field = field,
             focusRequester = focusRequester,
             onIntent = onIntent,
             addedFocusRequester = addedFocusRequester,
             dilemma = dilemma,
-            modifier = modifier,
         )
     }
 }
@@ -366,13 +365,13 @@ private fun OptionTextFields(
 @Composable
 private fun FieldsLayout(
     dilemma: Dilemma,
-    fieldContent: @Composable (OptionField, Modifier) -> Unit,
+    fieldContent: @Composable (OptionField) -> Unit,
 ) {
     val fields = dilemma.render()
     when (dilemma.mode) {
         Mode.Text -> {
             for (field in fields) {
-                fieldContent(field, Modifier)
+                fieldContent(field)
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
@@ -383,7 +382,7 @@ private fun FieldsLayout(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 items(fields) { field ->
-                    fieldContent(field, Modifier)
+                    fieldContent(field)
                 }
             }
         }
@@ -397,7 +396,6 @@ private fun Field(
     onIntent: (Intent) -> Unit,
     addedFocusRequester: FocusRequester,
     dilemma: Dilemma,
-    modifier: Modifier = Modifier,
 ) {
     when (field) {
         is Dilemma.TextField -> TextField(
@@ -412,7 +410,6 @@ private fun Field(
             onOptionChange = { option ->
                 onIntent(EnterOptionsIntent.ChangeText(option, field.id))
             },
-            modifier = modifier,
         )
     }
 }
@@ -449,13 +446,12 @@ private fun TextField(
 private fun ImageField(
     field: Dilemma.ImageField,
     onOptionChange: (Option) -> Unit,
-    modifier: Modifier,
 ) {
     val launchCamera = createLaunchCamera(onResult = { bitmap ->
         onOptionChange(Option.Image(bitmap))
     })
     Card(
-        modifier = modifier
+        modifier = Modifier
             .clickable(onClick = launchCamera)
     ) {
         val bitmap = field.value.bitmap
