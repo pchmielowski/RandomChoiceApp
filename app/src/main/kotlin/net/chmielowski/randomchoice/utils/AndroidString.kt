@@ -13,6 +13,7 @@ internal data class AndroidString(
     constructor(id: Int, vararg args: Any) : this(id, args.toList())
 }
 
+@Suppress("SpreadOperator")
 @Composable
 @ReadOnlyComposable
 internal fun stringResource(string: AndroidString) =
