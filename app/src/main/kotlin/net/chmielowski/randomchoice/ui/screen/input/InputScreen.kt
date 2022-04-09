@@ -2,6 +2,13 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.graphics.Bitmap
+import android.provider.MediaStore
+import android.util.Log
+import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -52,6 +59,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
@@ -394,6 +402,50 @@ private fun TextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImageField(field: Dilemma.ImageField) {
+
+
+    val owner = LocalActivityResultRegistryOwner.current!!
+    val registry = owner.activityResultRegistry
+    var bmp by remember { mutableStateOf<Bitmap?>(null) }
+    val launcher = registry.register(
+        "Camera",
+        object : ActivityResultContract<Unit, Bitmap>() {
+
+            override fun createIntent(context: Context, input: Unit): android.content.Intent {
+                return android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            }
+
+            override fun parseResult(resultCode: Int, intent: android.content.Intent?): Bitmap {
+                Log.d("pchm", "parseResult")
+                // TODO@ Handle errors, cancels and null data
+                val imageBitmap = intent!!.extras!!.get("data") as Bitmap
+                return imageBitmap
+            }
+        },
+        { result ->
+            bmp = result
+            Log.d("pchm", "onActivityResult $result")
+        },
+    )
+    IconButton(onClick = {
+        try {
+            launcher.launch(Unit)
+        } catch (e: ActivityNotFoundException) {
+            // TODO@
+        }
+    }) {
+        Icon(
+            imageVector = Icons.Default.CameraAlt,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary, // TODO@ Description
+        )
+    }
+    bmp?.let {
+        Image(it.asImageBitmap(), contentDescription = null)
+    }
+
+
+
     Card(
         modifier = Modifier
             .clickable { }
