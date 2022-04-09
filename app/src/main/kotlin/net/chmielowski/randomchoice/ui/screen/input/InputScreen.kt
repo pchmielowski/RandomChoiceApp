@@ -366,7 +366,9 @@ private fun OptionTextFields(
             is Dilemma.ImageField -> {
                 ImageField(
                     field = field,
-                    onIntent = onIntent,
+                    onOptionChange = { option ->
+                        onIntent(EnterOptionsIntent.ChangeText(option, field.id))
+                    },
                 )
             }
         }
@@ -404,9 +406,8 @@ private fun TextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImageField(
-    id: Int,
     field: Dilemma.ImageField,
-    onIntent: (Intent) -> Unit,
+    onOptionChange: (Option) -> Unit,
 ) {
     val contract = object : ActivityResultContract<Unit, Bitmap?>() {
         override fun createIntent(context: Context, input: Unit) =
@@ -421,7 +422,7 @@ private fun ImageField(
         }
     }
     val launcher = rememberLauncherForActivityResult(contract) { bitmap ->
-        onIntent(EnterOptionsIntent.ChangeText(Option.Image(bitmap), id))
+        onOptionChange(Option.Image(bitmap))
     }
     Card(
         modifier = Modifier
