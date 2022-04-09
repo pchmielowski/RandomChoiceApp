@@ -416,10 +416,10 @@ private fun ImageField(
             android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         override fun parseResult(resultCode: Int, intent: android.content.Intent?) =
-            if (resultCode != Activity.RESULT_OK) {
-                null
-            } else {
+            if (resultCode == Activity.RESULT_OK) {
                 intent?.extras?.get("data") as Bitmap?
+            } else {
+                null
             }
     }
     val launcher = rememberLauncherForActivityResult(contract) { bitmap ->
