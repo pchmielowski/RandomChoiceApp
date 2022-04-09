@@ -415,13 +415,12 @@ private fun ImageField(
         override fun createIntent(context: Context, input: Unit) =
             android.content.Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-        override fun parseResult(resultCode: Int, intent: android.content.Intent?): Bitmap? {
-            // TODO@ Errors!
+        override fun parseResult(resultCode: Int, intent: android.content.Intent?) =
             if (resultCode != Activity.RESULT_OK) {
-                return null
+                null
+            } else {
+                intent?.extras?.get("data") as Bitmap?
             }
-            return intent?.extras?.get("data") as Bitmap?
-        }
     }
     val launcher = rememberLauncherForActivityResult(contract) { bitmap ->
         onOptionChange(Option.Image(bitmap))
