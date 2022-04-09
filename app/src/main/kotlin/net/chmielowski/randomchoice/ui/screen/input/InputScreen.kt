@@ -59,6 +59,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipboardManager
@@ -442,6 +443,13 @@ private fun ImageField(
                 imageVector = Icons.Outlined.CameraAlt,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+        } else {
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
