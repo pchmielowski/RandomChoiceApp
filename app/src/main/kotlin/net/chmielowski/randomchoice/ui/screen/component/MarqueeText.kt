@@ -5,6 +5,7 @@ package net.chmielowski.randomchoice.ui.screen.component
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,11 +16,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import net.chmielowski.randomchoice.core.MakingDecisionWithImagesNotSupportedException
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 
@@ -42,7 +43,10 @@ internal fun AnimatedResult(
                             maxLines = if (finished) Int.MAX_VALUE else 1,
                             overflow = TextOverflow.Ellipsis,
                         )
-                        is Option.Image -> throw MakingDecisionWithImagesNotSupportedException()
+                        is Option.Image -> Image(
+                            item.bitmap!!.asImageBitmap(),
+                            contentDescription = null
+                        )
                     }
                 }
             }
