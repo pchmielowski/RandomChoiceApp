@@ -3,6 +3,8 @@ package net.chmielowski.randomchoice.core
 import android.graphics.Bitmap
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import net.chmielowski.randomchoice.utils.toBitmap
+import net.chmielowski.randomchoice.utils.toByteArray
 
 sealed interface Option : Parcelable {
 
@@ -17,8 +19,12 @@ sealed interface Option : Parcelable {
 
     @JvmInline
     @Parcelize
-    value class Image(val bitmap: Bitmap? = null) : Option {
+    value class Image(private val array: ByteArray? = null) : Option {
 
-        override val hasValue get() = bitmap != null
+        constructor(bitmap: Bitmap?) : this(bitmap?.toByteArray())
+
+        val bitmap get() = array?.toBitmap()
+
+        override val hasValue get() = array != null
     }
 }
