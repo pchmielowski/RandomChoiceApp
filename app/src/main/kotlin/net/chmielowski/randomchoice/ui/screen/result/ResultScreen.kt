@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import net.chmielowski.randomchoice.R
-import net.chmielowski.randomchoice.core.MakingDecisionWithImagesNotSupportedException
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 import net.chmielowski.randomchoice.ui.screen.component.AnimatedResult
@@ -53,7 +52,7 @@ internal fun ResultScreen(
                         text = AnnotatedString(
                             when (val chosen = result.chosen) {
                                 is Option.Text -> chosen.text
-                                is Option.Image -> throw MakingDecisionWithImagesNotSupportedException()
+                                is Option.Image -> ""
                             }
                         )
                     }
