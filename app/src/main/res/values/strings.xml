@@ -33,7 +33,7 @@
     <string name="label_saved">Saved dilemmas</string>
     <string name="label_or">or</string>
 
-    <string name="label_mode_photo">Photo mode</string>
+    <string name="label_mode_photo">Photo mode (experimental)</string>
     <string name="label_mode_text">Text mode</string>
 
     <string name="label_theme_light">Light theme</string>
