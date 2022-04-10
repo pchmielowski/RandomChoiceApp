@@ -3,8 +3,10 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
@@ -69,6 +74,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
+import net.chmielowski.randomchoice.core.Dilemma.OptionField
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
@@ -174,7 +180,12 @@ internal fun InputScreen(
         Column(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .verticalScroll(rememberScrollState())
+                .run {
+                    when (state.dilemma.mode) {
+                        Mode.Text -> verticalScroll(rememberScrollState())
+                        Mode.Image -> this
+                    }
+                }
                 .padding(16.dp),
         ) {
             OptionTextFields(
@@ -336,6 +347,7 @@ private fun SavedMessage() {
     }
 }
 
+// TODO: Rename
 @Composable
 private fun OptionTextFields(
     dilemma: Dilemma,
@@ -346,29 +358,67 @@ private fun OptionTextFields(
     dilemma.LaunchWhenOptionAdded {
         addedFocusRequester.requestFocus()
     }
+    FieldsLayout(dilemma) { field ->
+        Field(
+            field = field,
+            focusRequester = focusRequester,
+            onIntent = onIntent,
+            addedFocusRequester = addedFocusRequester,
+            dilemma = dilemma,
+        )
+    }
+}
 
-    for (field in dilemma.render()) {
-        when (field) {
-            is Dilemma.TextField -> {
-                TextField(
-                    field = field,
-                    focusRequester = focusRequester,
-                    onIntent = onIntent,
-                    addedFocusRequester = addedFocusRequester,
-                    dilemma = dilemma,
-                )
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun FieldsLayout(
+    dilemma: Dilemma,
+    fieldContent: @Composable (OptionField) -> Unit,
+) {
+    val fields = dilemma.render()
+    when (dilemma.mode) {
+        Mode.Text -> {
+            for (field in fields) {
+                fieldContent(field)
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            is Dilemma.ImageField -> {
-                ImageField(
-                    field = field,
-                    onOptionChange = { option ->
-                        onIntent(EnterOptionsIntent.ChangeText(option, field.id))
-                    },
-                )
+        }
+        Mode.Image -> {
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(fields) { field ->
+                    fieldContent(field)
+                }
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
+
+@Composable
+private fun Field(
+    field: OptionField,
+    focusRequester: FocusRequester,
+    onIntent: (Intent) -> Unit,
+    addedFocusRequester: FocusRequester,
+    dilemma: Dilemma,
+) {
+    when (field) {
+        is Dilemma.TextField -> TextField(
+            field = field,
+            focusRequester = focusRequester,
+            onIntent = onIntent,
+            addedFocusRequester = addedFocusRequester,
+            dilemma = dilemma,
+        )
+        is Dilemma.ImageField -> ImageField(
+            field = field,
+            onOptionChange = { option ->
+                onIntent(EnterOptionsIntent.ChangeText(option, field.id))
+            },
+        )
     }
 }
 
@@ -411,7 +461,6 @@ private fun ImageField(
     Card(
         modifier = Modifier
             .clickable(onClick = launchCamera)
-            .fillMaxWidth()
     ) {
         val bitmap = field.value.bitmap
         if (bitmap != null) {
@@ -419,7 +468,7 @@ private fun ImageField(
                 bitmap = bitmap.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         } else {
             Spacer(modifier = Modifier.height(32.dp))
