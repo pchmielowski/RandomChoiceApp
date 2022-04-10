@@ -87,10 +87,10 @@ import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
-import net.chmielowski.randomchoice.ui.destinations.AboutScreenDestination
-import net.chmielowski.randomchoice.ui.destinations.ResultScreenDestination
-import net.chmielowski.randomchoice.ui.destinations.SavedScreenDestination
 import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
+import net.chmielowski.randomchoice.ui.screen.destinations.AboutScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.ResultScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.SavedScreenDestination
 import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
@@ -191,7 +191,7 @@ internal fun InputScreen(
             if (state.mode == Mode.Image) {
                 PhotoModeBanner()
             }
-            OptionTextFields(
+            OptionFields(
                 dilemma = state.dilemma,
                 onIntent = onIntent,
                 focusRequester = focusRequester,
@@ -364,9 +364,8 @@ private fun SavedMessage() {
     }
 }
 
-// TODO: Rename
 @Composable
-private fun OptionTextFields(
+private fun OptionFields(
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
@@ -433,7 +432,7 @@ private fun Field(
         is Dilemma.ImageField -> ImageField(
             field = field,
             onOptionChange = { option ->
-                onIntent(EnterOptionsIntent.ChangeText(option, field.id))
+                onIntent(EnterOptionsIntent.ChangeOption(option, field.id))
             },
         )
     }
@@ -452,7 +451,7 @@ private fun TextField(
     }
     OptionTextField(
         value = field.value,
-        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeText(value, field.id)) },
+        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeOption(value, field.id)) },
         onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
         imeAction = field.imeAction,
         modifier = Modifier.chooseRequester(

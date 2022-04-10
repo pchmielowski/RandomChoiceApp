@@ -8,7 +8,7 @@ import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.Add
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.AddNew
-import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ChangeText
+import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ChangeOption
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.Remove
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ResetAll
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.SelectMode
@@ -33,13 +33,11 @@ internal sealed interface Intent {
 
     sealed interface EnterOptionsIntent : Intent {
 
-        // TODO: ChangeText -> ChangeOption, text -> option
-        data class ChangeText(val text: Option, val id: OptionId) : EnterOptionsIntent
+        data class ChangeOption(val option: Option, val id: OptionId) : EnterOptionsIntent
 
         object AddNew : EnterOptionsIntent
 
-        // TODO: text -> option
-        data class Add(val text: Option) : EnterOptionsIntent
+        data class Add(val option: Option) : EnterOptionsIntent
 
         data class Remove(val id: OptionId) : EnterOptionsIntent
 
@@ -107,11 +105,11 @@ internal class MainExecutor(
         }
         when (intent) {
             is EnterOptionsIntent -> when (intent) {
-                is ChangeText -> dispatchState {
-                    copy(dilemma = dilemma.updateText(intent.id, intent.text))
+                is ChangeOption -> dispatchState {
+                    copy(dilemma = dilemma.update(intent.id, intent.option))
                 }
                 AddNew -> dispatchState { copy(dilemma = dilemma.addNew()) }
-                is Add -> dispatchState { copy(dilemma = dilemma.addShared(intent.text)) }
+                is Add -> dispatchState { copy(dilemma = dilemma.add(intent.option)) }
                 is Remove -> dispatchState { copy(dilemma = dilemma.remove(intent.id)) }
                 ResetAll -> {
                     dispatchState { copy(dilemma = dilemma.reset()) }

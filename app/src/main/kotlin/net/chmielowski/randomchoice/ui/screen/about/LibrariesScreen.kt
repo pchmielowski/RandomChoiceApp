@@ -30,7 +30,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import net.chmielowski.randomchoice.R
-import net.chmielowski.randomchoice.ui.destinations.LicenseScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.LicenseScreenDestination
 import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
