@@ -87,10 +87,10 @@ import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.PhotoModeSupported
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
-import net.chmielowski.randomchoice.ui.destinations.AboutScreenDestination
-import net.chmielowski.randomchoice.ui.destinations.ResultScreenDestination
-import net.chmielowski.randomchoice.ui.destinations.SavedScreenDestination
 import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
+import net.chmielowski.randomchoice.ui.screen.destinations.AboutScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.ResultScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.SavedScreenDestination
 import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
