@@ -188,7 +188,7 @@ internal fun InputScreen(
                 }
                 .padding(16.dp),
         ) {
-            OptionTextFields(
+            OptionFields(
                 dilemma = state.dilemma,
                 onIntent = onIntent,
                 focusRequester = focusRequester,
@@ -347,9 +347,8 @@ private fun SavedMessage() {
     }
 }
 
-// TODO: Rename
 @Composable
-private fun OptionTextFields(
+private fun OptionFields(
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
@@ -416,7 +415,7 @@ private fun Field(
         is Dilemma.ImageField -> ImageField(
             field = field,
             onOptionChange = { option ->
-                onIntent(EnterOptionsIntent.ChangeText(option, field.id))
+                onIntent(EnterOptionsIntent.ChangeOption(option, field.id))
             },
         )
     }
@@ -435,7 +434,7 @@ private fun TextField(
     }
     OptionTextField(
         value = field.value,
-        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeText(value, field.id)) },
+        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeOption(value, field.id)) },
         onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
         imeAction = field.imeAction,
         modifier = Modifier.chooseRequester(

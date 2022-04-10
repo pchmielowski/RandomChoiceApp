@@ -45,12 +45,11 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     val canResetOrSave get() = options.any(Option::hasValue)
 
-    // TODO: Rename
-    fun updateText(id: OptionId, text: Option): Dilemma {
-        if (text is Image && text.bitmap == null) {
+    fun update(id: OptionId, option: Option): Dilemma {
+        if (option is Image && option.bitmap == null) {
             return this
         }
-        return Dilemma(options.replace(id.value, text))
+        return Dilemma(options.replace(id.value, option))
     }
 
     fun reset(): Dilemma {
@@ -65,8 +64,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     fun addNew() = Dilemma(options + Text())
 
-    // TODO: Rename
-    fun addShared(option: Option) = copy(
+    fun add(option: Option) = copy(
         options = options.replaceFirstEmptyOrAdd(option),
     )
 
