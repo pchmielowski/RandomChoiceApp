@@ -73,7 +73,10 @@ internal data class State(
 
     val showResetButton get() = dilemma.canResetOrSave
 
-    val showSaveButton get() = dilemma.canResetOrSave && dilemma != lastSaved
+    val showSaveButton
+        get() = dilemma.canResetOrSave &&
+                dilemma != lastSaved &&
+                mode != Mode.Image
 
     val showSavedMessage get() = dilemma == lastSaved
 
