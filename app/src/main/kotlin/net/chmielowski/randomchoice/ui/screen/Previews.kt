@@ -13,7 +13,7 @@ import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Option.Image
 import net.chmielowski.randomchoice.core.Result
 import net.chmielowski.randomchoice.core.State
-import net.chmielowski.randomchoice.ui.ResultScreen
+import net.chmielowski.randomchoice.ui.screen.result.ResultScreen
 import net.chmielowski.randomchoice.ui.screen.about.AboutScreen
 import net.chmielowski.randomchoice.ui.screen.about.LibrariesScreen
 import net.chmielowski.randomchoice.ui.screen.about.LicenseScreen

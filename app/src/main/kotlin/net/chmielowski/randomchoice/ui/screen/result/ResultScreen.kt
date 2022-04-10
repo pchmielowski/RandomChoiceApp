@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName")
 
-package net.chmielowski.randomchoice.ui
+package net.chmielowski.randomchoice.ui.screen.result
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
