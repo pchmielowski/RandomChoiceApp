@@ -37,6 +37,7 @@ import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -84,7 +85,6 @@ import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
-import net.chmielowski.randomchoice.core.PhotoModeSupported
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
 import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
@@ -188,6 +188,9 @@ internal fun InputScreen(
                 }
                 .padding(16.dp),
         ) {
+            if (state.mode == Mode.Image) {
+                PhotoModeBanner()
+            }
             OptionFields(
                 dilemma = state.dilemma,
                 onIntent = onIntent,
@@ -207,6 +210,22 @@ internal fun InputScreen(
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PhotoModeBanner() {
+    ElevatedCard {
+        Row(modifier = Modifier.padding(8.dp)) {
+            Image(Icons.Outlined.Info, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = stringResource(R.string.message_photo_mode_experimental),
+                style = MaterialTheme.typography.bodySmall,
+            )
+        }
+    }
+    Spacer(modifier = Modifier.height(18.dp))
 }
 
 @Suppress("LongParameterList")
@@ -267,19 +286,17 @@ private fun DropdownMenu(
             onDismiss = onDismiss,
         )
 
-        if (PhotoModeSupported) {
-            when (mode) {
-                Mode.Text -> Item(
-                    icon = Icons.Filled.CameraAlt,
-                    text = R.string.label_mode_photo,
-                    onClick = { onEnterModeClick(Mode.Image) },
-                )
-                Mode.Image -> Item(
-                    icon = Icons.Filled.ShortText,
-                    text = R.string.label_mode_text,
-                    onClick = { onEnterModeClick(Mode.Text) },
-                )
-            }
+        when (mode) {
+            Mode.Text -> Item(
+                icon = Icons.Filled.CameraAlt,
+                text = R.string.label_mode_photo,
+                onClick = { onEnterModeClick(Mode.Image) },
+            )
+            Mode.Image -> Item(
+                icon = Icons.Filled.ShortText,
+                text = R.string.label_mode_text,
+                onClick = { onEnterModeClick(Mode.Text) },
+            )
         }
         Item(
             icon = Icons.Outlined.ListAlt,
