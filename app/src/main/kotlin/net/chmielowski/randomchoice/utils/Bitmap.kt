@@ -10,4 +10,5 @@ internal fun Bitmap.toByteArray(): ByteArray {
     return stream.toByteArray()
 }
 
+@Suppress("MagicNumber")
 internal fun ByteArray.toBitmap() = BitmapFactory.decodeByteArray(this, 0, size)
