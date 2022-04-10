@@ -6,9 +6,9 @@ import java.io.ByteArrayOutputStream
 
 internal fun Bitmap.toByteArray(): ByteArray {
     val stream = ByteArrayOutputStream()
+    @Suppress("MagicNumber")
     compress(Bitmap.CompressFormat.JPEG, 70, stream)
     return stream.toByteArray()
 }
 
-@Suppress("MagicNumber")
 internal fun ByteArray.toBitmap() = BitmapFactory.decodeByteArray(this, 0, size)
