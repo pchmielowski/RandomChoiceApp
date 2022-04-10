@@ -390,12 +390,7 @@ private fun FieldsLayout(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 items(fields) { field ->
-                    fieldContent(
-                    field = field,
-                    onOptionChange = { option ->
-                        onIntent(EnterOptionsIntent.ChangeText(option, field.id))
-                    },
-                )
+                    fieldContent(field)
                 }
             }
         }
