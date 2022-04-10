@@ -7,6 +7,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,9 +26,11 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AnimatedResult(
     result: Result,
@@ -45,7 +50,7 @@ internal fun AnimatedResult(
                             maxLines = if (finished) Int.MAX_VALUE else 1,
                             overflow = TextOverflow.Ellipsis,
                         )
-                        is Option.Image -> {
+                        is Option.Image -> Card(Modifier.padding(top = 8.dp)) {
                             Image(
                                 bitmap = item.bitmap!!.asImageBitmap(),
                                 contentDescription = null,
