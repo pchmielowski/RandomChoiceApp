@@ -3,6 +3,7 @@
 package net.chmielowski.randomchoice.ui.widgets
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -47,9 +48,12 @@ internal fun Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier
             .navigationBarsWithImePadding()
-    ) {
+    ) { padding ->
         // Using legacy Material2 just for the correct colors on Material2 widgets.
-        androidx.compose.material.Scaffold(backgroundColor = backgroundColor) {
+        androidx.compose.material.Scaffold(
+            backgroundColor = backgroundColor,
+            modifier = Modifier.padding(padding)
+        ) {
             background()
             content()
             Divider(modifier = Modifier.alpha(1F - (scrollBehavior?.scrollFraction ?: 0F)))
