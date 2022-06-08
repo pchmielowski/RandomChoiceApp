@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.CameraAlt
@@ -478,6 +479,11 @@ private fun ImageField(
         modifier = Modifier
             .clickable(onClick = launchCamera)
     ) {
+        // TODO@ Layout it nicely
+        // TODO@ Add listener
+        IconButton(onClick = {}, modifier = Modifier.align(Alignment.End)) {
+            Icon(Icons.Default.Remove, contentDescription = null)
+        }
         val bitmap = field.value.bitmap
         if (bitmap != null) {
             Image(
@@ -487,7 +493,7 @@ private fun ImageField(
                 modifier = Modifier.fillMaxWidth(),
             )
         } else {
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Image(
                 imageVector = Icons.Outlined.CameraAlt,
                 contentDescription = null,
