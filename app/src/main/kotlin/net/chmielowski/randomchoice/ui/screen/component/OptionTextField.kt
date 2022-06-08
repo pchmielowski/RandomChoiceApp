@@ -17,7 +17,8 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -78,6 +79,16 @@ internal fun OptionTextField(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
+            trailingIcon = {
+                if (value.hasValue) {
+                    IconButton(onClick = { onValueChange(Option.Text("")) }) {
+                        Icon(
+                            Icons.Default.Clear,
+                            contentDescription = stringResource(R.string.action_clear)
+                        )
+                    }
+                }
+            },
             modifier = modifier
                 .weight(1F)
                 .animateFirstAppearance()
@@ -86,8 +97,9 @@ internal fun OptionTextField(
             Spacer(modifier = Modifier.width(8.dp))
             IconButton(onClick = onRemoveOption) {
                 Icon(
-                    Icons.Default.Close,
-                    contentDescription = stringResource(R.string.action_remove_option, index)
+                    Icons.Default.Remove,
+                    contentDescription = stringResource(R.string.action_remove_option, index),
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }
