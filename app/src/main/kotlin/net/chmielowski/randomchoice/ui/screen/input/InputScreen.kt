@@ -3,8 +3,10 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
@@ -32,6 +37,7 @@ import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,8 +59,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -68,6 +76,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
+import net.chmielowski.randomchoice.core.Dilemma.OptionField
 import net.chmielowski.randomchoice.core.Intent
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
@@ -77,18 +86,18 @@ import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
-import net.chmielowski.randomchoice.core.PhotoModeSupported
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
-import net.chmielowski.randomchoice.ui.destinations.AboutScreenDestination
-import net.chmielowski.randomchoice.ui.destinations.ResultScreenDestination
-import net.chmielowski.randomchoice.ui.destinations.SavedScreenDestination
 import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
+import net.chmielowski.randomchoice.ui.screen.destinations.AboutScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.ResultScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.SavedScreenDestination
 import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
+import net.chmielowski.randomchoice.utils.createLaunchCamera
 import net.chmielowski.randomchoice.utils.stringResource
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -172,10 +181,18 @@ internal fun InputScreen(
         Column(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .verticalScroll(rememberScrollState())
+                .run {
+                    when (state.dilemma.mode) {
+                        Mode.Text -> verticalScroll(rememberScrollState())
+                        Mode.Image -> this
+                    }
+                }
                 .padding(16.dp),
         ) {
-            OptionTextFields(
+            if (state.mode == Mode.Image) {
+                PhotoModeBanner()
+            }
+            OptionFields(
                 dilemma = state.dilemma,
                 onIntent = onIntent,
                 focusRequester = focusRequester,
@@ -194,6 +211,22 @@ internal fun InputScreen(
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PhotoModeBanner() {
+    ElevatedCard {
+        Row(modifier = Modifier.padding(8.dp)) {
+            Image(Icons.Outlined.Info, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = stringResource(R.string.message_photo_mode_experimental),
+                style = MaterialTheme.typography.bodySmall,
+            )
+        }
+    }
+    Spacer(modifier = Modifier.height(18.dp))
 }
 
 @Suppress("LongParameterList")
@@ -254,19 +287,17 @@ private fun DropdownMenu(
             onDismiss = onDismiss,
         )
 
-        if (PhotoModeSupported) {
-            when (mode) {
-                Mode.Text -> Item(
-                    icon = Icons.Filled.CameraAlt,
-                    text = R.string.label_mode_photo,
-                    onClick = { onEnterModeClick(Mode.Image) },
-                )
-                Mode.Image -> Item(
-                    icon = Icons.Filled.ShortText,
-                    text = R.string.label_mode_text,
-                    onClick = { onEnterModeClick(Mode.Text) },
-                )
-            }
+        when (mode) {
+            Mode.Text -> Item(
+                icon = Icons.Filled.CameraAlt,
+                text = R.string.label_mode_photo,
+                onClick = { onEnterModeClick(Mode.Image) },
+            )
+            Mode.Image -> Item(
+                icon = Icons.Filled.ShortText,
+                text = R.string.label_mode_text,
+                onClick = { onEnterModeClick(Mode.Text) },
+            )
         }
         Item(
             icon = Icons.Outlined.ListAlt,
@@ -335,7 +366,7 @@ private fun SavedMessage() {
 }
 
 @Composable
-private fun OptionTextFields(
+private fun OptionFields(
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
@@ -344,24 +375,67 @@ private fun OptionTextFields(
     dilemma.LaunchWhenOptionAdded {
         addedFocusRequester.requestFocus()
     }
+    FieldsLayout(dilemma) { field ->
+        Field(
+            field = field,
+            focusRequester = focusRequester,
+            onIntent = onIntent,
+            addedFocusRequester = addedFocusRequester,
+            dilemma = dilemma,
+        )
+    }
+}
 
-    for (field in dilemma.render()) {
-        when (field) {
-            is Dilemma.TextField -> {
-                TextField(
-                    field = field,
-                    focusRequester = focusRequester,
-                    onIntent = onIntent,
-                    addedFocusRequester = addedFocusRequester,
-                    dilemma = dilemma,
-                )
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun FieldsLayout(
+    dilemma: Dilemma,
+    fieldContent: @Composable (OptionField) -> Unit,
+) {
+    val fields = dilemma.render()
+    when (dilemma.mode) {
+        Mode.Text -> {
+            for (field in fields) {
+                fieldContent(field)
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            is Dilemma.ImageField -> {
-                ImageField(field)
+        }
+        Mode.Image -> {
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(fields) { field ->
+                    fieldContent(field)
+                }
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
+
+@Composable
+private fun Field(
+    field: OptionField,
+    focusRequester: FocusRequester,
+    onIntent: (Intent) -> Unit,
+    addedFocusRequester: FocusRequester,
+    dilemma: Dilemma,
+) {
+    when (field) {
+        is Dilemma.TextField -> TextField(
+            field = field,
+            focusRequester = focusRequester,
+            onIntent = onIntent,
+            addedFocusRequester = addedFocusRequester,
+            dilemma = dilemma,
+        )
+        is Dilemma.ImageField -> ImageField(
+            field = field,
+            onOptionChange = { option ->
+                onIntent(EnterOptionsIntent.ChangeOption(option, field.id))
+            },
+        )
     }
 }
 
@@ -378,7 +452,7 @@ private fun TextField(
     }
     OptionTextField(
         value = field.value,
-        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeText(value, field.id)) },
+        onValueChange = { value -> onIntent(EnterOptionsIntent.ChangeOption(value, field.id)) },
         onRemoveOption = { onIntent(EnterOptionsIntent.Remove(field.id)) },
         imeAction = field.imeAction,
         modifier = Modifier.chooseRequester(
@@ -394,14 +468,26 @@ private fun TextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ImageField(field: Dilemma.ImageField) {
+private fun ImageField(
+    field: Dilemma.ImageField,
+    onOptionChange: (Option) -> Unit,
+) {
+    val launchCamera = createLaunchCamera(onResult = { bitmap ->
+        onOptionChange(Option.Image(bitmap))
+    })
     Card(
         modifier = Modifier
-            .clickable { }
-            .fillMaxWidth()
+            .clickable(onClick = launchCamera)
     ) {
         val bitmap = field.value.bitmap
-        if (bitmap == null) {
+        if (bitmap != null) {
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        } else {
             Spacer(modifier = Modifier.height(32.dp))
             Image(
                 imageVector = Icons.Outlined.CameraAlt,
@@ -410,15 +496,15 @@ private fun ImageField(field: Dilemma.ImageField) {
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(field.label),
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(field.label),
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

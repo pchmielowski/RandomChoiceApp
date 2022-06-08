@@ -42,7 +42,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import net.chmielowski.randomchoice.BuildConfig
 import net.chmielowski.randomchoice.R
-import net.chmielowski.randomchoice.ui.destinations.LibrariesScreenDestination
+import net.chmielowski.randomchoice.ui.screen.destinations.LibrariesScreenDestination
 import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 

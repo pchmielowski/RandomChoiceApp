@@ -10,9 +10,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.Option
+import net.chmielowski.randomchoice.core.Option.Image
 import net.chmielowski.randomchoice.core.Result
 import net.chmielowski.randomchoice.core.State
-import net.chmielowski.randomchoice.ui.ResultScreen
+import net.chmielowski.randomchoice.ui.screen.result.ResultScreen
 import net.chmielowski.randomchoice.ui.screen.about.AboutScreen
 import net.chmielowski.randomchoice.ui.screen.about.LibrariesScreen
 import net.chmielowski.randomchoice.ui.screen.about.LicenseScreen
@@ -22,10 +23,22 @@ import net.chmielowski.randomchoice.ui.screen.saved.SavedScreen
 
 @Preview
 @Composable
-internal fun InputScreenPreview() {
+internal fun InputScreenTextPreview() {
     InputScreen(
         navigator = EmptyDestinationsNavigator,
         state = State(Dilemma()),
+        onIntent = {},
+        focusRequester = FocusRequester(),
+        menuStrategy = DropdownMenuStrategy.Real(),
+    )
+}
+
+@Preview
+@Composable
+internal fun InputScreenImagePreview() {
+    InputScreen(
+        navigator = EmptyDestinationsNavigator,
+        state = State(Dilemma(listOf(Image(), Image(), Image(), Image(), Image()))),
         onIntent = {},
         focusRequester = FocusRequester(),
         menuStrategy = DropdownMenuStrategy.Real(),
