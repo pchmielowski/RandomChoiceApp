@@ -62,7 +62,13 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
 
     val allFilled get() = options.all(Option::hasValue)
 
-    fun addNew() = Dilemma(options + Text())
+    fun addNew(): Dilemma {
+        val new = when (mode) {
+            Mode.Text -> Text()
+            Mode.Image -> Image()
+        }
+        return Dilemma(options + new)
+    }
 
     fun add(option: Option) = copy(
         options = options.replaceFirstEmptyOrAdd(option),
@@ -167,7 +173,10 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     ) : OptionField
 
     @Composable
-    fun LaunchWhenOptionAdded(block: suspend () -> Unit) {
+    fun LaunchWhenFocusableOptionAdded(block: suspend () -> Unit) {
+        if (mode == Mode.Image) {
+            return
+        }
         var previous by remember { mutableStateOf(options.size) }
         val current = options.size
         LaunchedEffect(current) {

@@ -371,7 +371,7 @@ private fun OptionFields(
     focusRequester: FocusRequester,
 ) {
     val addedFocusRequester = remember { FocusRequester() }
-    dilemma.LaunchWhenOptionAdded {
+    dilemma.LaunchWhenFocusableOptionAdded {
         addedFocusRequester.requestFocus()
     }
     FieldsLayout(dilemma) { field ->
