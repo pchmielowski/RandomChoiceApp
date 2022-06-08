@@ -81,12 +81,7 @@ internal fun OptionTextField(
             ),
             trailingIcon = {
                 if (value.hasValue) {
-                    IconButton(onClick = { onValueChange(Option.Text("")) }) {
-                        Icon(
-                            Icons.Default.Clear,
-                            contentDescription = stringResource(R.string.action_clear)
-                        )
-                    }
+                    ClearOptionButton(onValueChange)
                 }
             },
             modifier = modifier
@@ -95,14 +90,29 @@ internal fun OptionTextField(
         )
         AnimatedVisibility(canRemove) { // TODO: Overshoot interpolator.
             Spacer(modifier = Modifier.width(8.dp))
-            IconButton(onClick = onRemoveOption) {
-                Icon(
-                    Icons.Default.Remove,
-                    contentDescription = stringResource(R.string.action_remove_option, index),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
+            RemoveOptionButton(onRemoveOption, index)
         }
+    }
+}
+
+@Composable
+private fun ClearOptionButton(onValueChange: (Option.Text) -> Unit) {
+    IconButton(onClick = { onValueChange(Option.Text("")) }) {
+        Icon(
+            Icons.Default.Clear,
+            contentDescription = stringResource(R.string.action_clear)
+        )
+    }
+}
+
+@Composable
+private fun RemoveOptionButton(onClick: () -> Unit, index: Int) {
+    IconButton(onClick = onClick) {
+        Icon(
+            Icons.Default.Remove,
+            contentDescription = stringResource(R.string.action_remove_option, index),
+            tint = MaterialTheme.colorScheme.primary,
+        )
     }
 }
 
