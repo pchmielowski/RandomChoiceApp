@@ -43,6 +43,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
@@ -220,7 +221,11 @@ internal fun InputScreen(
 private fun PhotoModeBanner() {
     ElevatedCard {
         Row(modifier = Modifier.padding(12.dp)) {
-            Image(Icons.Outlined.Info, contentDescription = null)
+            Image(
+                Icons.Outlined.Info,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(LocalContentColor.current),
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.message_photo_mode_experimental),
