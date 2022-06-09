@@ -14,11 +14,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
@@ -59,6 +59,22 @@ internal fun SavedScreen(
     onIntent: (Intent) -> Unit,
     labels: Flow<Label>,
 ) {
+    val loadable by observeSavedDilemmas().collectAsLoadableState()
+    SavedScreen(
+        navigator = navigator,
+        loadable = loadable,
+        onIntent = onIntent,
+        labels = labels,
+    )
+}
+
+@Composable
+internal fun SavedScreen(
+    navigator: DestinationsNavigator,
+    loadable: Loadable<out List<Pair<DilemmaId, Dilemma>>>,
+    onIntent: (Intent) -> Unit,
+    labels: Flow<Label>,
+) {
     val scrollBehavior = rememberScrollBehavior()
     val snackbarHostState = undoDeletingSnackbarHostState(labels, onIntent)
     Scaffold(
@@ -67,12 +83,8 @@ internal fun SavedScreen(
         scrollBehavior = scrollBehavior,
         snackbarHostState = snackbarHostState,
     ) {
-        val loadable by observeSavedDilemmas().collectAsLoadableState()
-
-        @Suppress("UnnecessaryVariable")
-        val current = loadable
-        if (current is Loadable.Loaded) {
-            val items = current.content
+        if (loadable is Loadable.Loaded) {
+            val items = loadable.content
             if (items.isEmpty()) {
                 EmptyView()
             } else {
@@ -153,7 +165,7 @@ private fun SavedChoiceItem(
     onReuse: () -> Unit,
     modifier: Modifier,
 ) {
-    OutlinedCard(modifier = modifier) {
+    ElevatedCard(modifier = modifier) {
         Text(
             text = dilemma.summary(),
             style = MaterialTheme.typography.titleMedium,
@@ -171,7 +183,7 @@ private fun SavedChoiceItem(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.action_delete))
             }
-            OutlinedButton(onClick = onReuse) {
+            FilledTonalButton(onClick = onReuse) {
                 Icon(Icons.Outlined.Refresh, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.action_reuse))
