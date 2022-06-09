@@ -24,7 +24,7 @@
     <string name="message_saved">Saved!</string>
     <string name="message_deleted">Dilemma deleted</string>
     <string name="message_empty">The list is empty</string>
-    <string name="message_photo_mode_experimental">Photo mode is currently experimental and for now supports only two options, doesn\'t support saving dilemmas with photos and the quality of photos is limited. These limitations are going to be resolved soon!</string>
+    <string name="message_photo_mode_experimental">Photo mode is currently experimental and for now doesn\'t support saving dilemmas with photos and the quality of photos is limited. These limitations are going to be resolved soon!</string>
 
     <string name="error_no_email_client">No e-mail client installed!</string>
 

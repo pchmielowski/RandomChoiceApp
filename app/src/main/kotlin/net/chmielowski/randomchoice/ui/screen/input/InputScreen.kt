@@ -219,7 +219,7 @@ internal fun InputScreen(
 @Composable
 private fun PhotoModeBanner() {
     ElevatedCard {
-        Row(modifier = Modifier.padding(8.dp)) {
+        Row(modifier = Modifier.padding(12.dp)) {
             Image(Icons.Outlined.Info, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(
