@@ -17,7 +17,8 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -78,19 +79,40 @@ internal fun OptionTextField(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
+            trailingIcon = {
+                if (value.hasValue) {
+                    ClearOptionButton(onValueChange)
+                }
+            },
             modifier = modifier
                 .weight(1F)
                 .animateFirstAppearance()
         )
         AnimatedVisibility(canRemove) { // TODO: Overshoot interpolator.
             Spacer(modifier = Modifier.width(8.dp))
-            IconButton(onClick = onRemoveOption) {
-                Icon(
-                    Icons.Default.Close,
-                    contentDescription = stringResource(R.string.action_remove_option, index)
-                )
-            }
+            RemoveOptionButton(onRemoveOption, index)
         }
+    }
+}
+
+@Composable
+private fun ClearOptionButton(onValueChange: (Option.Text) -> Unit) {
+    IconButton(onClick = { onValueChange(Option.Text("")) }) {
+        Icon(
+            Icons.Default.Clear,
+            contentDescription = stringResource(R.string.action_clear)
+        )
+    }
+}
+
+@Composable
+private fun RemoveOptionButton(onClick: () -> Unit, index: Int) {
+    IconButton(onClick = onClick) {
+        Icon(
+            Icons.Default.Remove,
+            contentDescription = stringResource(R.string.action_remove_option, index),
+            tint = MaterialTheme.colorScheme.primary,
+        )
     }
 }
 
