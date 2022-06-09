@@ -442,6 +442,9 @@ private fun Field(
             onOptionChange = { option ->
                 onIntent(EnterOptionsIntent.ChangeOption(option, field.id))
             },
+            onOptionRemove = {
+                onIntent(EnterOptionsIntent.Remove(field.id))
+            },
         )
     }
 }
@@ -478,6 +481,7 @@ private fun TextField(
 private fun ImageField(
     field: Dilemma.ImageField,
     onOptionChange: (Option) -> Unit,
+    onOptionRemove: () -> Unit,
 ) {
     val launchCamera = createLaunchCamera(onResult = { bitmap ->
         onOptionChange(Option.Image(bitmap))
@@ -486,21 +490,17 @@ private fun ImageField(
         modifier = Modifier
             .clickable(onClick = launchCamera)
     ) {
-        // TODO@ Layout it nicely
-        // TODO@ Add listener
-//        IconButton(onClick = {}, modifier = Modifier.align(Alignment.End)) {
-//            Icon(Icons.Default.Remove, contentDescription = null)
-//        }
         SmallTopAppBar(
             title = { Text(stringResource(field.label)) },
             actions = {
-                IconButton(onClick = {}) {
+                IconButton(onClick = onOptionRemove) {
                     Icon(Icons.Default.Remove, contentDescription = null)
                 }
             },
             colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 titleContentColor = MaterialTheme.colorScheme.surfaceVariant,
+                actionIconContentColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
         )
         val bitmap = field.value.bitmap
