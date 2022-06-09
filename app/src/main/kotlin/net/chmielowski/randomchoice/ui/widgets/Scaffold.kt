@@ -52,12 +52,8 @@ internal fun Scaffold(
         modifier = Modifier
             .navigationBarsWithImePadding()
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
-                .padding(padding)
-        ) {
+        // Using legacy Material2 just for the correct colors on Material2 widgets.
+        androidx.compose.material.Scaffold(backgroundColor = backgroundColor, modifier = Modifier.padding(padding)) {
             background()
             content()
             Divider(modifier = Modifier.alpha(1F - (scrollBehavior?.scrollFraction ?: 0F)))
