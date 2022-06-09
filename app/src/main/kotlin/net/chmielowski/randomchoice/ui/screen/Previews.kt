@@ -7,19 +7,20 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import net.chmielowski.randomchoice.core.Dilemma
+import net.chmielowski.randomchoice.core.DilemmaId
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Option.Image
 import net.chmielowski.randomchoice.core.Result
 import net.chmielowski.randomchoice.core.State
-import net.chmielowski.randomchoice.ui.screen.result.ResultScreen
 import net.chmielowski.randomchoice.ui.screen.about.AboutScreen
 import net.chmielowski.randomchoice.ui.screen.about.LibrariesScreen
 import net.chmielowski.randomchoice.ui.screen.about.LicenseScreen
 import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.screen.input.InputScreen
+import net.chmielowski.randomchoice.ui.screen.result.ResultScreen
 import net.chmielowski.randomchoice.ui.screen.saved.SavedScreen
+import net.chmielowski.randomchoice.utils.Loadable
 
 @Preview
 @Composable
@@ -57,9 +58,13 @@ internal fun ResultScreenPreview() {
 @Preview
 @Composable
 internal fun SavedScreenPreview() {
+    val dilemmas = listOf(
+        DilemmaId(0) to Dilemma(listOf(Option.Text("Pizza"), Option.Text("Salad"))),
+        DilemmaId(1) to Dilemma(listOf(Option.Text("Ski"), Option.Text("Bike"))),
+    )
     SavedScreen(
         navigator = EmptyDestinationsNavigator,
-        observeSavedDilemmas = { flowOf(emptyList()) },
+        loadable = Loadable.Loaded(dilemmas),
         onIntent = {},
         labels = flow { },
     )
