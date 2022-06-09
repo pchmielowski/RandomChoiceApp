@@ -15,10 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -48,7 +50,7 @@ internal fun LibrariesScreen(navigator: DestinationsNavigator = EmptyDestination
         Column {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "This application uses following open source libraries:",
+                text = stringResource(R.string.label_app_uses_following_libraries),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -77,9 +79,14 @@ private fun LibraryItem(
     navigator: DestinationsNavigator,
     library: Library,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column {
         Text(library.name, style = MaterialTheme.typography.titleLarge)
-        Text(library.url, style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            library.url, style = MaterialTheme.typography.bodyMedium,
+            color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             WebPageButton(library = library)
             LicenseButton(
@@ -93,7 +100,7 @@ private fun LibraryItem(
 @Composable
 private fun WebPageButton(library: Library) {
     val context = LocalContext.current
-    FilledTonalButton(onClick = { context.openWebPage(library) }) {
+    ElevatedButton(onClick = { context.openWebPage(library) }) {
         Text(stringResource(R.string.action_open_webpage))
     }
 }
@@ -107,7 +114,7 @@ private fun LicenseButton(
     navigator: DestinationsNavigator,
     library: Library
 ) {
-    OutlinedButton(onClick = { navigator.navigateToLicense(library) }) {
+    TextButton(onClick = { navigator.navigateToLicense(library) }) {
         Text(stringResource(R.string.action_show_license))
     }
 }
