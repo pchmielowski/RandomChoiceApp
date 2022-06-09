@@ -514,13 +514,6 @@ private fun ImageField(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(field.label),
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
