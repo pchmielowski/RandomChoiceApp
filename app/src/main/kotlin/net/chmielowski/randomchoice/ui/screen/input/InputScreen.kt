@@ -439,12 +439,7 @@ private fun Field(
         )
         is Dilemma.ImageField -> ImageField(
             field = field,
-            onOptionChange = { option ->
-                onIntent(EnterOptionsIntent.ChangeOption(option, field.id))
-            },
-            onOptionRemove = {
-                onIntent(EnterOptionsIntent.Remove(field.id))
-            },
+            onIntent = onIntent,
         )
     }
 }
@@ -480,11 +475,10 @@ private fun TextField(
 @Composable
 private fun ImageField(
     field: Dilemma.ImageField,
-    onOptionChange: (Option) -> Unit,
-    onOptionRemove: () -> Unit,
+    onIntent: (Intent) -> Unit,
 ) {
     val launchCamera = createLaunchCamera(onResult = { bitmap ->
-        onOptionChange(Option.Image(bitmap))
+        onIntent(EnterOptionsIntent.ChangeOption(Option.Image(bitmap), field.id))
     })
     Card(
         modifier = Modifier
@@ -493,7 +487,7 @@ private fun ImageField(
         SmallTopAppBar(
             title = { Text(stringResource(field.label)) },
             actions = {
-                IconButton(onClick = onOptionRemove) {
+                IconButton(onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) }) {
                     Icon(Icons.Default.Remove, contentDescription = null)
                 }
             },
