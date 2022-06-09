@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -485,7 +486,12 @@ private fun ImageField(
             .clickable(onClick = launchCamera)
     ) {
         SmallTopAppBar(
-            title = { Text(stringResource(field.label)) },
+            title = {
+                Text(
+                    stringResource(field.label),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            },
             actions = {
                 IconButton(onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) }) {
                     Icon(Icons.Default.Remove, contentDescription = null)
@@ -506,15 +512,15 @@ private fun ImageField(
                 modifier = Modifier.fillMaxWidth(),
             )
         } else {
-            Spacer(modifier = Modifier.height(16.dp))
             Image(
                 imageVector = Icons.Outlined.CameraAlt,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
+                    .padding(20.dp)
+                    .size(40.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
