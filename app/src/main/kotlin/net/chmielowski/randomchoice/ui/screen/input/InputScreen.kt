@@ -44,8 +44,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -481,9 +483,21 @@ private fun ImageField(
     ) {
         // TODO@ Layout it nicely
         // TODO@ Add listener
-        IconButton(onClick = {}, modifier = Modifier.align(Alignment.End)) {
-            Icon(Icons.Default.Remove, contentDescription = null)
-        }
+//        IconButton(onClick = {}, modifier = Modifier.align(Alignment.End)) {
+//            Icon(Icons.Default.Remove, contentDescription = null)
+//        }
+        SmallTopAppBar(
+            title = { Text(stringResource(field.label)) },
+            actions = {
+                IconButton(onClick = {}) {
+                    Icon(Icons.Default.Remove, contentDescription = null)
+                }
+            },
+            colors = TopAppBarDefaults.smallTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                titleContentColor = MaterialTheme.colorScheme.surfaceVariant,
+            ),
+        )
         val bitmap = field.value.bitmap
         if (bitmap != null) {
             Image(
