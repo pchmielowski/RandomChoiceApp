@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,7 +30,6 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
-import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
@@ -42,6 +42,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -88,6 +89,7 @@ import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
 import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
+import net.chmielowski.randomchoice.ui.screen.component.RemoveOptionButton
 import net.chmielowski.randomchoice.ui.screen.destinations.AboutScreenDestination
 import net.chmielowski.randomchoice.ui.screen.destinations.ResultScreenDestination
 import net.chmielowski.randomchoice.ui.screen.destinations.SavedScreenDestination
@@ -97,7 +99,6 @@ import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
 import net.chmielowski.randomchoice.utils.createLaunchCamera
-import net.chmielowski.randomchoice.utils.stringResource
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Destination(start = true)
@@ -196,16 +197,16 @@ internal fun InputScreen(
                 onIntent = onIntent,
                 focusRequester = focusRequester,
             )
-            if (state.dilemma.mode == Mode.Text) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Row {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                if (state.dilemma.mode == Mode.Text) {
                     PasteButton(onIntent = onIntent)
                     Spacer(modifier = Modifier.width(8.dp))
-                    AddOptionButton(
-                        onIntent = onIntent,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
                 }
+                AddOptionButton(
+                    onIntent = onIntent,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
             Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
@@ -216,8 +217,12 @@ internal fun InputScreen(
 @Composable
 private fun PhotoModeBanner() {
     ElevatedCard {
-        Row(modifier = Modifier.padding(8.dp)) {
-            Image(Icons.Outlined.Info, contentDescription = null)
+        Row(modifier = Modifier.padding(12.dp)) {
+            Image(
+                Icons.Outlined.Info,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(LocalContentColor.current),
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.message_photo_mode_experimental),
@@ -371,7 +376,7 @@ private fun OptionFields(
     focusRequester: FocusRequester,
 ) {
     val addedFocusRequester = remember { FocusRequester() }
-    dilemma.LaunchWhenOptionAdded {
+    dilemma.LaunchWhenFocusableOptionAdded {
         addedFocusRequester.requestFocus()
     }
     FieldsLayout(dilemma) { field ->
@@ -431,9 +436,8 @@ private fun Field(
         )
         is Dilemma.ImageField -> ImageField(
             field = field,
-            onOptionChange = { option ->
-                onIntent(EnterOptionsIntent.ChangeOption(option, field.id))
-            },
+            onIntent = onIntent,
+            dilemma = dilemma,
         )
     }
 }
@@ -469,15 +473,21 @@ private fun TextField(
 @Composable
 private fun ImageField(
     field: Dilemma.ImageField,
-    onOptionChange: (Option) -> Unit,
+    dilemma: Dilemma,
+    onIntent: (Intent) -> Unit,
 ) {
     val launchCamera = createLaunchCamera(onResult = { bitmap ->
-        onOptionChange(Option.Image(bitmap))
+        onIntent(EnterOptionsIntent.ChangeOption(Option.Image(bitmap), field.id))
     })
     Card(
-        modifier = Modifier
-            .clickable(onClick = launchCamera)
+        modifier = Modifier.clickable(onClick = launchCamera)
     ) {
+        RemoveOptionButton(
+            onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+            index = field.humanIndex,
+            modifier = Modifier.align(Alignment.End),
+            canRemove = dilemma.canRemove,
+        )
         val bitmap = field.value.bitmap
         if (bitmap != null) {
             Image(
@@ -487,22 +497,15 @@ private fun ImageField(
                 modifier = Modifier.fillMaxWidth(),
             )
         } else {
-            Spacer(modifier = Modifier.height(32.dp))
             Image(
-                imageVector = Icons.Outlined.CameraAlt,
+                imageVector = Icons.Filled.CameraAlt,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
+                    .padding(20.dp)
+                    .size(40.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(field.label),
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
