@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
+import net.chmielowski.randomchoice.BuildConfig
 import net.chmielowski.randomchoice.R
 import java.io.File
 
@@ -42,7 +43,7 @@ private class CameraResultContract : ActivityResultContract<Unit, Bitmap?>() {
     private fun createFile(context: Context): Uri? {
         val directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: return null
         val file = File.createTempFile("Random Choice", ".jpg", directory)
-        return FileProvider.getUriForFile(context, "com.example.android.fileprovider", file)
+        return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file)
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?) =
