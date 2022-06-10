@@ -24,26 +24,20 @@ internal fun createLaunchCamera(onResult: (Bitmap?) -> Unit): () -> Unit {
     val context = LocalContext.current
     return {
         @Suppress("SwallowedException") try {
-            launcher.launch(Unit)
+            val file = createFile(context)
+            launcher.launch(file)
         } catch (e: ActivityNotFoundException) {
             context.showError()
         }
     }
 }
 
-private class CameraResultContract : ActivityResultContract<Unit, Bitmap?>() {
+private class CameraResultContract : ActivityResultContract<Uri, Bitmap?>() {
 
-    override fun createIntent(context: Context, input: Unit): Intent {
+    override fun createIntent(context: Context, input: Uri): Intent {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val uri = createFile(context) ?: error("") // TODO@
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, input)
         return intent
-    }
-
-    private fun createFile(context: Context): Uri? {
-        val directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: return null
-        val file = File.createTempFile("Random Choice", ".jpg", directory)
-        return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file)
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?) =
@@ -58,4 +52,10 @@ private fun Context.showError() {
     Toast
         .makeText(this, R.string.error, Toast.LENGTH_LONG)
         .show()
+}
+
+private fun createFile(context: Context): Uri? {
+    val directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: return null
+    val file = File.createTempFile("Random Choice", ".jpg", directory)
+    return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file)
 }
