@@ -2,14 +2,12 @@
 
 package net.chmielowski.randomchoice.ui.screen.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -87,10 +85,12 @@ internal fun OptionTextField(
                 .weight(1F)
                 .animateFirstAppearance()
         )
-        AnimatedVisibility(canRemove) { // TODO: Overshoot interpolator.
-            Spacer(modifier = Modifier.width(8.dp))
-            RemoveOptionButton(onRemoveOption, index)
-        }
+        RemoveOptionButton(
+            onClick = onRemoveOption,
+            index = index,
+            canRemove = canRemove,
+            modifier = Modifier.padding(start = 8.dp)
+        )
     }
 }
 

@@ -3,7 +3,6 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -483,13 +482,12 @@ private fun ImageField(
     Card(
         modifier = Modifier.clickable(onClick = launchCamera)
     ) {
-        AnimatedVisibility(dilemma.canRemove, modifier = Modifier.align(Alignment.End)) {
-            RemoveOptionButton(
-                onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
-                index = field.humanIndex,
-                modifier = Modifier.align(Alignment.End),
-            )
-        }
+        RemoveOptionButton(
+            onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+            index = field.humanIndex,
+            modifier = Modifier.align(Alignment.End),
+            canRemove = dilemma.canRemove,
+        )
         val bitmap = field.value.bitmap
         if (bitmap != null) {
             Image(

@@ -2,6 +2,7 @@
 
 package net.chmielowski.randomchoice.ui.screen.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
@@ -13,12 +14,19 @@ import androidx.compose.ui.res.stringResource
 import net.chmielowski.randomchoice.R
 
 @Composable
-internal fun RemoveOptionButton(onClick: () -> Unit, index: Int, modifier: Modifier = Modifier) {
-    IconButton(onClick = onClick, modifier = modifier) {
-        Icon(
-            Icons.Default.Remove,
-            contentDescription = stringResource(R.string.action_remove_option, index),
-            tint = MaterialTheme.colorScheme.primary,
-        )
+internal fun RemoveOptionButton(
+    onClick: () -> Unit,
+    index: Int,
+    modifier: Modifier = Modifier,
+    canRemove: Boolean,
+) {
+    AnimatedVisibility(canRemove, modifier = modifier) {
+        IconButton(onClick = onClick) {
+            Icon(
+                Icons.Default.Remove,
+                contentDescription = stringResource(R.string.action_remove_option, index),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
     }
 }
