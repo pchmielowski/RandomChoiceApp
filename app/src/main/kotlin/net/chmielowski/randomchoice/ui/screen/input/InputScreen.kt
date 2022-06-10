@@ -482,7 +482,7 @@ private fun ImageField(
     ) {
         RemoveOptionButton(
             onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
-            index = 0, // TODO@ Index
+            index = field.humanIndex,
             modifier = Modifier.align(Alignment.End),
         )
         val bitmap = field.value.bitmap

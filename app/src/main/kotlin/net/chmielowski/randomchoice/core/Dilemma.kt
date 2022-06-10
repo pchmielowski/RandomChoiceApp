@@ -130,12 +130,12 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         val id = OptionId(index)
         val label = AndroidString(R.string.label_option, index + 1)
         return when (item) {
-            is Text -> textField(id, index, item, label)
-            is Image -> ImageField(id, item, label)
+            is Text -> textField(id, item, index, label)
+            is Image -> ImageField(id, item, index, label)
         }
     }
 
-    private fun textField(id: OptionId, index: Int, item: Text, label: AndroidString) = TextField(
+    private fun textField(id: OptionId, item: Text, index: Int, label: AndroidString) = TextField(
         id = id,
         value = item,
         imeAction = if (index == options.lastIndex) {
@@ -154,6 +154,8 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         val id: OptionId
 
         val label: AndroidString
+
+        val humanIndex: Int
     }
 
     data class TextField(
@@ -161,7 +163,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
         val value: Text,
         val imeAction: ImeAction,
         val focused: Boolean,
-        val humanIndex: Int,
+        override val humanIndex: Int,
         val isLast: Boolean,
         override val label: AndroidString,
     ) : OptionField
@@ -169,6 +171,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     data class ImageField(
         override val id: OptionId,
         val value: Image,
+        override val humanIndex: Int,
         override val label: AndroidString,
     ) : OptionField
 

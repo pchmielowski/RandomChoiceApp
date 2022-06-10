@@ -18,7 +18,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -101,17 +100,6 @@ private fun ClearOptionButton(onValueChange: (Option.Text) -> Unit) {
         Icon(
             Icons.Default.Clear,
             contentDescription = stringResource(R.string.action_clear)
-        )
-    }
-}
-
-@Composable
-fun RemoveOptionButton(onClick: () -> Unit, index: Int, modifier: Modifier = Modifier) {
-    IconButton(onClick = onClick, modifier = modifier) {
-        Icon(
-            Icons.Default.Remove,
-            contentDescription = stringResource(R.string.action_remove_option, index),
-            tint = MaterialTheme.colorScheme.primary,
         )
     }
 }
