@@ -3,6 +3,7 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -437,6 +438,7 @@ private fun Field(
         is Dilemma.ImageField -> ImageField(
             field = field,
             onIntent = onIntent,
+            canRemove = dilemma.canRemove,
         )
     }
 }
@@ -472,6 +474,7 @@ private fun TextField(
 @Composable
 private fun ImageField(
     field: Dilemma.ImageField,
+    canRemove: Boolean,
     onIntent: (Intent) -> Unit,
 ) {
     val launchCamera = createLaunchCamera(onResult = { bitmap ->
@@ -480,11 +483,13 @@ private fun ImageField(
     Card(
         modifier = Modifier.clickable(onClick = launchCamera)
     ) {
-        RemoveOptionButton(
-            onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
-            index = field.humanIndex,
-            modifier = Modifier.align(Alignment.End),
-        )
+        AnimatedVisibility(canRemove, modifier = Modifier.align(Alignment.End)) {
+            RemoveOptionButton(
+                onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+                index = field.humanIndex,
+                modifier = Modifier.align(Alignment.End),
+            )
+        }
         val bitmap = field.value.bitmap
         if (bitmap != null) {
             Image(

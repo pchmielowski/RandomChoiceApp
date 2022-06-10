@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import net.chmielowski.randomchoice.R
 
 @Composable
-fun RemoveOptionButton(onClick: () -> Unit, index: Int, modifier: Modifier = Modifier) {
+internal fun RemoveOptionButton(onClick: () -> Unit, index: Int, modifier: Modifier = Modifier) {
     IconButton(onClick = onClick, modifier = modifier) {
         Icon(
             Icons.Default.Remove,
