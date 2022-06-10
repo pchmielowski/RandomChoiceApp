@@ -50,6 +50,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -57,15 +58,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.states
@@ -96,6 +98,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
+import net.chmielowski.randomchoice.utils.createFile
 import net.chmielowski.randomchoice.utils.createLaunchCamera
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -471,8 +474,10 @@ private fun ImageField(
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
 ) {
-    val launchCamera = createLaunchCamera(onResult = { bitmap ->
-        onIntent(EnterOptionsIntent.ChangeOption(Option.Image(bitmap), field.id))
+    val context = LocalContext.current
+    val file = rememberSaveable { createFile(context) }
+    val launchCamera = createLaunchCamera(onResult = {
+        onIntent(EnterOptionsIntent.ChangeOption(Option.Image(file), field.id))
     })
     Card(
         modifier = Modifier.clickable(onClick = launchCamera)
@@ -483,10 +488,10 @@ private fun ImageField(
             modifier = Modifier.align(Alignment.End),
             canRemove = dilemma.canRemove,
         )
-        val bitmap = field.value.bitmap
+        val bitmap = field.value.file
         if (bitmap != null) {
             Image(
-                bitmap = bitmap.asImageBitmap(),
+                painter = rememberAsyncImagePainter(field.value.file),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier.fillMaxWidth(),

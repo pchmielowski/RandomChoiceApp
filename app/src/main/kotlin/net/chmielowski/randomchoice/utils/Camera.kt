@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
@@ -20,23 +19,22 @@ import java.io.File
 
 @Composable
 internal fun createLaunchCamera(onResult: (Bitmap?) -> Unit): () -> Unit {
-    val launcher = rememberLauncherForActivityResult(CameraResultContract(), onResult)
     val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(CameraResultContract(), onResult)
     return {
         @Suppress("SwallowedException") try {
-            val file = createFile(context)
-            launcher.launch(file)
+            launcher.launch(Unit)
         } catch (e: ActivityNotFoundException) {
             context.showError()
         }
     }
 }
 
-private class CameraResultContract : ActivityResultContract<Uri, Bitmap?>() {
+private class CameraResultContract : ActivityResultContract<Unit, Bitmap?>() {
 
-    override fun createIntent(context: Context, input: Uri): Intent {
+    override fun createIntent(context: Context, input: Unit): Intent {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, input)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, createFile(context).uri(context))
         return intent
     }
 
@@ -54,8 +52,10 @@ private fun Context.showError() {
         .show()
 }
 
-private fun createFile(context: Context): Uri? {
-    val directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: return null
-    val file = File.createTempFile("Random Choice", ".jpg", directory)
-    return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file)
+internal fun createFile(context: Context): File {
+    val directory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: error("TODO@")
+    return File.createTempFile("Random Choice", ".jpg", directory)
 }
+
+private fun File.uri(context: Context) =
+    FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", this)
