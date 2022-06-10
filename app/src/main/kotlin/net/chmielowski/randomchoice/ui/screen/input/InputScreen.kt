@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
-import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material.icons.outlined.WbSunny
@@ -46,10 +45,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -71,6 +68,7 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
@@ -90,6 +88,7 @@ import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
+import net.chmielowski.randomchoice.core.OptionId
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
 import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
@@ -100,9 +99,9 @@ import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
+import net.chmielowski.randomchoice.utils.AndroidString
 import net.chmielowski.randomchoice.utils.Observe
 import net.chmielowski.randomchoice.utils.createLaunchCamera
-import net.chmielowski.randomchoice.utils.stringResource
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Destination(start = true)
@@ -482,27 +481,14 @@ private fun ImageField(
         onIntent(EnterOptionsIntent.ChangeOption(Option.Image(bitmap), field.id))
     })
     Card(
-        modifier = Modifier
-            .clickable(onClick = launchCamera)
+        modifier = Modifier.clickable(onClick = launchCamera)
     ) {
-        SmallTopAppBar(
-            title = {
-                Text(
-                    stringResource(field.label),
-                    style = MaterialTheme.typography.titleMedium
-                )
-            },
-            actions = {
-                IconButton(onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) }) {
-                    Icon(Icons.Default.Remove, contentDescription = null)
-                }
-            },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                titleContentColor = MaterialTheme.colorScheme.surfaceVariant,
-                actionIconContentColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-        )
+        IconButton(
+            onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+            modifier = Modifier.align(Alignment.End),
+        ) {
+            Icon(Icons.Default.Remove, contentDescription = null)
+        }
         val bitmap = field.value.bitmap
         if (bitmap != null) {
             Image(
@@ -513,7 +499,7 @@ private fun ImageField(
             )
         } else {
             Image(
-                imageVector = Icons.Outlined.CameraAlt,
+                imageVector = Icons.Filled.CameraAlt,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
                 modifier = Modifier
@@ -573,4 +559,18 @@ private fun AddOptionButton(
         Spacer(modifier = Modifier.width(8.dp))
         Text(stringResource(R.string.action_add_option))
     }
+}
+
+// TODO@ Remove
+@Preview
+@Composable
+fun ThePreview() {
+    ImageField(
+        field = Dilemma.ImageField(
+            id = OptionId(0),
+            value = Option.Image(bitmap = null),
+            label = AndroidString(id = R.string.action_add_option)
+        ),
+        onIntent = {},
+    )
 }
