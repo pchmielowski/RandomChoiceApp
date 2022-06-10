@@ -438,7 +438,7 @@ private fun Field(
         is Dilemma.ImageField -> ImageField(
             field = field,
             onIntent = onIntent,
-            canRemove = dilemma.canRemove,
+            dilemma = dilemma,
         )
     }
 }
@@ -474,7 +474,7 @@ private fun TextField(
 @Composable
 private fun ImageField(
     field: Dilemma.ImageField,
-    canRemove: Boolean,
+    dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
 ) {
     val launchCamera = createLaunchCamera(onResult = { bitmap ->
@@ -483,7 +483,7 @@ private fun ImageField(
     Card(
         modifier = Modifier.clickable(onClick = launchCamera)
     ) {
-        AnimatedVisibility(canRemove, modifier = Modifier.align(Alignment.End)) {
+        AnimatedVisibility(dilemma.canRemove, modifier = Modifier.align(Alignment.End)) {
             RemoveOptionButton(
                 onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
                 index = field.humanIndex,
