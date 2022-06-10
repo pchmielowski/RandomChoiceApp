@@ -106,8 +106,8 @@ private fun ClearOptionButton(onValueChange: (Option.Text) -> Unit) {
 }
 
 @Composable
-private fun RemoveOptionButton(onClick: () -> Unit, index: Int) {
-    IconButton(onClick = onClick) {
+fun RemoveOptionButton(onClick: () -> Unit, index: Int, modifier: Modifier = Modifier) {
+    IconButton(onClick = onClick, modifier = modifier) {
         Icon(
             Icons.Default.Remove,
             contentDescription = stringResource(R.string.action_remove_option, index),

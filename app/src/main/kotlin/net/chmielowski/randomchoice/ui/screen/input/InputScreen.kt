@@ -28,7 +28,6 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Info
@@ -68,7 +67,6 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
@@ -88,10 +86,10 @@ import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
 import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
-import net.chmielowski.randomchoice.core.OptionId
 import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.CircularRevealAnimation
 import net.chmielowski.randomchoice.ui.screen.component.OptionTextField
+import net.chmielowski.randomchoice.ui.screen.component.RemoveOptionButton
 import net.chmielowski.randomchoice.ui.screen.destinations.AboutScreenDestination
 import net.chmielowski.randomchoice.ui.screen.destinations.ResultScreenDestination
 import net.chmielowski.randomchoice.ui.screen.destinations.SavedScreenDestination
@@ -99,7 +97,6 @@ import net.chmielowski.randomchoice.ui.theme.LocalTheme
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
-import net.chmielowski.randomchoice.utils.AndroidString
 import net.chmielowski.randomchoice.utils.Observe
 import net.chmielowski.randomchoice.utils.createLaunchCamera
 
@@ -483,12 +480,11 @@ private fun ImageField(
     Card(
         modifier = Modifier.clickable(onClick = launchCamera)
     ) {
-        IconButton(
+        RemoveOptionButton(
             onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
+            index = 0, // TODO@ Index
             modifier = Modifier.align(Alignment.End),
-        ) {
-            Icon(Icons.Default.Remove, contentDescription = null)
-        }
+        )
         val bitmap = field.value.bitmap
         if (bitmap != null) {
             Image(
@@ -559,18 +555,4 @@ private fun AddOptionButton(
         Spacer(modifier = Modifier.width(8.dp))
         Text(stringResource(R.string.action_add_option))
     }
-}
-
-// TODO@ Remove
-@Preview
-@Composable
-fun ThePreview() {
-    ImageField(
-        field = Dilemma.ImageField(
-            id = OptionId(0),
-            value = Option.Image(bitmap = null),
-            label = AndroidString(id = R.string.action_add_option)
-        ),
-        onIntent = {},
-    )
 }
