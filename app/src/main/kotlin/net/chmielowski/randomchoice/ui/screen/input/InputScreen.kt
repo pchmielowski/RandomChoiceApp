@@ -488,10 +488,10 @@ private fun ImageField(
             modifier = Modifier.align(Alignment.End),
             canRemove = dilemma.canRemove,
         )
-        val bitmap = field.value.file
-        if (bitmap != null) {
+        val file = field.value.file
+        if (file != null) {
             Image(
-                painter = rememberAsyncImagePainter(field.value.file),
+                painter = rememberAsyncImagePainter(file),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier.fillMaxWidth(),
