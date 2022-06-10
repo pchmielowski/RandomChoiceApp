@@ -20,13 +20,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.Result
 
@@ -52,7 +52,7 @@ internal fun AnimatedResult(
                         )
                         is Option.Image -> Card(Modifier.padding(top = 8.dp)) {
                             Image(
-                                bitmap = item.bitmap!!.asImageBitmap(),
+                                painter = rememberAsyncImagePainter(item.file),
                                 contentDescription = null,
                                 contentScale = ContentScale.FillWidth,
                                 modifier = Modifier
