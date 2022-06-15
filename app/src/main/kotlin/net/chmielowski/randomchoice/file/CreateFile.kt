@@ -7,9 +7,14 @@ import androidx.core.content.FileProvider
 import net.chmielowski.randomchoice.BuildConfig
 import java.io.File
 
-internal class CreateFile(private val context: Context) {
+interface CreateFile {
 
-    operator fun invoke(): Pair<File, Uri> {
+    operator fun invoke(): Pair<File, Uri>
+}
+
+internal class CreateFileImpl(private val context: Context) : CreateFile {
+
+    override operator fun invoke(): Pair<File, Uri> {
         val file = createTempFile()
         val uri = getUri(file)
         return file to uri
