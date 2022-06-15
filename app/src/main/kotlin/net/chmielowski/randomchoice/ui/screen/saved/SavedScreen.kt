@@ -43,6 +43,7 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
 import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
+import net.chmielowski.randomchoice.core.Label.TakePicture
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.ui.widgets.Divider
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
@@ -116,7 +117,7 @@ private fun undoDeletingSnackbarHostState(
                     SnackbarResult.ActionPerformed -> onIntent(DilemmaIntent.UndoDeleting)
                 }
             }
-            is ShowResult, FocusFirstOptionInput -> {
+            is ShowResult, FocusFirstOptionInput, is TakePicture -> {
             }
         }
     }
