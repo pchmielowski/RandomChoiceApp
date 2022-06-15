@@ -23,5 +23,4 @@ internal class CreateFile(private val context: Context) {
 
     private fun getUri(file: File) =
         FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file)
-
 }
