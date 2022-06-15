@@ -3,6 +3,8 @@
 package net.chmielowski.randomchoice.ui.screen.input
 
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -52,7 +54,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -66,7 +67,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -77,6 +77,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.Dilemma.OptionField
@@ -87,6 +88,7 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
 import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
+import net.chmielowski.randomchoice.core.Label.TakePicture
 import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.State
@@ -101,8 +103,6 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
-import net.chmielowski.randomchoice.utils.createFile
-import net.chmielowski.randomchoice.utils.createLaunchCamera
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Destination(start = true)
@@ -118,7 +118,7 @@ internal fun InputScreen(
         when (label) {
             is ShowResult -> navigator.navigate(ResultScreenDestination(label.result))
             FocusFirstOptionInput -> focusRequester.requestFocus()
-            ShowDilemmaDeleted -> {}
+            ShowDilemmaDeleted, is TakePicture -> {} // TODO@ Consider taking picture there
         }
     }
     InputScreen(
@@ -127,6 +127,7 @@ internal fun InputScreen(
         onIntent = store::accept,
         focusRequester = focusRequester,
         menuStrategy = menuStrategy,
+        labels = store.labels,
     )
 }
 
@@ -139,6 +140,7 @@ internal fun InputScreen(
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
     menuStrategy: DropdownMenuStrategy,
+    labels: Flow<Label>,
 ) {
     var transitionVisible by remember { mutableStateOf(false) }
     val scrollBehavior = rememberScrollBehavior()
@@ -200,6 +202,7 @@ internal fun InputScreen(
                 dilemma = state.dilemma,
                 onIntent = onIntent,
                 focusRequester = focusRequester,
+                labels = labels,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row {
@@ -375,6 +378,7 @@ private fun OptionFields(
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
+    labels: Flow<Label>,
 ) {
     val addedFocusRequester = remember { FocusRequester() }
     dilemma.LaunchWhenFocusableOptionAdded {
@@ -387,6 +391,7 @@ private fun OptionFields(
             onIntent = onIntent,
             addedFocusRequester = addedFocusRequester,
             dilemma = dilemma,
+            labels = labels,
         )
     }
 }
@@ -426,6 +431,7 @@ private fun Field(
     onIntent: (Intent) -> Unit,
     addedFocusRequester: FocusRequester,
     dilemma: Dilemma,
+    labels: Flow<Label>,
 ) {
     when (field) {
         is Dilemma.TextField -> TextField(
@@ -439,6 +445,7 @@ private fun Field(
             field = field,
             onIntent = onIntent,
             dilemma = dilemma,
+            labels = labels,
         )
     }
 }
@@ -476,18 +483,16 @@ private fun ImageField(
     field: Dilemma.ImageField,
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
+    labels: Flow<Label>,
 ) {
-    val context = LocalContext.current
-    val file = rememberSaveable { createFile(context) }
-    Log.d("pchm", "Create " + file.absolutePath.toString())
-    val launchCamera = createLaunchCamera(onResult = {
-        onIntent(EnterOptionsIntent.ChangeOption(Option.Image(file), field.id))
-    })
+    val launcher = rememberTakePictureLauncher(onIntent, field)
+    labels.Observe { label ->
+        if (label is TakePicture) {
+            launcher.launch(label.uri)
+        }
+    }
     Card(
-        modifier = Modifier.clickable(onClick = {
-            val file1 = createFile(context)
-            launchCamera(file1)
-        })
+        modifier = Modifier.clickable(onClick = { onIntent(EnterOptionsIntent.ClickOption(option = field.id)) })
     ) {
         RemoveOptionButton(
             onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
@@ -521,6 +526,16 @@ private fun ImageField(
         }
     }
 }
+
+@Composable
+private fun rememberTakePictureLauncher(
+    onIntent: (Intent) -> Unit,
+    field: Dilemma.ImageField
+) = rememberLauncherForActivityResult(
+    ActivityResultContracts.TakePicture(),
+    onResult = { success ->
+        onIntent(EnterOptionsIntent.OnCameraResult(option = field.id, success = success))
+    })
 
 private fun Modifier.chooseRequester(
     field: Dilemma.TextField,

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.DilemmaId
@@ -31,6 +32,7 @@ internal fun InputScreenTextPreview() {
         onIntent = {},
         focusRequester = FocusRequester(),
         menuStrategy = DropdownMenuStrategy.Real(),
+        labels = emptyFlow(),
     )
 }
 
@@ -43,6 +45,7 @@ internal fun InputScreenImagePreview() {
         onIntent = {},
         focusRequester = FocusRequester(),
         menuStrategy = DropdownMenuStrategy.Real(),
+        labels = emptyFlow(),
     )
 }
 
