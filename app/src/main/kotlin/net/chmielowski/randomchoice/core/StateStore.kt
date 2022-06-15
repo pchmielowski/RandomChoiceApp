@@ -1,6 +1,8 @@
 package net.chmielowski.randomchoice.core
 
+import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.os.Parcelable
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
@@ -23,6 +25,8 @@ import net.chmielowski.randomchoice.persistence.SaveDilemma
 import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemma
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
+import net.chmielowski.randomchoice.utils.uri
+import java.io.File
 
 internal fun createStateStore(
     factory: MainExecutor.Factory,
@@ -100,12 +104,24 @@ internal sealed interface Label {
     data class TakePicture(val uri: Uri) : Label
 }
 
+// TODO@ Move
+internal class CreateFile(private val context: Context) {
+
+    operator fun invoke(): Pair<File, Uri> {
+        val directory =
+            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: error("TODO@")
+        val file = File.createTempFile("Random Choice", ".jpg", directory)
+        return file to file.uri(context)
+    }
+}
+
 internal class MainExecutor(
     private val choice: Choice,
     private val preference: ThemePreference,
     private val saveDilemma: SaveDilemma,
     private val deleteDilemma: DeleteSavedDilemma,
     private val undeleteDilemma: UndeleteSavedDilemma,
+    private val createFile: CreateFile,
 ) : CoroutineExecutor<Intent, Nothing, State, State, Label>() {
 
     @Suppress("ComplexMethod")
@@ -128,8 +144,22 @@ internal class MainExecutor(
                     }
                 }
                 is SelectMode -> dispatchState { copy(dilemma = dilemma.selectMode(intent.mode)) }
-                is ClickOption -> TODO()
-                is OnCameraResult -> TODO()
+                is ClickOption -> {
+                    val (file, uri) = createFile()
+                    dispatchState {
+                        copy(dilemma = dilemma.update(intent.option, Option.Image(file)))
+                    }
+                    publish(Label.TakePicture(uri))
+                }
+                is OnCameraResult -> {
+                    if (intent.success) {
+
+                    } else {
+                        // TODO@ Show error
+                        // TODO@ Delete file
+                        // TODO@ Clearnup state
+                    }
+                }
             }
             MakeChoice -> {
                 val result = getState().dilemma.choose(choice)
