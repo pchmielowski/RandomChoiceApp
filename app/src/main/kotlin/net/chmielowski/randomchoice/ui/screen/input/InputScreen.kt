@@ -2,9 +2,12 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,6 +62,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -481,6 +485,7 @@ private fun ImageField(
 ) {
     val context = LocalContext.current
     val file = rememberSaveable { createFile(context) }
+    Log.d("pchm", "Create " + file.absolutePath.toString())
     val launchCamera = createLaunchCamera(onResult = {
         onIntent(EnterOptionsIntent.ChangeOption(Option.Image(file), field.id))
     })
@@ -493,13 +498,16 @@ private fun ImageField(
             modifier = Modifier.align(Alignment.End),
             canRemove = dilemma.canRemove,
         )
-        val file = field.value.file
-        if (file != null) {
+        val readFile = field.value.file
+        Log.d("pchm", "Read " + readFile?.absolutePath.toString())
+        if (readFile != null) {
             Image(
-                painter = rememberAsyncImagePainter(file),
+                painter = rememberAsyncImagePainter(readFile, contentScale = ContentScale.FillBounds),
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth(),
+//                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .size(50.dp)
+                    .border(2.dp, Color.Red),
             )
         } else {
             Image(
