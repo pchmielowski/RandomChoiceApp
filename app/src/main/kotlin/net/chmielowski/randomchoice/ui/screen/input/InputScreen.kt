@@ -484,7 +484,10 @@ private fun ImageField(
         onIntent(EnterOptionsIntent.ChangeOption(Option.Image(file), field.id))
     })
     Card(
-        modifier = Modifier.clickable(onClick = { launchCamera() })
+        modifier = Modifier.clickable(onClick = {
+            val file1 = createFile(context)
+            launchCamera(file1)
+        })
     ) {
         RemoveOptionButton(
             onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
