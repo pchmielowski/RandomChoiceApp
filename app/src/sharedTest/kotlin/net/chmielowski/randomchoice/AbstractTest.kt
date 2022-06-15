@@ -3,6 +3,7 @@
 package net.chmielowski.randomchoice
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
@@ -23,6 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import net.chmielowski.randomchoice.core.Choice
 import net.chmielowski.randomchoice.core.MainExecutor
 import net.chmielowski.randomchoice.core.createStateStore
+import net.chmielowski.randomchoice.file.CreateFile
+import net.chmielowski.randomchoice.file.DeleteFile
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemmaImpl
 import net.chmielowski.randomchoice.persistence.NonCancellableTask
 import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmasImpl
@@ -34,6 +37,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 import org.junit.Before
 import org.junit.Rule
+import java.io.File
 import java.io.FileOutputStream
 
 internal abstract class AbstractTest {
@@ -69,6 +73,12 @@ internal abstract class AbstractTest {
                     saveDilemma = SaveDilemmaImpl(database, NonCancellableTask.fake),
                     deleteDilemma = DeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                     undeleteDilemma = UndeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
+                    createFile = object : CreateFile {
+                        override fun invoke(): Pair<File, Uri> {
+                            TODO("Not yet implemented")
+                        }
+                    },
+                    deleteFile = DeleteFile(),
                 )
             }),
             menuStrategy = menuStrategy,
