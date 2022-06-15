@@ -113,11 +113,13 @@ internal fun InputScreen(
 ) {
     val state by store.states.collectAsState(State())
     val focusRequester = remember { FocusRequester() }
+    val launcher = rememberTakePictureLauncher(store::accept)
     store.labels.Observe { label ->
         when (label) {
             is ShowResult -> navigator.navigate(ResultScreenDestination(label.result))
             FocusFirstOptionInput -> focusRequester.requestFocus()
-            ShowDilemmaDeleted, is TakePicture -> {} // TODO@ Consider taking picture there
+            is TakePicture -> launcher.launch(label.uri)
+            ShowDilemmaDeleted -> {}
         }
     }
     InputScreen(
@@ -442,9 +444,8 @@ private fun Field(
         )
         is Dilemma.ImageField -> ImageField(
             field = field,
-            onIntent = onIntent,
             dilemma = dilemma,
-            labels = labels,
+            onIntent = onIntent,
         )
     }
 }
@@ -482,16 +483,7 @@ private fun ImageField(
     field: Dilemma.ImageField,
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
-    labels: Flow<Label>,
 ) {
-    // TODO@ Extract as function
-    val launcher = rememberTakePictureLauncher(onIntent)
-    labels.Observe { label ->
-        if (label is TakePicture && label.option == field.id) {
-            launcher.launch(label.uri)
-        }
-    }
-
     Card(
         modifier = Modifier.clickable(onClick = { onIntent(EnterOptionsIntent.ClickOption(option = field.id)) })
     ) {
