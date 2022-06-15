@@ -1,7 +1,7 @@
 package net.chmielowski.randomchoice
 
 import net.chmielowski.randomchoice.core.Choice
-import net.chmielowski.randomchoice.core.CreateFile
+import net.chmielowski.randomchoice.file.CreateFile
 import net.chmielowski.randomchoice.core.MainExecutor
 import net.chmielowski.randomchoice.core.RandomChoice
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemma
