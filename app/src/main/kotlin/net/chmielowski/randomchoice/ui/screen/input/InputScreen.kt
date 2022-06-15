@@ -2,18 +2,17 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -60,10 +59,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -504,21 +503,19 @@ private fun ImageField(
         )
         val readFile = field.value.file
         if (readFile != null) {
-            val painter = rememberAsyncImagePainter(readFile)
+            val painter =
+                rememberAsyncImagePainter(readFile, contentScale = ContentScale.FillWidth)
             val state = painter.state
-            LaunchedEffect(state) {
-                if (state is AsyncImagePainter.State.Error) {
-
-                    Log.d("pchm", "${state.result.throwable}\n${readFile.absolutePath}")
-                }
+            if (state is AsyncImagePainter.State.Error) {
+                // TODO@
             }
             Image(
                 painter = painter,
                 contentDescription = null,
-//                contentScale = ContentScale.FillWidth,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .size(50.dp)
-                    .border(2.dp, Color.Red),
+                    .defaultMinSize(minHeight = 80.dp)
+                    .fillMaxWidth()
             )
         } else {
             Image(
