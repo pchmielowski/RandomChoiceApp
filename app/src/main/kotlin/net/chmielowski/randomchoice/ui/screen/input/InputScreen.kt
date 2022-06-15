@@ -76,7 +76,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import net.chmielowski.randomchoice.R
 import net.chmielowski.randomchoice.core.Dilemma
 import net.chmielowski.randomchoice.core.Dilemma.OptionField
@@ -129,7 +128,6 @@ internal fun InputScreen(
         onIntent = store::accept,
         focusRequester = focusRequester,
         menuStrategy = menuStrategy,
-        labels = store.labels,
     )
 }
 
@@ -142,7 +140,6 @@ internal fun InputScreen(
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
     menuStrategy: DropdownMenuStrategy,
-    labels: Flow<Label>,
 ) {
     var transitionVisible by remember { mutableStateOf(false) }
     val scrollBehavior = rememberScrollBehavior()
@@ -204,7 +201,6 @@ internal fun InputScreen(
                 dilemma = state.dilemma,
                 onIntent = onIntent,
                 focusRequester = focusRequester,
-                labels = labels,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row {
@@ -383,7 +379,6 @@ private fun OptionFields(
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
     focusRequester: FocusRequester,
-    labels: Flow<Label>,
 ) {
     val addedFocusRequester = remember { FocusRequester() }
     dilemma.LaunchWhenFocusableOptionAdded {
@@ -396,7 +391,6 @@ private fun OptionFields(
             onIntent = onIntent,
             addedFocusRequester = addedFocusRequester,
             dilemma = dilemma,
-            labels = labels,
         )
     }
 }
@@ -436,7 +430,6 @@ private fun Field(
     onIntent: (Intent) -> Unit,
     addedFocusRequester: FocusRequester,
     dilemma: Dilemma,
-    labels: Flow<Label>,
 ) {
     when (field) {
         is Dilemma.TextField -> TextField(
@@ -502,6 +495,7 @@ private fun ImageField(
             val painter =
                 rememberAsyncImagePainter(readFile, contentScale = ContentScale.FillWidth)
             val state = painter.state
+            @Suppress("ControlFlowWithEmptyBody")
             if (state is AsyncImagePainter.State.Error) {
                 // TODO@
             }
