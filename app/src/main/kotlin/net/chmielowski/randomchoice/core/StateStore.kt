@@ -1,5 +1,6 @@
 package net.chmielowski.randomchoice.core
 
+import android.net.Uri
 import android.os.Parcelable
 import com.arkivanov.mvikotlin.extensions.coroutines.SuspendExecutor
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
@@ -44,6 +45,10 @@ internal sealed interface Intent {
         object ResetAll : EnterOptionsIntent
 
         data class SelectMode(val mode: Mode) : EnterOptionsIntent
+
+        data class OnCameraResult(val option: OptionId, val success: Boolean) : EnterOptionsIntent
+
+        data class ClickOption(val option: OptionId) : EnterOptionsIntent
     }
 
     data class SetTheme(val theme: Theme) : Intent
@@ -88,6 +93,8 @@ internal sealed interface Label {
     data class ShowResult(val result: Result) : Label
 
     object ShowDilemmaDeleted : Label
+
+    data class TakePicture(val uri: Uri) : Label
 }
 
 internal class MainExecutor(
