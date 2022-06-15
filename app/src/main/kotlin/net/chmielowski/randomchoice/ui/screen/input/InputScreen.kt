@@ -2,8 +2,6 @@
 
 package net.chmielowski.randomchoice.ui.screen.input
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -102,6 +100,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
+import net.chmielowski.randomchoice.utils.rememberTakePictureLauncher
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Destination(start = true)
@@ -118,7 +117,7 @@ internal fun InputScreen(
         when (label) {
             is ShowResult -> navigator.navigate(ResultScreenDestination(label.result))
             FocusFirstOptionInput -> focusRequester.requestFocus()
-            is TakePicture -> launcher.launch(label.uri)
+            is TakePicture -> launcher.launch(label.uri) // _: ActivityNotFoundException TODO@
             ShowDilemmaDeleted -> {}
         }
     }
@@ -522,13 +521,6 @@ private fun ImageField(
         }
     }
 }
-
-// TODO@ Move to Camera
-@Composable
-private fun rememberTakePictureLauncher(onIntent: (Intent) -> Unit) =
-    rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        onIntent(EnterOptionsIntent.OnCameraResult(success = success))
-    }
 
 private fun Modifier.chooseRequester(
     field: Dilemma.TextField,
