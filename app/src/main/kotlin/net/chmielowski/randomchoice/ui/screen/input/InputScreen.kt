@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -485,7 +484,7 @@ private fun ImageField(
         onIntent(EnterOptionsIntent.ChangeOption(Option.Image(file), field.id))
     })
     Card(
-        modifier = Modifier.clickable(onClick = launchCamera)
+        modifier = Modifier.clickable(onClick = { launchCamera() })
     ) {
         RemoveOptionButton(
             onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
@@ -497,7 +496,9 @@ private fun ImageField(
         Log.d("pchm", "Read " + readFile?.absolutePath.toString())
         if (readFile != null) {
             Image(
-                painter = rememberAsyncImagePainter(readFile, contentScale = ContentScale.FillBounds),
+                painter = rememberAsyncImagePainter(
+                    readFile, contentScale = ContentScale.FillBounds
+                ),
                 contentDescription = null,
 //                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
