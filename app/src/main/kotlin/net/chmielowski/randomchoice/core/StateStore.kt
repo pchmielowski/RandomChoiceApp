@@ -1,8 +1,6 @@
 package net.chmielowski.randomchoice.core
 
-import android.content.Context
 import android.net.Uri
-import android.os.Environment
 import android.os.Parcelable
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
@@ -20,12 +18,13 @@ import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ResetAll
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.SelectMode
 import net.chmielowski.randomchoice.core.Intent.MakeChoice
 import net.chmielowski.randomchoice.core.Intent.SetTheme
+import net.chmielowski.randomchoice.file.CreateFile
+import net.chmielowski.randomchoice.file.DeleteFile
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemma
 import net.chmielowski.randomchoice.persistence.SaveDilemma
 import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemma
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
-import net.chmielowski.randomchoice.utils.uri
 import java.io.File
 
 internal fun createStateStore(
@@ -111,17 +110,6 @@ internal sealed interface Label {
     data class TakePicture(val uri: Uri, val option: OptionId) : Label
 }
 
-// TODO@ Move
-internal class CreateFile(private val context: Context) {
-
-    operator fun invoke(): Pair<File, Uri> {
-        val directory =
-            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: error("TODO@")
-        val file = File.createTempFile("Random Choice", ".jpg", directory)
-        return file to file.uri(context)
-    }
-}
-
 internal class MainExecutor(
     private val choice: Choice,
     private val preference: ThemePreference,
@@ -129,6 +117,7 @@ internal class MainExecutor(
     private val deleteDilemma: DeleteSavedDilemma,
     private val undeleteDilemma: UndeleteSavedDilemma,
     private val createFile: CreateFile,
+    private val deleteFile: DeleteFile,
 ) : CoroutineExecutor<Intent, Nothing, State, State, Label>() {
 
     @Suppress("ComplexMethod")
@@ -163,16 +152,19 @@ internal class MainExecutor(
                         dispatchState {
                             val request = pendingPhotoRequest!!
                             copy(
-                                dilemma = dilemma.update(request.option, Option.Image(request.file)),
+                                dilemma = dilemma.update(
+                                    request.option,
+                                    Option.Image(request.file)
+                                ),
                                 pendingPhotoRequest = null
                             )
                         }
                     } else {
+                        deleteFile(getState().pendingPhotoRequest!!.file)
                         dispatchState {
                             copy(pendingPhotoRequest = null)
                         }
                         // TODO@ Show error
-                        // TODO@ Delete file
                     }
                 }
             }
