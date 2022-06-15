@@ -490,7 +490,7 @@ private fun ImageField(
     labels: Flow<Label>,
 ) {
     // TODO@ Extract as function
-    val launcher = rememberTakePictureLauncher(onIntent, field)
+    val launcher = rememberTakePictureLauncher(onIntent)
     labels.Observe { label ->
         if (label is TakePicture && label.option == field.id) {
             launcher.launch(label.uri)
@@ -538,14 +538,10 @@ private fun ImageField(
 
 // TODO@ Move to Camera
 @Composable
-private fun rememberTakePictureLauncher(
-    onIntent: (Intent) -> Unit,
-    field: Dilemma.ImageField
-) = rememberLauncherForActivityResult(
-    ActivityResultContracts.TakePicture(),
-    onResult = { success ->
-        onIntent(EnterOptionsIntent.OnCameraResult(option = field.id, success = success))
-    })
+private fun rememberTakePictureLauncher(onIntent: (Intent) -> Unit) =
+    rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        onIntent(EnterOptionsIntent.OnCameraResult(success = success))
+    }
 
 private fun Modifier.chooseRequester(
     field: Dilemma.TextField,
