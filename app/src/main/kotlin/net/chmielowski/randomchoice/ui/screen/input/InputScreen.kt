@@ -485,12 +485,14 @@ private fun ImageField(
     onIntent: (Intent) -> Unit,
     labels: Flow<Label>,
 ) {
+    // TODO@ Extract as function
     val launcher = rememberTakePictureLauncher(onIntent, field)
     labels.Observe { label ->
         if (label is TakePicture) {
             launcher.launch(label.uri)
         }
     }
+
     Card(
         modifier = Modifier.clickable(onClick = { onIntent(EnterOptionsIntent.ClickOption(option = field.id)) })
     ) {
@@ -527,6 +529,7 @@ private fun ImageField(
     }
 }
 
+// TODO@ Move to Camera
 @Composable
 private fun rememberTakePictureLauncher(
     onIntent: (Intent) -> Unit,

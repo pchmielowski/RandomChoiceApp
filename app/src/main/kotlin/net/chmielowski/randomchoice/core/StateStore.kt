@@ -11,6 +11,8 @@ import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.Add
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.AddNew
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ChangeOption
+import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ClickOption
+import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.OnCameraResult
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.Remove
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.ResetAll
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent.SelectMode
@@ -126,6 +128,8 @@ internal class MainExecutor(
                     }
                 }
                 is SelectMode -> dispatchState { copy(dilemma = dilemma.selectMode(intent.mode)) }
+                is ClickOption -> TODO()
+                is OnCameraResult -> TODO()
             }
             MakeChoice -> {
                 val result = getState().dilemma.choose(choice)
