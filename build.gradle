@@ -25,7 +25,7 @@ subprojects {
         config = files("$rootDir/detekt-config.yml")
     }
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-        kotlinOptions.allWarningsAsErrors = true
+        kotlinOptions.allWarningsAsErrors = false
         kotlinOptions.freeCompilerArgs += [
                 '-opt-in=kotlin.RequiresOptIn',
         ]
