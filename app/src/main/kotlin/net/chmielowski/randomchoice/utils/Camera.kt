@@ -38,5 +38,5 @@ internal fun createFile(context: Context): File {
     return File.createTempFile("Random Choice", ".jpg", directory)
 }
 
-private fun File.uri(context: Context) =
+fun File.uri(context: Context) =
     FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", this)
