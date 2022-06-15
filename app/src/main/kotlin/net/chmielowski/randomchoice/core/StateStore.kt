@@ -101,7 +101,7 @@ internal sealed interface Label {
 
     object ShowDilemmaDeleted : Label
 
-    data class TakePicture(val uri: Uri) : Label
+    data class TakePicture(val uri: Uri, val option: OptionId) : Label
 }
 
 // TODO@ Move
@@ -149,7 +149,7 @@ internal class MainExecutor(
                     dispatchState {
                         copy(dilemma = dilemma.update(intent.option, Option.Image(file)))
                     }
-                    publish(Label.TakePicture(uri))
+                    publish(Label.TakePicture(uri, intent.option))
                 }
                 is OnCameraResult -> {
                     if (intent.success) {
