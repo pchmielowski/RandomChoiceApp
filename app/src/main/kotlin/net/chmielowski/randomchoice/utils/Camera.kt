@@ -14,13 +14,13 @@ import net.chmielowski.randomchoice.R
 import java.io.File
 
 @Composable
-internal fun createLaunchCamera(onResult: (Boolean) -> Unit): () -> Unit {
+internal fun createLaunchCamera(onResult: (Boolean) -> Unit): (File) -> Unit {
     val context = LocalContext.current
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture(), onResult)
-    return {
+    return { file: File ->
         try {
-            launcher.launch(createFile(context).uri(context))
+            launcher.launch(file.uri(context))
         } catch (_: ActivityNotFoundException) {
             context.showError()
         }
