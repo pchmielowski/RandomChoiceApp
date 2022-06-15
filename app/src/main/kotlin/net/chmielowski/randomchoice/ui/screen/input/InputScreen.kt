@@ -66,12 +66,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
@@ -493,7 +493,7 @@ private fun ImageField(
     // TODO@ Extract as function
     val launcher = rememberTakePictureLauncher(onIntent, field)
     labels.Observe { label ->
-        if (label is TakePicture) {
+        if (label is TakePicture && label.option == field.id) {
             launcher.launch(label.uri)
         }
     }
@@ -508,12 +508,17 @@ private fun ImageField(
             canRemove = dilemma.canRemove,
         )
         val readFile = field.value.file
-        Log.d("pchm", "Read " + readFile?.absolutePath.toString())
         if (readFile != null) {
+            val painter = rememberAsyncImagePainter(readFile)
+            val state = painter.state
+            LaunchedEffect(state) {
+                if (state is AsyncImagePainter.State.Error) {
+
+                    Log.d("pchm", "${state.result.throwable}\n${readFile.absolutePath}")
+                }
+            }
             Image(
-                painter = rememberAsyncImagePainter(
-                    readFile, contentScale = ContentScale.FillBounds
-                ),
+                painter = painter,
                 contentDescription = null,
 //                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
