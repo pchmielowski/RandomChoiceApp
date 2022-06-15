@@ -78,6 +78,7 @@ internal data class State(
     val dilemma: Dilemma = Dilemma(),
     private val lastSaved: Dilemma? = null,
     val lastDeleted: DilemmaId? = null,
+    val pendingPhotoRequest: PhotoRequest? = null,
 ) : Parcelable {
 
     val showResetButton get() = dilemma.canResetOrSave
@@ -90,6 +91,12 @@ internal data class State(
     val showSavedMessage get() = dilemma == lastSaved
 
     val mode get() = dilemma.mode
+
+    @Parcelize
+    data class PhotoRequest(
+        val option: OptionId,
+        val file: File,
+    ) : Parcelable
 }
 
 internal sealed interface Label {
@@ -146,17 +153,25 @@ internal class MainExecutor(
                 is ClickOption -> {
                     val (file, uri) = createFile()
                     dispatchState {
-                        copy(dilemma = dilemma.update(intent.option, Option.Image(file)))
+                        copy(pendingPhotoRequest = State.PhotoRequest(intent.option, file))
                     }
                     publish(Label.TakePicture(uri, intent.option))
                 }
                 is OnCameraResult -> {
                     if (intent.success) {
-
+                        dispatchState {
+                            val request = pendingPhotoRequest!!
+                            copy(
+                                dilemma = dilemma.update(request.option, Option.Image(request.file)),
+                                pendingPhotoRequest = null
+                            )
+                        }
                     } else {
+                        dispatchState {
+                            copy(pendingPhotoRequest = null)
+                        }
                         // TODO@ Show error
                         // TODO@ Delete file
-                        // TODO@ Clearnup state
                     }
                 }
             }
