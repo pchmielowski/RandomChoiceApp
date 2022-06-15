@@ -52,7 +52,7 @@ internal sealed interface Intent {
 
         data class SelectMode(val mode: Mode) : EnterOptionsIntent
 
-        data class OnCameraResult(val option: OptionId, val success: Boolean) : EnterOptionsIntent
+        data class OnCameraResult(val success: Boolean) : EnterOptionsIntent
 
         data class ClickOption(val option: OptionId) : EnterOptionsIntent
     }
