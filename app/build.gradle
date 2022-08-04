@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
-    id 'com.google.devtools.ksp' version "1.6.10-1.0.4"
+    id 'com.google.devtools.ksp' version "1.7.0-1.0.6"
     id 'com.squareup.sqldelight'
 }
 
@@ -39,9 +39,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             signingConfig signingConfigs.release
         }
-    }
-    kotlinOptions {
-        useIR = true
     }
     buildFeatures {
         compose true
@@ -94,15 +91,15 @@ kotlin {
 }
 
 dependencies {
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.5.1'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha13'
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha15'
     implementation "androidx.compose.material:material-icons-core:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 
     // Accompanist
     final accompanist_version = "0.23.1"
@@ -132,7 +129,7 @@ dependencies {
     testImplementation "org.xerial:sqlite-jdbc:3.34.0"
 
     // Koin
-    final koin_version = "3.1.5"
+    final koin_version = "3.2.0"
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
     testImplementation "io.insert-koin:koin-test:$koin_version"
 
