@@ -1,8 +1,9 @@
 package net.chmielowski.randomchoice.core
 
 import android.os.Parcelable
-import com.arkivanov.mvikotlin.extensions.coroutines.SuspendExecutor
+import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import net.chmielowski.randomchoice.core.Intent.DilemmaIntent
 import net.chmielowski.randomchoice.core.Intent.EnterOptionsIntent
@@ -23,7 +24,7 @@ import net.chmielowski.randomchoice.ui.theme.ThemePreference
 internal fun createStateStore(
     factory: MainExecutor.Factory,
     state: State = State(),
-) = DefaultStoreFactory.create(
+) = DefaultStoreFactory().create(
     initialState = state,
     executorFactory = factory::create,
     reducer = { it },
@@ -96,10 +97,10 @@ internal class MainExecutor(
     private val saveDilemma: SaveDilemma,
     private val deleteDilemma: DeleteSavedDilemma,
     private val undeleteDilemma: UndeleteSavedDilemma,
-) : SuspendExecutor<Intent, Nothing, State, State, Label>() {
+) : CoroutineExecutor<Intent, Nothing, State, State, Label>() {
 
     @Suppress("ComplexMethod")
-    override suspend fun executeIntent(intent: Intent, getState: () -> State) {
+    override fun executeIntent(intent: Intent, getState: () -> State) {
         fun dispatchState(function: State.() -> State) {
             dispatch(getState().function())
         }
@@ -131,7 +132,7 @@ internal class MainExecutor(
                     dispatchState { copy(lastSaved = current) }
                 }
                 is DilemmaIntent.Reuse -> dispatchState { copy(dilemma = intent.dilemma) }
-                is DilemmaIntent.Delete -> {
+                is DilemmaIntent.Delete -> scope.launch {
                     deleteDilemma(intent.dilemma)
                     dispatchState { copy(lastDeleted = intent.dilemma) }
                     publish(Label.ShowDilemmaDeleted)

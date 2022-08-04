@@ -115,7 +115,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
     // MVI
-    final mvi_version = "2.0.4"
+    final mvi_version = "3.0.1"
     implementation "com.arkivanov.mvikotlin:mvikotlin:$mvi_version"
     implementation "com.arkivanov.mvikotlin:mvikotlin-main:$mvi_version"
     implementation "com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:$mvi_version"
