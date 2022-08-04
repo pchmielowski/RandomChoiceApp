@@ -4,6 +4,7 @@ package net.chmielowski.randomchoice.ui.screen.result
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import net.chmielowski.randomchoice.ui.screen.component.AnimatedResult
 import net.chmielowski.randomchoice.ui.screen.component.offset
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 internal fun ResultScreen(
