@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -99,7 +100,8 @@ private fun ClearOptionButton(onValueChange: (Option.Text) -> Unit) {
     IconButton(onClick = { onValueChange(Option.Text("")) }) {
         Icon(
             Icons.Default.Clear,
-            contentDescription = stringResource(R.string.action_clear)
+            contentDescription = stringResource(R.string.action_clear),
+            tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
         )
     }
 }
