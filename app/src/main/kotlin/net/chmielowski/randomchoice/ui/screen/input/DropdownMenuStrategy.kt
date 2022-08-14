@@ -57,6 +57,7 @@ internal interface DropdownMenuStrategy {
             content()
         }
 
+        @Suppress("ComposableNaming")
         @OptIn(ExperimentalMaterial3Api::class)
         @Composable
         override fun Item(

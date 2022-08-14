@@ -3,6 +3,7 @@
 package net.chmielowski.randomchoice.ui.screen.component
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.google.accompanist.insets.statusBarsPadding
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TopBar(
     navigationIcon: @Composable () -> Unit = {},
@@ -21,7 +23,7 @@ internal fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior?,
 ) {
     val colors = TopAppBarDefaults.largeTopAppBarColors()
-    val containerColor by colors.containerColor(scrollBehavior?.scrollFraction ?: 0F)
+    val containerColor by colors.containerColor(scrollBehavior?.state?.collapsedFraction ?: 0F)
     Surface(color = containerColor, modifier = Modifier) {
         LargeTopAppBar(
             navigationIcon = navigationIcon,

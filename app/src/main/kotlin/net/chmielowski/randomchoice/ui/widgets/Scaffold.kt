@@ -2,6 +2,7 @@
 
 package net.chmielowski.randomchoice.ui.widgets
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +18,7 @@ import com.google.accompanist.insets.navigationBarsWithImePadding
 import net.chmielowski.randomchoice.ui.screen.component.BackButton
 import net.chmielowski.randomchoice.ui.screen.component.TopBar
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Suppress("LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +55,7 @@ internal fun Scaffold(
         androidx.compose.material.Scaffold(backgroundColor = backgroundColor, modifier = Modifier.padding(padding)) {
             background()
             content()
-            Divider(modifier = Modifier.alpha(1F - (scrollBehavior?.scrollFraction ?: 0F)))
+            Divider(modifier = Modifier.alpha(1F - (scrollBehavior?.state?.collapsedFraction ?: 0F)))
         }
     }
 }

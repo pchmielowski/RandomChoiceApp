@@ -46,6 +46,8 @@ class MainActivity : ComponentActivity() {
         return createStateStore(get(), state ?: State())
     }
 
-    override fun onNewIntent(intent: android.content.Intent?) =
+    override fun onNewIntent(intent: android.content.Intent?) {
+        super.onNewIntent(intent)
         intentDelegate.onNewIntent(intent)
+    }
 }

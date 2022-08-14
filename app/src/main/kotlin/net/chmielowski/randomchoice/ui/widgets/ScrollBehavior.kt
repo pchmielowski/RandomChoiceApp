@@ -4,7 +4,7 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberTopAppBarScrollState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 @Composable
 internal fun rememberScrollBehavior(): TopAppBarScrollBehavior {
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
-    val scrollState = rememberTopAppBarScrollState()
+    val scrollState = rememberTopAppBarState()
     return remember {
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec, scrollState)
     }

@@ -68,6 +68,7 @@ internal fun SavedScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SavedScreen(
     navigator: DestinationsNavigator,
