@@ -47,6 +47,7 @@ private object FakeDropdownMenuStrategy : DropdownMenuStrategy {
         }
     }
 
+    @Suppress("ComposableNaming")
     @Composable
     override fun Item(
         icon: ImageVector,
