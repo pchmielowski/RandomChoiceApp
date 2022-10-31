@@ -34,7 +34,7 @@ private class CameraResultContract : ActivityResultContract<Unit, Bitmap?>() {
 
     override fun parseResult(resultCode: Int, intent: Intent?) =
         if (resultCode == Activity.RESULT_OK) {
-            intent?.extras?.get("data") as Bitmap?
+            intent?.extras?.getParcelable("data", Bitmap::class.java)
         } else {
             null
         }

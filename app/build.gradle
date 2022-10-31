@@ -24,11 +24,11 @@ android {
             }
         }
     }
-    compileSdk 32
+    compileSdk 33
     defaultConfig {
         applicationId "net.chmielowski.randomchoice"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 24
         versionName "1.$versionCode"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -108,7 +108,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
 
     // Destinations
-    final destinations_version = "1.4.2-beta"
+    final destinations_version = "1.7.23-beta"
     implementation "io.github.raamcosta.compose-destinations:animations-core:$destinations_version"
     ksp "io.github.raamcosta.compose-destinations:ksp:$destinations_version"
 

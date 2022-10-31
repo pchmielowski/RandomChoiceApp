@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
         val valueKey = "state"
         val state = savedStateRegistry
             .consumeRestoredStateForKey(registryKey)
-            ?.getParcelable<State>(valueKey)
+            ?.getParcelable(valueKey, State::class.java)
         savedStateRegistry.registerSavedStateProvider(registryKey) {
             bundleOf(valueKey to stateStore.state)
         }
