@@ -3,7 +3,10 @@
 package net.chmielowski.randomchoice.ui.widgets
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -51,11 +54,19 @@ internal fun Scaffold(
         modifier = Modifier
             .navigationBarsWithImePadding()
     ) { padding ->
-        // Using legacy Material2 just for the correct colors on Material2 widgets.
-        androidx.compose.material.Scaffold(backgroundColor = backgroundColor, modifier = Modifier.padding(padding)) {
+        Box(
+            modifier = Modifier
+                .background(backgroundColor)
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             background()
             content()
-            Divider(modifier = Modifier.alpha(1F - (scrollBehavior?.state?.collapsedFraction ?: 0F)))
+            Divider(
+                modifier = Modifier.alpha(
+                    1F - (scrollBehavior?.state?.collapsedFraction ?: 0F)
+                )
+            )
         }
     }
 }

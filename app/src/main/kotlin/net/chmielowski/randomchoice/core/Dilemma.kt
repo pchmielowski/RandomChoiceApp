@@ -4,8 +4,7 @@ package net.chmielowski.randomchoice.core
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -118,7 +117,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     @Composable
     private fun AnnotatedString.Builder.appendSeparator() {
         append(" ")
-        withStyle(SpanStyle(LocalContentColor.current.copy(alpha = ContentAlpha.medium))) {
+        withStyle(SpanStyle(MaterialTheme.colorScheme.onSurfaceVariant)) {
             append(stringResource(R.string.label_or))
         }
         append(" ")
