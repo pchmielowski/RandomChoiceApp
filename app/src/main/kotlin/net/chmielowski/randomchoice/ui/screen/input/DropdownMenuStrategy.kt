@@ -8,13 +8,13 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.material3.Divider as MaterialDivider
 
 internal interface DropdownMenuStrategy {
 
@@ -81,6 +81,6 @@ internal interface DropdownMenuStrategy {
         )
 
         @Composable
-        override fun Divider(modifier: Modifier) = MenuDefaults.Divider(modifier = modifier)
+        override fun Divider(modifier: Modifier) = MaterialDivider(modifier = modifier)
     }
 }
