@@ -104,7 +104,6 @@ dependencies {
     // Accompanist
     final accompanist_version = "0.23.1"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
 
     // Destinations
     final destinations_version = "1.7.23-beta"

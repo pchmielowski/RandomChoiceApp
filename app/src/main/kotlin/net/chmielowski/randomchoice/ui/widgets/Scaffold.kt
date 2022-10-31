@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.insets.navigationBarsWithImePadding
 import net.chmielowski.randomchoice.ui.screen.component.BackButton
 import net.chmielowski.randomchoice.ui.screen.component.TopBar
 
@@ -52,8 +52,7 @@ internal fun Scaffold(
         },
         floatingActionButton = floatingActionButton,
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        modifier = Modifier
-            .navigationBarsWithImePadding()
+        modifier = Modifier.imePadding()
     ) { padding ->
         Box(
             modifier = Modifier
