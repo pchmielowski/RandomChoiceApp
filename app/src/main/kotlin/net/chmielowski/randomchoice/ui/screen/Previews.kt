@@ -16,7 +16,6 @@ import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.ui.screen.about.AboutScreen
 import net.chmielowski.randomchoice.ui.screen.about.LibrariesScreen
 import net.chmielowski.randomchoice.ui.screen.about.LicenseScreen
-import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.screen.input.InputScreen
 import net.chmielowski.randomchoice.ui.screen.result.ResultScreen
 import net.chmielowski.randomchoice.ui.screen.saved.SavedScreen
@@ -30,7 +29,6 @@ internal fun InputScreenTextPreview() {
         state = State(Dilemma()),
         onIntent = {},
         focusRequester = FocusRequester(),
-        menuStrategy = DropdownMenuStrategy.Real(),
     )
 }
 
@@ -42,7 +40,6 @@ internal fun InputScreenImagePreview() {
         state = State(Dilemma(listOf(Image(), Image(), Image(), Image(), Image()))),
         onIntent = {},
         focusRequester = FocusRequester(),
-        menuStrategy = DropdownMenuStrategy.Real(),
     )
 }
 

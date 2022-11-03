@@ -47,8 +47,6 @@ internal abstract class AbstractTest {
 
     protected open val prepopulateDatabase = PrepopulateDatabase {}
 
-    protected open val menuStrategy: DropdownMenuStrategy = DropdownMenuStrategy.Real()
-
     @Before
     fun setUp() {
         rule.setContent { Content() }
@@ -71,7 +69,6 @@ internal abstract class AbstractTest {
                     undeleteDilemma = UndeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                 )
             }),
-            menuStrategy = menuStrategy,
         )
     }
 
