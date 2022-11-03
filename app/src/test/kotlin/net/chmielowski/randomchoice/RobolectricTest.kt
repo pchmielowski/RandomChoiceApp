@@ -22,6 +22,8 @@ internal class RobolectricTest : BehaviorTest() {
 
     override val menuStrategy: DropdownMenuStrategy = FakeDropdownMenuStrategy
 
+    override val isRobolectric = true
+
     @After
     fun tearDown() = stopKoin()
 }
@@ -57,7 +59,9 @@ private object FakeDropdownMenuStrategy : DropdownMenuStrategy {
         onDismiss: () -> Unit,
     ) = Text(
         stringResource(text),
-        modifier = Modifier.size(10.dp).clickable { onClick(); onDismiss() },
+        modifier = Modifier
+            .size(10.dp)
+            .clickable { onClick(); onDismiss() },
         fontSize = 1.sp
     )
 
