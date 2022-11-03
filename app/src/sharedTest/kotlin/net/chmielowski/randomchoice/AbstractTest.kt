@@ -29,7 +29,6 @@ import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmasImpl
 import net.chmielowski.randomchoice.persistence.SaveDilemmaImpl
 import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemmaImpl
 import net.chmielowski.randomchoice.ui.Content
-import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 import org.junit.Before
