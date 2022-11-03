@@ -11,16 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.Saver
@@ -40,6 +39,7 @@ import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.utils.AndroidString
 import net.chmielowski.randomchoice.utils.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongParameterList")
 @Composable
 internal fun OptionTextField(
@@ -61,19 +61,13 @@ internal fun OptionTextField(
         TextField(
             value = value.text,
             onValueChange = { onValueChange(Option.Text(it)) },
-            placeholder = {
-                Text(
-                    text = stringResource(label),
-                    color = MaterialTheme.colorScheme.onSurface.copy(ContentAlpha.medium),
-                )
-            },
+            placeholder = { Text(stringResource(label)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = imeAction,
             ),
             shape = RoundedCornerShape(12.dp),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
@@ -101,7 +95,7 @@ private fun ClearOptionButton(onValueChange: (Option.Text) -> Unit) {
         Icon(
             Icons.Default.Clear,
             contentDescription = stringResource(R.string.action_clear),
-            tint = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

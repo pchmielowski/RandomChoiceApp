@@ -18,8 +18,7 @@ internal fun createLaunchCamera(onResult: (Bitmap?) -> Unit): () -> Unit {
     val launcher = rememberLauncherForActivityResult(CameraResultContract(), onResult)
     val context = LocalContext.current
     return {
-        @Suppress("SwallowedException")
-        try {
+        @Suppress("SwallowedException") try {
             launcher.launch(Unit)
         } catch (e: ActivityNotFoundException) {
             context.showError()
@@ -34,7 +33,7 @@ private class CameraResultContract : ActivityResultContract<Unit, Bitmap?>() {
 
     override fun parseResult(resultCode: Int, intent: Intent?) =
         if (resultCode == Activity.RESULT_OK) {
-            intent?.extras?.get("data") as Bitmap?
+            intent?.extras?.getParcelableCompat<Bitmap>("data")
         } else {
             null
         }
