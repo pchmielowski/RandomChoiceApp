@@ -107,7 +107,7 @@ internal sealed interface Label {
 
     object ShowDilemmaDeleted : Label
 
-    data class TakePicture(val uri: Uri, val option: OptionId) : Label
+    data class TakePicture(val option: OptionId, val uri: Uri) : Label
 }
 
 internal class MainExecutor(
@@ -145,7 +145,7 @@ internal class MainExecutor(
                     dispatchState {
                         copy(pendingPhotoRequest = State.PhotoRequest(intent.option, file))
                     }
-                    publish(Label.TakePicture(uri, intent.option))
+                    publish(Label.TakePicture(intent.option, uri))
                 }
                 is OnCameraResult -> {
                     if (intent.success) {
