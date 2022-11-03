@@ -12,6 +12,7 @@ import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.core.createStateStore
 import net.chmielowski.randomchoice.ui.Content
 import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
+import net.chmielowski.randomchoice.utils.getParcelableCompat
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
         val valueKey = "state"
         val state = savedStateRegistry
             .consumeRestoredStateForKey(registryKey)
-            ?.getParcelable(valueKey, State::class.java)
+            ?.getParcelableCompat<State>(valueKey)
         savedStateRegistry.registerSavedStateProvider(registryKey) {
             bundleOf(valueKey to stateStore.state)
         }
