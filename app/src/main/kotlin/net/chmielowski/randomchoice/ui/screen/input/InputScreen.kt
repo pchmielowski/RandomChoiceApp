@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -57,7 +58,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -66,6 +66,8 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.states
@@ -82,6 +84,7 @@ import net.chmielowski.randomchoice.core.Label
 import net.chmielowski.randomchoice.core.Label.FocusFirstOptionInput
 import net.chmielowski.randomchoice.core.Label.ShowDilemmaDeleted
 import net.chmielowski.randomchoice.core.Label.ShowResult
+import net.chmielowski.randomchoice.core.Label.TakePicture
 import net.chmielowski.randomchoice.core.Mode
 import net.chmielowski.randomchoice.core.Option
 import net.chmielowski.randomchoice.core.State
@@ -96,7 +99,7 @@ import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.widgets.Scaffold
 import net.chmielowski.randomchoice.ui.widgets.rememberScrollBehavior
 import net.chmielowski.randomchoice.utils.Observe
-import net.chmielowski.randomchoice.utils.createLaunchCamera
+import net.chmielowski.randomchoice.utils.rememberTakePictureLauncher
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Destination(start = true)
@@ -108,10 +111,12 @@ internal fun InputScreen(
 ) {
     val state by store.states.collectAsState(State())
     val focusRequester = remember { FocusRequester() }
+    val launcher = rememberTakePictureLauncher(store::accept)
     store.labels.Observe { label ->
         when (label) {
             is ShowResult -> navigator.navigate(ResultScreenDestination(label.result))
             FocusFirstOptionInput -> focusRequester.requestFocus()
+            is TakePicture -> launcher.launch(label.uri) // _: ActivityNotFoundException TODO@
             ShowDilemmaDeleted -> {}
         }
     }
@@ -431,8 +436,8 @@ private fun Field(
         )
         is Dilemma.ImageField -> ImageField(
             field = field,
-            onIntent = onIntent,
             dilemma = dilemma,
+            onIntent = onIntent,
         )
     }
 }
@@ -471,11 +476,8 @@ private fun ImageField(
     dilemma: Dilemma,
     onIntent: (Intent) -> Unit,
 ) {
-    val launchCamera = createLaunchCamera(onResult = { bitmap ->
-        onIntent(EnterOptionsIntent.ChangeOption(Option.Image(bitmap), field.id))
-    })
     Card(
-        modifier = Modifier.clickable(onClick = launchCamera)
+        modifier = Modifier.clickable(onClick = { onIntent(EnterOptionsIntent.ClickOption(option = field.id)) })
     ) {
         RemoveOptionButton(
             onClick = { onIntent(EnterOptionsIntent.Remove(field.id)) },
@@ -483,13 +485,22 @@ private fun ImageField(
             modifier = Modifier.align(Alignment.End),
             canRemove = dilemma.canRemove,
         )
-        val bitmap = field.value.bitmap
-        if (bitmap != null) {
+        val readFile = field.value.file
+        if (readFile != null) {
+            val painter =
+                rememberAsyncImagePainter(readFile, contentScale = ContentScale.FillWidth)
+            val state = painter.state
+            @Suppress("ControlFlowWithEmptyBody")
+            if (state is AsyncImagePainter.State.Error) {
+                // TODO@
+            }
             Image(
-                bitmap = bitmap.asImageBitmap(),
+                painter = painter,
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .defaultMinSize(minHeight = 80.dp)
+                    .fillMaxWidth()
             )
         } else {
             Image(

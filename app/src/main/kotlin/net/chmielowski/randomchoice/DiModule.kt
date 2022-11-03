@@ -1,8 +1,11 @@
 package net.chmielowski.randomchoice
 
 import net.chmielowski.randomchoice.core.Choice
+import net.chmielowski.randomchoice.file.CreateFileImpl
 import net.chmielowski.randomchoice.core.MainExecutor
 import net.chmielowski.randomchoice.core.RandomChoice
+import net.chmielowski.randomchoice.file.CreateFile
+import net.chmielowski.randomchoice.file.DeleteFile
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemma
 import net.chmielowski.randomchoice.persistence.DeleteSavedDilemmaImpl
 import net.chmielowski.randomchoice.persistence.NonCancellableTask
@@ -31,5 +34,10 @@ internal val diModule = module {
     factory<ObserveSavedDilemmas> { ObserveSavedDilemmasImpl(get()) }
     factory<DeleteSavedDilemma> { DeleteSavedDilemmaImpl(get(), get()) }
     factory<UndeleteSavedDilemma> { UndeleteSavedDilemmaImpl(get(), get()) }
-    factory { MainExecutor.Factory { MainExecutor(get(), get(), get(), get(), get()) } }
+
+    // File system
+    factory<CreateFile> { CreateFileImpl(get()) }
+    factory { DeleteFile() }
+
+    factory { MainExecutor.Factory { MainExecutor(get(), get(), get(), get(), get(), get(), get()) } }
 }

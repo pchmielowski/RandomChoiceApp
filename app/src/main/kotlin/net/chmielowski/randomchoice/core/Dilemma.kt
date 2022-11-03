@@ -45,7 +45,7 @@ internal data class Dilemma(private val options: List<Option> = listOf(Text(), T
     val canResetOrSave get() = options.any(Option::hasValue)
 
     fun update(id: OptionId, option: Option): Dilemma {
-        if (option is Image && option.bitmap == null) {
+        if (option is Image && option.file == null) {
             return this
         }
         return Dilemma(options.replace(id.value, option))
