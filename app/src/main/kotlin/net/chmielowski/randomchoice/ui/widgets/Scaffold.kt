@@ -3,6 +3,7 @@
 package net.chmielowski.randomchoice.ui.widgets
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
@@ -54,6 +55,7 @@ internal fun Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.imePadding()
     ) { padding ->
+        Log.d("pchm", padding.toString()) // TODO@
         Box(
             modifier = Modifier
                 .background(backgroundColor)

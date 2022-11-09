@@ -206,7 +206,7 @@ internal fun InputScreen(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
+//            Spacer(modifier = Modifier.height(100.dp)) // Let the user scroll content up.
         }
     }
 }
