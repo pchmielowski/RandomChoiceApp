@@ -23,7 +23,6 @@ import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmas
 import net.chmielowski.randomchoice.ui.screen.NavGraphs
 import net.chmielowski.randomchoice.ui.screen.destinations.InputScreenDestination
 import net.chmielowski.randomchoice.ui.screen.destinations.SavedScreenDestination
-import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.screen.input.InputScreen
 import net.chmielowski.randomchoice.ui.screen.saved.SavedScreen
 import net.chmielowski.randomchoice.ui.theme.AppTheme
@@ -40,7 +39,6 @@ internal fun Content(
     preference: ThemePreference,
     observeSavedDilemmas: ObserveSavedDilemmas,
     store: Store<Intent, State, Label>,
-    menuStrategy: DropdownMenuStrategy,
 ) {
     CompositionLocalProvider(LocalTheme provides preference.current) {
         AppTheme {
@@ -55,7 +53,6 @@ internal fun Content(
                         InputScreen(
                             navigator = destinationsNavigator,
                             store = store,
-                            menuStrategy = menuStrategy,
                         )
                     }
                     composable(SavedScreenDestination) {

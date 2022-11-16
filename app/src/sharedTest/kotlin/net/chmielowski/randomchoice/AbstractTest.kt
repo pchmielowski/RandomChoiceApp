@@ -29,7 +29,6 @@ import net.chmielowski.randomchoice.persistence.ObserveSavedDilemmasImpl
 import net.chmielowski.randomchoice.persistence.SaveDilemmaImpl
 import net.chmielowski.randomchoice.persistence.UndeleteSavedDilemmaImpl
 import net.chmielowski.randomchoice.ui.Content
-import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
 import net.chmielowski.randomchoice.ui.theme.Theme
 import net.chmielowski.randomchoice.ui.theme.ThemePreference
 import org.junit.Before
@@ -46,8 +45,6 @@ internal abstract class AbstractTest {
     protected open val theme = Theme.Light
 
     protected open val prepopulateDatabase = PrepopulateDatabase {}
-
-    protected open val menuStrategy: DropdownMenuStrategy = DropdownMenuStrategy.Real()
 
     @Before
     fun setUp() {
@@ -71,7 +68,6 @@ internal abstract class AbstractTest {
                     undeleteDilemma = UndeleteSavedDilemmaImpl(database, NonCancellableTask.fake),
                 )
             }),
-            menuStrategy = menuStrategy,
         )
     }
 
