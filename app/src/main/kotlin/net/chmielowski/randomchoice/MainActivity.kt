@@ -12,8 +12,6 @@ import net.chmielowski.randomchoice.core.State
 import net.chmielowski.randomchoice.core.createStateStore
 import net.chmielowski.randomchoice.ui.Content
 import net.chmielowski.randomchoice.utils.getParcelableCompat
-import net.chmielowski.randomchoice.ui.screen.input.DropdownMenuStrategy
-import net.chmielowski.randomchoice.utils.getParcelableCompat
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {

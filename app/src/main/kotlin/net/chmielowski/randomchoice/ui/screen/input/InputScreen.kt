@@ -152,7 +152,8 @@ internal fun InputScreen(
                 onAboutClick = { navigator.navigate(AboutScreenDestination) },
                 onShowSavedClick = { navigator.navigate(SavedScreenDestination) },
                 mode = state.mode,
-            ) { onIntent(EnterOptionsIntent.SelectMode(it)) }
+                onSelectMode = { onIntent(EnterOptionsIntent.SelectMode(it)) },
+            )
         },
         scrollBehavior = scrollBehavior,
         floatingActionButton = {
